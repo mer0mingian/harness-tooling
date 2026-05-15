@@ -1,7 +1,11 @@
 {
   "name": "harness-deepwiki-skill",
-  "version": "1.0.0",
-  "description": "Architecture wiki (deepwiki) skill for generating and maintaining project documentation",
+  "version": "1.1.0",
+  "description": "Architecture documentation generation skills (litho/deepwiki-rs)",
   "author": "Daniel Minges",
-  "skills": "../../../skills/architecture-wiki/"
+  "skills": [
+    "skills/litho.md",
+    "skills/ai-context-generator.md",
+    "skills/ai-context.md"
+  ]
 }

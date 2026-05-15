@@ -1,6 +1,16 @@
 # Open Bugs
 
-No open bugs at this time.
+### Claude Code configuration in Sandbox
+
+Claude Code CLI within the sandbox does not find the API key provided by the host.
+
+Also, claude code plugin installations during the build have failed.
+
+During the image build, claude code should be updated to use the latest
+
+**Spec:** [docs/specs/bug-fix-claude-config-in-sandbox.md](../specs/bug-fix-claude-config-in-sandbox.md)
+**Investigation Prompt:** [docs/specs/bug-fix-claude-config-in-sandbox-PROMPT.md](../specs/bug-fix-claude-config-in-sandbox-PROMPT.md)
+**Story Points:** 5
 
 ### Missing deepwiki/litho skills
 
@@ -13,6 +23,10 @@ E.g:
 
 Understand the setup of deepwiki/litho and extend our plugin by the skills required to operate deepwiki.
 Make an assessment if the current integration by running deepwiki in a separate container attached to our sandbox is a good architectural choice. Consider that we are using the sandbox as a dev container and do not want it to be too heavy.
+
+**Spec:** [docs/specs/bug-fix-missing-deepwiki-skills.md](../specs/bug-fix-missing-deepwiki-skills.md)
+**Investigation Prompt:** [docs/specs/bug-fix-missing-deepwiki-skills-PROMPT.md](../specs/bug-fix-missing-deepwiki-skills-PROMPT.md)
+**Story Points:** 8 (5 investigation + 3 implementation TBD)
 
 ## Recently Resolved
 
