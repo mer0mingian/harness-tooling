@@ -1,38 +1,38 @@
 # Open Bugs
 
-### Claude Code configuration in Sandbox
-
-Claude Code CLI within the sandbox does not find the API key provided by the host.
-
-Also, claude code plugin installations during the build have failed.
-
-During the image build, claude code should be updated to use the latest
-
-**Spec:** [docs/specs/bug-fix-claude-config-in-sandbox.md](../specs/bug-fix-claude-config-in-sandbox.md)
-**Investigation Prompt:** [docs/specs/bug-fix-claude-config-in-sandbox-PROMPT.md](../specs/bug-fix-claude-config-in-sandbox-PROMPT.md)
-**Story Points:** 5
-
-### Missing deepwiki/litho skills
-
-The deepwiki/litho repository contains more skills than the ones integrated into our plugin here: /home/minged01/repositories/harness-workplace/harness-tooling/.agents/plugins/harness-deepwiki-skill/.claude-plugin/plugin.json
-E.g:
-
-- /home/minged01/repositories/harness-workplace/deepwiki-rs/assets/skill-litho/SKILL.md
-- /home/minged01/repositories/harness-workplace/deepwiki-rs/.skills/ai-context-generator/SKILL.md
-- /home/minged01/repositories/harness-workplace/deepwiki-rs/.ai-context/SKILL.md
-
-Understand the setup of deepwiki/litho and extend our plugin by the skills required to operate deepwiki.
-Make an assessment if the current integration by running deepwiki in a separate container attached to our sandbox is a good architectural choice. Consider that we are using the sandbox as a dev container and do not want it to be too heavy.
-
-**Spec:** [docs/specs/bug-fix-missing-deepwiki-skills.md](../specs/bug-fix-missing-deepwiki-skills.md)
-**Investigation Prompt:** [docs/specs/bug-fix-missing-deepwiki-skills-PROMPT.md](../specs/bug-fix-missing-deepwiki-skills-PROMPT.md)
-**Story Points:** 8 (5 investigation + 3 implementation TBD)
+No open bugs currently tracked.
 
 ## Recently Resolved
 
-All previously tracked bugs have been resolved and merged to `dev` branch:
+Latest fixes (2026-05-17):
 
-1. **Litho container read-only mount failure** - Fixed nested mount conflict on harness up
+1. **Claude Code configuration in Sandbox** - Fixed credential file access
+
+   - Spec: [docs/specs/bug-fix-claude-config-in-sandbox.md](../specs/bug-fix-claude-config-in-sandbox.md)
+   - Resolution: Modified Dockerfile to change sandbox user UID from 998→1000, matching host user for credential file access (mode 600)
+   - Commit: harness-sandbox (modified Dockerfile, docker-compose.yml, .env.example)
+   - Validation: ✅ Config file readable, Claude Code operational (v2.1.91), no permission errors
+   - Story points: 2
+
+2. **Missing deepwiki/litho skills** - Integrated 3 skills via RPC model
+
+   - Spec: [docs/specs/bug-fix-missing-deepwiki-skills.md](../specs/bug-fix-missing-deepwiki-skills.md)
+   - Resolution: Fixed plugin manifest, created wrapper skills using docker exec to litho container (Model B - RPC approach, +0 MB vs +1.24 GB for Rust toolchain)
+   - Commit: harness-tooling bf7c5ff (plugin.json, 3 skill files)
+   - Validation: ✅ Plugin manifest valid, skills exist with correct frontmatter, litho container operational
+   - Story points: 3
+
+3. **Litho CA certificate configuration** - Fixed HTTPS connectivity for corporate proxy
+
+   - Spec: [docs/specs/fix-litho-ca-certificate.md](../specs/fix-litho-ca-certificate.md)
+   - Resolution: Added explicit SSL environment variables to docker-compose.yml litho service
+   - Commit: harness-sandbox c5b60bd
+   - Validation: ✅ HTTPS connectivity works, litho runs without CA errors
+   - Story points: 1
+
+Previous fixes merged to `dev` branch:
+
+4. **Litho container read-only mount failure** - Fixed nested mount conflict on harness up
 
    - Spec: [docs/specs/bug-fix-litho-readonly-mount.md](../specs/bug-fix-litho-readonly-mount.md)
    - Resolution: Moved litho cache to `/litho-cache` (sibling path), removed hardcoded `PROJECT_NAME`, added cache pre-creation
