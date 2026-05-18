@@ -1,88 +1,74 @@
-name: harness-tdd-workflow
-version: 1.0.0
-description: MATD (Multi-Agent Test-Driven) workflow commands and artifact
-  templates for SpecKit
-author: Harness Sandbox Team
-commands:
-  test:
-    file: commands/test.md
-    description: Generate failing tests (RED state) for feature
-    usage: /speckit.matd.test <feature-id>
-    arguments:
-      - name: feature_id
-        required: true
-        description: Feature identifier (e.g., 'feat-123')
-  implement:
-    file: commands/implement.md
-    description: Implement feature code (RED → GREEN)
-    usage: /speckit.matd.implement <feature-id> [--skip-integration]
-    arguments:
-      - name: feature_id
-        required: true
-        description: Feature identifier (e.g., 'feat-123')
-      - name: --skip-integration
-        required: false
-        description: Skip integration checks (ruff, mypy)
-  review:
-    file: commands/review.md
-    description: Parallel architecture + code review
-    usage: /speckit.matd.review <feature-id> [--max-cycles=N]
-    arguments:
-      - name: feature_id
-        required: true
-        description: Feature identifier (e.g., 'feat-123')
-      - name: --max-cycles
-        required: false
-        description: "Maximum review cycles (default: 3)"
-  commit:
-    file: commands/commit.md
-    description: Validate evidence and create git commit
-    usage: /speckit.matd.commit <feature-id>
-    arguments:
-      - name: feature_id
-        required: true
-        description: Feature identifier (e.g., 'feat-123')
-  update-docs:
-    file: commands/update-docs.md
-    description: Update C4 diagrams and Code Graph Context index after feature
-      implementation
-    usage: /speckit.matd.update-docs [feature-id]
-    arguments:
-      - name: feature_id
-        required: false
-        description: "Feature identifier for CGC tagging (default: 'unknown')"
-  specify-product-brief:
-    file: commands/specify-product-brief.md
-    description: Create or update product brief using grill-me interview for new products
-    usage: /speckit.matd.specify-product-brief [product-name]
-    arguments:
-      - name: product_name
-        required: false
-        description: Optional product identifier (determined during grill-me if not
-          provided)
-  specify-adr:
-    file: commands/specify-adr.md
-    description: Create Architecture Decision Record using grill-me interview
-    usage: /speckit.matd.specify-adr [decision-title]
-    arguments:
-      - name: decision_title
-        required: false
-        description: Optional decision identifier (determined during grill-me if not
-          provided)
-  specify-solution-design:
-    file: commands/specify-solution-design.md
-    description: "Solution Design: generate ADR comparing approaches and C2/C3
-      architecture via c4-* agents"
-    usage: /speckit.matd.specify-solution-design <feature-id>
-    arguments:
-      - name: feature_id
-        required: true
-        description: Feature identifier (e.g., 'feat-123')
+schema_version: "1.0"
+
+extension:
+  id: "matd"
+  name: "harness-tdd-workflow"
+  version: "1.0.0"
+  description: "MATD (Multi-Agent Test-Driven) workflow commands and artifact templates for SpecKit"
+  author: "Harness Sandbox Team"
+  repository: "https://github.com/harness-sandbox/harness-tooling"
+  license: "MIT"
+  homepage: "https://github.com/harness-sandbox/harness-tooling/tree/main/spec-kit-multi-agent-tdd"
+
+requires:
+  speckit_version: ">=0.1.0"
+  tools: []
+  commands: []
+  scripts: []
+
+provides:
+  commands:
+    - name: "speckit.matd.test"
+      file: "commands/test.md"
+      description: "Generate failing tests (RED state) for feature"
+      aliases: []
+    - name: "speckit.matd.implement"
+      file: "commands/implement.md"
+      description: "Implement feature code (RED → GREEN)"
+      aliases: []
+    - name: "speckit.matd.review"
+      file: "commands/review.md"
+      description: "Parallel architecture + code review"
+      aliases: []
+    - name: "speckit.matd.commit"
+      file: "commands/commit.md"
+      description: "Validate evidence and create git commit"
+      aliases: []
+    - name: "speckit.matd.update-docs"
+      file: "commands/update-docs.md"
+      description: "Update C4 diagrams and Code Graph Context index after feature implementation"
+      aliases: []
+    - name: "speckit.matd.specify-product-brief"
+      file: "commands/specify-product-brief.md"
+      description: "Create or update product brief using grill-me interview for new products"
+      aliases: []
+    - name: "speckit.matd.specify-adr"
+      file: "commands/specify-adr.md"
+      description: "Create Architecture Decision Record using grill-me interview"
+      aliases: []
+    - name: "speckit.matd.specify-solution-design"
+      file: "commands/specify-solution-design.md"
+      description: "Solution Design: generate ADR comparing approaches and C2/C3 architecture via c4-* agents"
+      aliases: []
+  config:
+    - name: "harness-tdd-config.yml"
+      template: "harness-tdd-config.yml.template"
+      description: "MATD workflow configuration (test frameworks, paths, quality gates)"
+      required: false
+
 templates:
-  directory: templates/
-config:
-  file: harness-tdd-config.yml
-  schema: config-schema.json
+  directory: "templates/"
+
 hooks:
-  config: hooks/config.yml
-  install: hooks/install.sh
+  config: "hooks/config.yml"
+  install: "hooks/install.sh"
+
+tags:
+  - "tdd"
+  - "testing"
+  - "workflow"
+  - "multi-agent"
+  - "matd"
+
+defaults:
+  # Configuration defaults are defined in harness-tdd-config.yml.template

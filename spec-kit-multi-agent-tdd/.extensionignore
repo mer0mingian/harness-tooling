@@ -1,0 +1,43 @@
+# Development files
+.pytest_cache/
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.git/
+.gitignore
+
+# Test artifacts
+artifacts/
+.specify/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Examples and docs (if not needed in installation)
+examples/
+docs/archive/
+
+# Lock files (users should generate their own)
+uv.lock
+poetry.lock
+
+# Keep essentials for runtime
+!scripts/
+!lib/
+!templates/
+!commands/
+!hooks/
+!config-schema.json
+!harness-tdd-config.yml.template
+!extension.yml
+!USER-GUIDE.md
