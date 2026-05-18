@@ -29,7 +29,7 @@ This repository provides **two distinct artifacts** for the MATD (Multi-Agent Te
 ### 2. matd Claude Code Plugin
 - **Location**: `.agents/plugins/matd/`
 - **Purpose**: Skills, agents, and commands for Claude Code marketplace
-- **Usage**: Add `plugins: [matd]` to `.harness.yaml` for marketplace integration
+- **Usage**: Add `plugins: [matd]` to `.harness.yml` for marketplace integration
 - **Commands**: `/matd-01-specification` through `/matd-04-implement`
 - **Audience**: Claude Code users working in harness sandbox or standalone projects
 - **Installation**: Via marketplace manifest (see Quick Install below)
@@ -88,14 +88,18 @@ git clone <harness-tooling-url> .harness-tooling
 # OpenCode auto-discovers agents/skills in .agents/
 ```
 
-### Gemini CLI (Planned for v2)
+### SpecKit Extension
 
 ```bash
-cd .gemini/extensions/matd-research
-gemini extensions install .
+specify extension add harness-tdd-workflow \
+  --from /path/to/harness-tooling/spec-kit-multi-agent-tdd
 ```
 
-**Note:** Gemini support is scaffolded but not implemented in v1.
+### Complete Registration Guide
+
+For detailed installation instructions, troubleshooting, and advanced topics, see [docs/PLUGIN_REGISTRATION_GUIDE.md](docs/PLUGIN_REGISTRATION_GUIDE.md).
+
+**Note:** Gemini CLI support is scaffolded but not implemented in v1.
 
 ---
 
