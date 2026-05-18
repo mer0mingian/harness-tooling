@@ -6,6 +6,13 @@
     "name": "Daniel Minges",
     "email": "minged01@stepstone.com"
   },
-  "agents": "./agents/",
+  "agents": [
+    "./agents/matd-architect.md",
+    "./agents/matd-dev.md",
+    "./agents/matd-qa.md",
+    "./agents/matd-specifier.md",
+    "./agents/matd-orchestrator.md",
+    "./agents/matd-critical-thinker.md"
+  ],
   "skills": "./skills/"
 }

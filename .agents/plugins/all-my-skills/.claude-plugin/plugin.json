@@ -5,8 +5,5 @@
   "author": {
     "name": "Daniel Minges",
     "email": "minged01@stepstone.com"
-  },
-  "skills": "./skills/",
-  "agents": "./agents/",
-  "commands": "./commands/"
+  }
 }
