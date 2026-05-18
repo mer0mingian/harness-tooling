@@ -34,7 +34,7 @@ specify extension install .
 
 ### Configure Test Environment
 
-Create `harness-tdd-config.yml` in your project root:
+Create `matd-config.yml` in your project root:
 
 ```yaml
 test_framework: pytest

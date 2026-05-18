@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Harness TDD Workflow Configuration",
-  "description": "Configuration schema for harness-tdd-workflow extension",
+  "title": "MATD Configuration",
+  "description": "Configuration schema for MATD SpecKit extension",
   "type": "object",
   "required": ["version", "agents", "artifacts"],
   "properties": {

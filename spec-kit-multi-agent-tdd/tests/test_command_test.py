@@ -69,8 +69,8 @@ class TestLoadConfig:
     """Test config file loading and defaults."""
 
     def test_load_config_from_file(self, tmp_path):
-        """Loads config from .specify/harness-tdd-config.yml."""
-        config_path = tmp_path / ".specify" / "harness-tdd-config.yml"
+        """Loads config from .specify/matd-config.yml."""
+        config_path = tmp_path / ".specify" / "matd-config.yml"
         config_path.parent.mkdir(parents=True)
         config_data = {
             "version": "1.0",
@@ -103,7 +103,7 @@ class TestLoadConfig:
 
     def test_load_config_malformed_uses_defaults(self, tmp_path, capsys):
         """Uses defaults and warns when config is malformed."""
-        config_path = tmp_path / ".specify" / "harness-tdd-config.yml"
+        config_path = tmp_path / ".specify" / "matd-config.yml"
         config_path.parent.mkdir(parents=True)
         config_path.write_text("invalid: yaml: [unclosed")
 
@@ -412,7 +412,7 @@ class TestExecuteTestCommand:
 """)
 
         # Setup: Create config
-        config_path = tmp_path / ".specify" / "harness-tdd-config.yml"
+        config_path = tmp_path / ".specify" / "matd-config.yml"
         config_path.parent.mkdir(parents=True)
         config_data = {
             "artifacts": {

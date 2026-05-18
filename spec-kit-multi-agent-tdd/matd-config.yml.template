@@ -1,5 +1,5 @@
-# harness-tdd-workflow Configuration Template
-# Copy this file to .specify/harness-tdd-config.yml in your workspace
+# MATD Configuration Template
+# Copy this file to .specify/matd-config.yml in your workspace
 
 version: "1.0"
 

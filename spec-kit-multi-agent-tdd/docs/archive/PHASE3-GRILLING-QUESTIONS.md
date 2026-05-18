@@ -375,9 +375,9 @@ Missing implementations: parallel execution, timeout enforcement, artifact valid
 ---
 
 ### Q17: Per-Project vs Global Config
-Config template goes in .specify/harness-tdd-config.yml (per-project).
+Config template goes in .specify/matd-config.yml (per-project).
 
-**Q17a:** Should there also be global config (~/.claude/harness-tdd-defaults.yml)?
+**Q17a:** Should there also be global config (~/.claude/matd-defaults.yml)?
 - User-wide defaults (agent preferences, log level)
 - Project config overrides global
 

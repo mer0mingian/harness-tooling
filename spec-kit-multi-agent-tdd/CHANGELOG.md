@@ -29,14 +29,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Evidence-Based Commits**: Validation chain requires test artifacts before code changes
 - **Parallel Reviews**: Independent architecture and code reviews with convergence detection
 - **Template Library**: 10 artifact templates for product briefs, ADRs, solution designs, test strategies, reviews
-- **Configuration**: `harness-tdd-config.yml` for test framework and artifact directory customization
+- **Configuration**: `matd-config.yml` for test framework and artifact directory customization
 - **Validation Scripts**: Python-based phase validation and evidence chain verification
 
 ### Documentation
 - Comprehensive USER-GUIDE.md with workflow examples
 - Config schema with JSON Schema validation
 - Extension metadata in extension.yml and extension.json
-- Template configuration file: harness-tdd-config.yml.template
+- Template configuration file: matd-config.yml.template
 
 ### Testing
 - pytest-based test suite with fixtures

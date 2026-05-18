@@ -56,7 +56,7 @@ fi
 
 ### 3. Load Configuration
 
-Load `.specify/harness-tdd-config.yml` or use defaults:
+Load `.specify/matd-config.yml` or use defaults:
 - Agent: `matd-qa`, timeout: 30 minutes
 - Test patterns: `tests/**/*.py`, `**/test_*.py`, `**/*_test.py`
 - Valid RED codes: `MISSING_BEHAVIOR`, `ASSERTION_MISMATCH`, `AssertionError`, `NameError`, `AttributeError`
@@ -135,7 +135,7 @@ specify artifact render test-design \
 
 ## Configuration
 
-Default `.specify/harness-tdd-config.yml`:
+Default `.specify/matd-config.yml`:
 
 ```yaml
 agents:

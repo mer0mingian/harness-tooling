@@ -2,13 +2,12 @@ schema_version: "1.0"
 
 extension:
   id: "matd"
-  name: "harness-tdd-workflow"
+  name: "matd"
   version: "1.0.0"
   description: "MATD (Multi-Agent Test-Driven) workflow commands and artifact templates for SpecKit"
   author: "Harness Sandbox Team"
-  repository: "https://github.com/harness-sandbox/harness-tooling"
+  repository: "https://github.com/mer0mingian/harness-tooling"
   license: "MIT"
-  homepage: "https://github.com/harness-sandbox/harness-tooling/tree/main/spec-kit-multi-agent-tdd"
 
 requires:
   speckit_version: ">=0.1.0"
@@ -51,17 +50,16 @@ provides:
       description: "Solution Design: generate ADR comparing approaches and C2/C3 architecture via c4-* agents"
       aliases: []
   config:
-    - name: "harness-tdd-config.yml"
-      template: "harness-tdd-config.yml.template"
+    - name: "matd-config.yml"
+      template: "matd-config.yml.template"
       description: "MATD workflow configuration (test frameworks, paths, quality gates)"
       required: false
 
 templates:
   directory: "templates/"
 
-hooks:
-  config: "hooks/config.yml"
-  install: "hooks/install.sh"
+# Note: hooks/install.sh is auto-discovered by SpecKit during installation
+# Note: hooks/config.yml contains Claude Code hooks (PreToolUse), not SpecKit lifecycle hooks
 
 tags:
   - "tdd"
@@ -71,4 +69,4 @@ tags:
   - "matd"
 
 defaults:
-  # Configuration defaults are defined in harness-tdd-config.yml.template
+  # Configuration defaults are defined in matd-config.yml.template

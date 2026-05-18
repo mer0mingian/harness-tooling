@@ -38,6 +38,6 @@ poetry.lock
 !commands/
 !hooks/
 !config-schema.json
-!harness-tdd-config.yml.template
+!matd-config.yml.template
 !extension.yml
 !USER-GUIDE.md

@@ -55,7 +55,7 @@ The validation logic from the Python commands was extracted and moved to helper 
    These tests invoked Python scripts directly and are no longer relevant.
 
 3. **Configuration unchanged:**
-   - `.specify/harness-tdd-config.yml` format remains the same
+   - `.specify/matd-config.yml` format remains the same
    - Helper scripts in `scripts/` directory still used
 
 ## Migration Commit Reference
