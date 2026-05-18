@@ -12,7 +12,7 @@
     },
     {
       "name": "harness-agents",
-      "source": "./.agents/plugins/harness-agents/plugin.json",
+      "source": "./.agents/plugins/harness-agents/.claude-plugin/plugin.json",
       "description": "Multi-agent TDD workflow specialist agents",
       "version": "1.0.0"
     },
@@ -44,7 +44,7 @@
     },
     {
       "name": "matd",
-      "source": "./.agents/plugins/matd/plugin.json",
+      "source": "./.agents/plugins/matd/.claude-plugin/plugin.json",
       "description": "Multi-Agent Test-Driven Development workflow for SpecKit. Provides orchestrated TDD workflow with specialized agents for requirements, architecture, QA, and implementation",
       "version": "1.0.0"
     }
