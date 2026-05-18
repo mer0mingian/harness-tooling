@@ -11,7 +11,7 @@
     },
     {
       "name": "harness-management-tools",
-      "source": "./.agents/plugins/harness-management-tools/.claude-plugin/plugin.json",
+      "source": "./.claude-plugin-harness-management-tools/plugin.json",
       "description": "Plugin and extension management skills for Claude Code and SpecKit",
       "version": "1.0.0",
       "keywords": ["plugin", "extension", "speckit", "claude-code", "marketplace"],
