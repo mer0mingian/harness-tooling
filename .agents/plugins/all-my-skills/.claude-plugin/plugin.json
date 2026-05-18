@@ -6,7 +6,7 @@
     "name": "Daniel Minges",
     "email": "minged01@stepstone.com"
   },
-  "skills": "../.agents/skills/",
-  "agents": "../.agents/agents/",
-  "commands": "../.agents/commands/"
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "commands": "./commands/"
 }

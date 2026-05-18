@@ -9,7 +9,7 @@
   "keywords": ["plugin", "extension", "speckit", "claude-code", "marketplace"],
   "category": "development",
   "skills": [
-    "../.agents/skills/manage-plugin-creation/SKILL.md",
-    "../.agents/skills/manage-speckit-extension/SKILL.md"
+    "./skills/manage-plugin-creation/SKILL.md",
+    "./skills/manage-speckit-extension/SKILL.md"
   ]
 }
