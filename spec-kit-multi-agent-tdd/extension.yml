@@ -1,0 +1,88 @@
+name: harness-tdd-workflow
+version: 1.0.0
+description: MATD (Multi-Agent Test-Driven) workflow commands and artifact
+  templates for SpecKit
+author: Harness Sandbox Team
+commands:
+  test:
+    file: commands/test.md
+    description: Generate failing tests (RED state) for feature
+    usage: /speckit.matd.test <feature-id>
+    arguments:
+      - name: feature_id
+        required: true
+        description: Feature identifier (e.g., 'feat-123')
+  implement:
+    file: commands/implement.md
+    description: Implement feature code (RED → GREEN)
+    usage: /speckit.matd.implement <feature-id> [--skip-integration]
+    arguments:
+      - name: feature_id
+        required: true
+        description: Feature identifier (e.g., 'feat-123')
+      - name: --skip-integration
+        required: false
+        description: Skip integration checks (ruff, mypy)
+  review:
+    file: commands/review.md
+    description: Parallel architecture + code review
+    usage: /speckit.matd.review <feature-id> [--max-cycles=N]
+    arguments:
+      - name: feature_id
+        required: true
+        description: Feature identifier (e.g., 'feat-123')
+      - name: --max-cycles
+        required: false
+        description: "Maximum review cycles (default: 3)"
+  commit:
+    file: commands/commit.md
+    description: Validate evidence and create git commit
+    usage: /speckit.matd.commit <feature-id>
+    arguments:
+      - name: feature_id
+        required: true
+        description: Feature identifier (e.g., 'feat-123')
+  update-docs:
+    file: commands/update-docs.md
+    description: Update C4 diagrams and Code Graph Context index after feature
+      implementation
+    usage: /speckit.matd.update-docs [feature-id]
+    arguments:
+      - name: feature_id
+        required: false
+        description: "Feature identifier for CGC tagging (default: 'unknown')"
+  specify-product-brief:
+    file: commands/specify-product-brief.md
+    description: Create or update product brief using grill-me interview for new products
+    usage: /speckit.matd.specify-product-brief [product-name]
+    arguments:
+      - name: product_name
+        required: false
+        description: Optional product identifier (determined during grill-me if not
+          provided)
+  specify-adr:
+    file: commands/specify-adr.md
+    description: Create Architecture Decision Record using grill-me interview
+    usage: /speckit.matd.specify-adr [decision-title]
+    arguments:
+      - name: decision_title
+        required: false
+        description: Optional decision identifier (determined during grill-me if not
+          provided)
+  specify-solution-design:
+    file: commands/specify-solution-design.md
+    description: "Solution Design: generate ADR comparing approaches and C2/C3
+      architecture via c4-* agents"
+    usage: /speckit.matd.specify-solution-design <feature-id>
+    arguments:
+      - name: feature_id
+        required: true
+        description: Feature identifier (e.g., 'feat-123')
+templates:
+  directory: templates/
+config:
+  file: harness-tdd-config.yml
+  schema: config-schema.json
+hooks:
+  config: hooks/config.yml
+  install: hooks/install.sh
