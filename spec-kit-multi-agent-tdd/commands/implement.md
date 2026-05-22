@@ -24,7 +24,7 @@ This command orchestrates the RED → GREEN transition: validates RED entry, inv
 - Tests are in valid RED state (failing with MISSING_BEHAVIOR or ASSERTION_MISMATCH)
 - Test framework (pytest) configured
 - Python environment with pytest available
-- Configuration file at `.specify/harness-tdd-config.yml` (optional, uses defaults if missing)
+- Configuration file at `.specify/matd-config.yml` (optional, uses defaults if missing)
 
 ## User Input
 
@@ -36,7 +36,7 @@ This command orchestrates the RED → GREEN transition: validates RED entry, inv
 
 ### Step 1: Load Configuration
 
-Load harness configuration from `.specify/harness-tdd-config.yml` or use defaults.
+Load harness configuration from `.specify/matd-config.yml` or use defaults.
 
 **Default configuration includes**:
 - Agent names (matd-dev for implementation)
@@ -378,7 +378,7 @@ Tests have errors that prevent RED/GREEN classification
 
 ## Configuration Reference
 
-`.specify/harness-tdd-config.yml`:
+`.specify/matd-config.yml`:
 
 ```yaml
 version: '1.0'

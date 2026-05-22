@@ -6,16 +6,47 @@
   "plugins": [
     {
       "name": "all-my-skills",
-      "source": "./.claude-plugin/plugin.json",
-      "description": "Daniel's STDD + orchestration + review workflows for Claude Code"
+      "source": "./.agents/plugins/all-my-skills",
+      "description": "Daniel's STDD + orchestration + review workflows for Claude Code",
+      "version": "0.1.0"
+    },
+    {
+      "name": "harness-agents",
+      "source": "./.agents/plugins/harness-agents",
+      "description": "Multi-agent TDD workflow specialist agents",
+      "version": "1.0.0"
+    },
+    {
+      "name": "harness-cgc-skill",
+      "source": "./.agents/plugins/harness-cgc-skill",
+      "description": "CodeGraphContext (CGC) skill for querying code graphs via MCP in harness sandbox",
+      "version": "1.0.0"
+    },
+    {
+      "name": "harness-deepwiki-skill",
+      "source": "./.agents/plugins/harness-deepwiki-skill",
+      "description": "Architecture documentation generation skills (litho/deepwiki-rs)",
+      "version": "1.1.0"
     },
     {
       "name": "harness-management-tools",
-      "source": "./.agents/plugins/harness-management-tools/.claude-plugin/plugin.json",
+      "source": "./.agents/plugins/harness-management-tools",
       "description": "Plugin and extension management skills for Claude Code and SpecKit",
       "version": "1.0.0",
       "keywords": ["plugin", "extension", "speckit", "claude-code", "marketplace"],
       "category": "development"
+    },
+    {
+      "name": "harness-workflow-runtime",
+      "source": "./.agents/plugins/harness-workflow-runtime",
+      "description": "Runtime plugin for multi-agent CLI workflows: schema validation, resolver, enforcement hooks, and the /workflow state machine",
+      "version": "0.1.0"
+    },
+    {
+      "name": "matd",
+      "source": "./.agents/plugins/matd",
+      "description": "Multi-Agent Test-Driven Development workflow for SpecKit. Provides orchestrated TDD workflow with specialized agents for requirements, architecture, QA, and implementation",
+      "version": "1.8.0"
     }
   ]
 }

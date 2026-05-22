@@ -18,7 +18,7 @@ This command validates all evidence artifacts from the Multi-Agent TDD workflow 
 
 - All workflow steps completed (Test Design, Implementation Notes, Architecture Review, Code Review)
 - SpecKit CLI installed and configured
-- Configuration file at `.specify/harness-tdd-config.yml` (optional, uses defaults)
+- Configuration file at `.specify/matd-config.yml` (optional, uses defaults)
 
 ## User Input
 
@@ -30,7 +30,7 @@ This command validates all evidence artifacts from the Multi-Agent TDD workflow 
 
 ## Step 1: Load Configuration
 
-SpecKit loads configuration from `.specify/harness-tdd-config.yml` or uses defaults.
+SpecKit loads configuration from `.specify/matd-config.yml` or uses defaults.
 
 **Key configuration**:
 - `artifacts.root`: Base directory for artifacts (default: `docs/features`)
@@ -190,7 +190,7 @@ Check template: .specify/templates/workflow-summary-template.md
 
 ## Configuration Reference
 
-See `.specify/harness-tdd-config.yml` for artifact paths and workflow settings. SpecKit manages artifact type resolution automatically.
+See `.specify/matd-config.yml` for artifact paths and workflow settings. SpecKit manages artifact type resolution automatically.
 
 ## Related Commands
 

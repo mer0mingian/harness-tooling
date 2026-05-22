@@ -43,7 +43,7 @@ This command generates an Architecture Decision Record comparing solution altern
 - Set `feature_id` from `$ARGUMENTS` (trim whitespace)
 - Check that c4-context, c4-container, and c4-component agents exist in `.claude/agents/` or `~/.claude/agents/`
 - If any c4-* agent is missing → ❌ Exit 1 with message listing all missing agents (all must be installed together with the plugin)
-- Load config from `.specify/harness-tdd-config.yml` or use defaults:
+- Load config from `.specify/matd-config.yml` or use defaults:
 
 | Key | Default | Purpose |
 |-----|---------|---------|
@@ -178,7 +178,7 @@ Suggest next step:
 
 ## Configuration Reference
 
-`.specify/harness-tdd-config.yml` keys used by this command:
+`.specify/matd-config.yml` keys used by this command:
 
 ```yaml
 artifacts:

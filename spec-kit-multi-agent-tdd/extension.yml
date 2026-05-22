@@ -1,0 +1,72 @@
+schema_version: "1.0"
+
+extension:
+  id: "matd"
+  name: "matd"
+  version: "1.0.0"
+  description: "MATD (Multi-Agent Test-Driven) workflow commands and artifact templates for SpecKit"
+  author: "Harness Sandbox Team"
+  repository: "https://github.com/mer0mingian/harness-tooling"
+  license: "MIT"
+
+requires:
+  speckit_version: ">=0.1.0"
+  tools: []
+  commands: []
+  scripts: []
+
+provides:
+  commands:
+    - name: "speckit.matd.test"
+      file: "commands/test.md"
+      description: "Generate failing tests (RED state) for feature"
+      aliases: []
+    - name: "speckit.matd.implement"
+      file: "commands/implement.md"
+      description: "Implement feature code (RED → GREEN)"
+      aliases: []
+    - name: "speckit.matd.review"
+      file: "commands/review.md"
+      description: "Parallel architecture + code review"
+      aliases: []
+    - name: "speckit.matd.commit"
+      file: "commands/commit.md"
+      description: "Validate evidence and create git commit"
+      aliases: []
+    - name: "speckit.matd.update-docs"
+      file: "commands/update-docs.md"
+      description: "Update C4 diagrams and Code Graph Context index after feature implementation"
+      aliases: []
+    - name: "speckit.matd.specify-product-brief"
+      file: "commands/specify-product-brief.md"
+      description: "Create or update product brief using grill-me interview for new products"
+      aliases: []
+    - name: "speckit.matd.specify-adr"
+      file: "commands/specify-adr.md"
+      description: "Create Architecture Decision Record using grill-me interview"
+      aliases: []
+    - name: "speckit.matd.specify-solution-design"
+      file: "commands/specify-solution-design.md"
+      description: "Solution Design: generate ADR comparing approaches and C2/C3 architecture via c4-* agents"
+      aliases: []
+  config:
+    - name: "matd-config.yml"
+      template: "matd-config.yml.template"
+      description: "MATD workflow configuration (test frameworks, paths, quality gates)"
+      required: false
+
+templates:
+  directory: "templates/"
+
+# Note: hooks/install.sh is auto-discovered by SpecKit during installation
+# Note: hooks/config.yml contains Claude Code hooks (PreToolUse), not SpecKit lifecycle hooks
+
+tags:
+  - "tdd"
+  - "testing"
+  - "workflow"
+  - "multi-agent"
+  - "matd"
+
+defaults:
+  # Configuration defaults are defined in matd-config.yml.template

@@ -1,5 +1,5 @@
 {
-  "name": "harness-tdd-workflow",
+  "name": "matd",
   "version": "1.0.0",
   "description": "MATD (Multi-Agent Test-Driven) workflow commands and artifact templates for SpecKit",
   "author": "Harness Sandbox Team",
@@ -115,7 +115,7 @@
     "directory": "templates/"
   },
   "config": {
-    "file": "harness-tdd-config.yml",
+    "file": "matd-config.yml",
     "schema": "config-schema.json"
   },
   "hooks": {

@@ -1,7 +1,8 @@
 ---
 type: adr
 feature_id: "{{feature_id}}"
-status: proposed
+status: proposed  # proposed | accepted | rejected | deprecated | superseded
+superseded_by: ""  # If deprecated, link to new ADR
 decision_date: "{{date}}"
 ---
 
@@ -30,6 +31,10 @@ _Fixed set of criteria used to evaluate alternatives. Extend if user requests ad
 | Maintainability | Ease of understanding, modifying, and extending the solution | High |
 | Cost | Infrastructure, operational, and development costs | Medium |
 | Complexity | Implementation complexity and cognitive overhead | High |
+| Security | Data protection, access control, compliance requirements | High |
+| Developer Experience | Learning curve, tooling support, debugging ease | Medium |
+| Time to Market | Speed of implementation and delivery | Medium |
+| Operational Overhead | Monitoring, deployment, and maintenance burden | Medium |
 
 ## Solution Alternative 1: {{alternative_1_name}}
 
@@ -203,12 +208,50 @@ _Positive and negative consequences of this decision:_
 - _Follow-up decisions or architectural work required_
 - _Monitoring or evaluation criteria_
 
+## Implementation Impact
+
+### Migration Strategy
+
+_Describe how to transition from the current state to the chosen alternative:_
+- Migration path (big bang, phased rollout, parallel running)
+- Data migration requirements
+- Rollback strategy
+- Risk mitigation during transition
+
+### Team Skills Required
+
+_What knowledge, training, or expertise is needed:_
+- New technologies or frameworks to learn
+- Training requirements
+- Knowledge transfer needs
+- External expertise needed
+
+### Timeline Estimate
+
+_High-level effort estimation:_
+- Design phase: _duration_
+- Implementation phase: _duration_
+- Testing & validation: _duration_
+- Deployment: _duration_
+- Total estimated timeline: _duration_
+
+### Dependencies & Blockers
+
+_External dependencies or blockers that could impact implementation:_
+- Third-party services or approvals needed
+- Infrastructure provisioning requirements
+- Team availability constraints
+
 ---
 
 **Verification Checklist:**
 - [ ] All three alternatives documented with C1/C2 diagrams
-- [ ] Decision criteria clearly defined
+- [ ] Decision criteria clearly defined and weighted
 - [ ] Pros and cons balanced for each alternative
 - [ ] Recommendation provided with clear rationale
 - [ ] Decision made and documented
 - [ ] Consequences understood and accepted
+- [ ] Implementation impact assessed
+- [ ] Migration strategy defined
+- [ ] Team skills and training needs identified
+- [ ] Timeline estimated

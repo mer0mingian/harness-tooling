@@ -24,7 +24,7 @@ Examples:
     python3 scripts/run_integration_checks.py /path/to/project
 
 Configuration:
-    Checks are configured in .specify/harness-tdd-config.yml:
+    Checks are configured in .specify/matd-config.yml:
 
     integration_checks:
       commands:
@@ -80,7 +80,7 @@ DEFAULT_CONFIG = {
 
 def load_config(project_root: Path) -> dict:
     """
-    Load harness-tdd-config.yml from project root.
+    Load matd-config.yml from project root.
 
     Args:
         project_root: Project root directory
@@ -88,7 +88,7 @@ def load_config(project_root: Path) -> dict:
     Returns:
         Configuration dictionary with integration_checks section
     """
-    config_path = project_root / ".specify" / "harness-tdd-config.yml"
+    config_path = project_root / ".specify" / "matd-config.yml"
 
     if not config_path.exists():
         return DEFAULT_CONFIG.copy()
