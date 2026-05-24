@@ -52,7 +52,7 @@ cat > docs/features/feat-test-001-spec.md <<'EOF'
 EOF
 
 # Create config file
-cat > .specify/harness-tdd-config.yml <<'EOF'
+cat > .specify/matd-config.yml <<'EOF'
 version: "1.0"
 
 agents:

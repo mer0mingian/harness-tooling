@@ -33,7 +33,7 @@ This command runs a grill-me session to elicit architectural decision context an
 
 ## Step 1: Load Configuration
 
-Load from `.specify/harness-tdd-config.yml` or use defaults:
+Load from `.specify/matd-config.yml` or use defaults:
 
 | Key | Default | Purpose |
 |-----|---------|---------|
@@ -158,7 +158,7 @@ Suggest next steps:
 
 ## Configuration Reference
 
-`.specify/harness-tdd-config.yml` keys used by this command:
+`.specify/matd-config.yml` keys used by this command:
 
 ```yaml
 artifacts:

@@ -238,7 +238,7 @@ Skills: Use arch-c4-architecture for workflow, arch-mermaid-diagrams for syntax
 
 ## G5: Config Template Implementation Gaps
 
-**Current Template Coverage (harness-tdd-config.yml.template):**
+**Current Template Coverage (matd-config.yml.template):**
 - ✅ Agent assignments (lines 8-13)
 - ✅ Artifact paths and types (lines 16-41)
 - ✅ Quality gates (lines 45-52)
@@ -271,7 +271,7 @@ Skills: Use arch-c4-architecture for workflow, arch-mermaid-diagrams for syntax
 
 **Suggested Slice 8 Scope:**
 - Implement missing config features above (5 items)
-- Add config validation script (ensure .specify/harness-tdd-config.yml is valid)
+- Add config validation script (ensure .specify/matd-config.yml is valid)
 - Document config options in docs/CONFIG-GUIDE.md
 - Create config migration script for version updates
 

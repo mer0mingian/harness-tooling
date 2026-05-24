@@ -26,7 +26,7 @@ The **SpecKit Multi-Agent TDD extension** (also called "matd SpecKit extension")
 2. **Install this extension**:
    ```bash
    # Extension auto-installs via workspace .harness.yml
-   # Or manually: specify extension add harness-tdd-workflow --from /path/to/harness-tooling/spec-kit-multi-agent-tdd
+   # Or manually: specify extension add matd --from /path/to/harness-tooling/spec-kit-multi-agent-tdd
    ```
 
 3. **Initialize in your project**:
@@ -35,7 +35,7 @@ The **SpecKit Multi-Agent TDD extension** (also called "matd SpecKit extension")
    ```
 
 4. **Configure** (optional):
-   Copy `harness-tdd-config.yml.template` to `.specify/harness-tdd-config.yml` and customize agent assignments and artifact paths.
+   Copy `matd-config.yml.template` to `.specify/matd-config.yml` and customize agent assignments and artifact paths.
 
 **For detailed installation instructions and troubleshooting**, see [../docs/PLUGIN_REGISTRATION_GUIDE.md](../docs/PLUGIN_REGISTRATION_GUIDE.md).
 
@@ -177,7 +177,7 @@ The workflow or command sequence runs the complete TDD cycle:
 
 ## Configuration
 
-Edit `.specify/harness-tdd-config.yml` to customize:
+Edit `.specify/matd-config.yml` to customize:
 
 ### Agent Assignments
 
@@ -297,7 +297,7 @@ ls harness-tooling/.claude/agents/matd-*.md
 
 Check your artifact root configuration:
 ```bash
-cat .specify/harness-tdd-config.yml | grep "root:"
+cat .specify/matd-config.yml | grep "root:"
 ```
 
 Artifacts must exist before running implementation commands:
@@ -355,7 +355,7 @@ Skips ruff/mypy checks. Useful for prototyping, but don't commit without running
 
 ### Manual Review Gates
 
-Edit `.specify/harness-tdd-config.yml`:
+Edit `.specify/matd-config.yml`:
 ```yaml
 gates:
   default_mode: "manual"

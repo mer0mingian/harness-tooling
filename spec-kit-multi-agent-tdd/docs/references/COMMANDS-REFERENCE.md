@@ -230,7 +230,7 @@ speckit workflow run workflows/matd-tdd.yml --feature-id feat-123
 
 ## Configuration
 
-Commands use configuration from `.specify/harness-tdd-config.yml`:
+Commands use configuration from `.specify/matd-config.yml`:
 
 ```yaml
 agents:
@@ -283,7 +283,7 @@ This table shows the complete mapping of MATD commands to their assigned agents,
 - **Product-brief is optional**: Specs can exist without a product-brief
 - **Spec integration**: New specs optionally enhance/update existing product-brief
 - **Agent specialization**: Each MATD agent has specific skills aligned with their role
-- **Output paths**: Configurable via `.specify/harness-tdd-config.yml`
+- **Output paths**: Configurable via `.specify/matd-config.yml`
 
 ---
 

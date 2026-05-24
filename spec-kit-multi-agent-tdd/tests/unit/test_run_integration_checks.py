@@ -27,7 +27,7 @@ class TestLoadConfig:
         """Should load integration_checks section from config."""
         config_dir = tmp_path / ".specify"
         config_dir.mkdir()
-        config_file = config_dir / "harness-tdd-config.yml"
+        config_file = config_dir / "matd-config.yml"
 
         config_file.write_text("""
 integration_checks:
@@ -60,7 +60,7 @@ integration_checks:
         """Should handle malformed YAML gracefully."""
         config_dir = tmp_path / ".specify"
         config_dir.mkdir()
-        config_file = config_dir / "harness-tdd-config.yml"
+        config_file = config_dir / "matd-config.yml"
 
         config_file.write_text("invalid: yaml: content:")
 
