@@ -9,7 +9,7 @@ tools:
   - 'filesystem/write'
 templates:
   product-brief: .speckit-templates/specs/product-brief-template.md
-  constitution: templates/system-constitution-template.md
+  constitution: templates/constitution-template.md
 exit_codes:
   0: "Success - product brief created or updated"
   1: "Validation failure - required inputs missing"
@@ -36,7 +36,7 @@ This command runs a grill-me session to elicit high-level product vision and cre
 
 ## Step 1: Load Configuration
 
-Load from `.specify/harness-tdd-config.yml` or use defaults:
+Load from `.specify/matd-config.yml` or use defaults:
 
 | Key | Default | Purpose |
 |-----|---------|---------|
@@ -108,10 +108,10 @@ If technical constraints or NFR information were discussed in Step 4:
 
 - Extract tech constraints and NFR information gathered in Step 4
 - If constitution exists (Step 3): merge new findings into the existing file silently
-- If no constitution exists: create from `templates/system-constitution-template.md`
+- If no constitution exists: create from `templates/constitution-template.md`
 - Save to: `docs/architecture/technical-constitution.md` (or the existing path found in Step 3)
 - If save fails: ❌ Exit 2 with message: "Error: failed to write System Constitution"
-- If `system-constitution-template.md` is missing and no existing constitution: ❌ Exit 2
+- If `constitution-template.md` is missing and no existing constitution: ❌ Exit 2
 
 If no technical constraints were discussed, skip this step entirely.
 
@@ -144,7 +144,7 @@ Suggest next step:
 
 ## Configuration Reference
 
-`.specify/harness-tdd-config.yml` keys used by this command:
+`.specify/matd-config.yml` keys used by this command:
 
 ```yaml
 artifacts:

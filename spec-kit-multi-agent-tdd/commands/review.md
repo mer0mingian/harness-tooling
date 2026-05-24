@@ -24,7 +24,7 @@ This command spawns @check (architecture reviewer) and @simplify (code reviewer)
 - Implementation complete (GREEN state from step 8)
 - Implementation notes artifact exists
 - Review templates available (arch-review-template.md, code-review-template.md)
-- Configuration file at `.specify/harness-tdd-config.yml` (optional, uses defaults if missing)
+- Configuration file at `.specify/matd-config.yml` (optional, uses defaults if missing)
 
 ## User Input
 
@@ -36,7 +36,7 @@ This command spawns @check (architecture reviewer) and @simplify (code reviewer)
 
 ## Step 1: Load Configuration
 
-Load harness configuration from `.specify/harness-tdd-config.yml` or use defaults:
+Load harness configuration from `.specify/matd-config.yml` or use defaults:
 
 **Default configuration includes**:
 - Agent names (check for architecture, simplify for code quality)
@@ -117,7 +117,7 @@ Collect review context for both agents:
 
 ## Step 7: Invoke Parallel Reviewers
 
-**NOTE**: Execution mode is controlled by `workflow.parallel_enabled` from `.specify/harness-tdd-config.yml`. Default is `false` (sequential) when the key is missing.
+**NOTE**: Execution mode is controlled by `workflow.parallel_enabled` from `.specify/matd-config.yml`. Default is `false` (sequential) when the key is missing.
 
 **@check agent (architecture review)**:
 - Context: implementation files, notes, spec, diff
@@ -161,7 +161,7 @@ Wait for both reviewers to complete (future automation):
 If overall verdict is `NEEDS_REVISION`:
 
 **Review cycle management**:
-- Max cycles: 3 (configurable in harness-tdd-config.yml)
+- Max cycles: 3 (configurable in matd-config.yml)
 - Track current cycle in artifacts
 - On each cycle:
   1. Developer fixes issues
@@ -261,7 +261,7 @@ Checked locations:
 
 ## Configuration Reference
 
-`.specify/harness-tdd-config.yml`:
+`.specify/matd-config.yml`:
 
 ```yaml
 version: '1.0'

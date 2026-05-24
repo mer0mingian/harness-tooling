@@ -56,7 +56,7 @@ def load_test_patterns() -> List[str]:
     # Try to load from config
     try:
         project_root = Path.cwd()
-        config_path = project_root / ".specify" / "harness-tdd-config.yml"
+        config_path = project_root / ".specify" / "matd-config.yml"
 
         if config_path.exists():
             try:

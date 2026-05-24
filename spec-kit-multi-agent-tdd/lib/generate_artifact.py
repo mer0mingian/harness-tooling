@@ -191,14 +191,14 @@ def load_config(config_path: Optional[Path] = None) -> Dict[str, Any]:
     Load configuration from YAML file.
 
     Args:
-        config_path: Path to config file (default: harness-tdd-config.yml)
+        config_path: Path to config file (default: matd-config.yml)
 
     Returns:
         Configuration dictionary (or empty dict if no config found)
     """
     if config_path is None:
         script_dir = Path(__file__).parent
-        config_path = script_dir.parent / "harness-tdd-config.yml"
+        config_path = script_dir.parent / "matd-config.yml"
 
     if not config_path.exists():
         return {}
@@ -293,7 +293,7 @@ Examples:
     parser.add_argument(
         "--config",
         type=Path,
-        help="Config file path (default: ../harness-tdd-config.yml)"
+        help="Config file path (default: ../matd-config.yml)"
     )
     parser.add_argument(
         "--var",
