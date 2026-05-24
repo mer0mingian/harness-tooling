@@ -13,5 +13,15 @@
     "./agents/matd-specifier.md",
     "./agents/matd-orchestrator.md",
     "./agents/matd-critical-thinker.md"
+  ],
+  "commands": [
+    "./commands/test.md",
+    "./commands/implement.md",
+    "./commands/review.md",
+    "./commands/commit.md",
+    "./commands/update-docs.md",
+    "./commands/specify-product-brief.md",
+    "./commands/specify-adr.md",
+    "./commands/specify-solution-design.md"
   ]
 }
