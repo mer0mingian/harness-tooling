@@ -66,6 +66,61 @@ Search in order:
 
 ## Step 4: Run Grill-Me Session (general-grill-me skill)
 
+**CLI Detection:**
+
+```bash
+# Detect CLI environment
+detect_cli() {
+    if command -v claude >/dev/null 2>&1; then
+        echo "claude"
+    elif command -v opencode >/dev/null 2>&1; then
+        echo "opencode"
+    else
+        echo "none"
+    fi
+}
+
+CLI=$(detect_cli)
+
+if [ "$CLI" = "none" ]; then
+    echo "Error: No supported CLI detected (claude or opencode required)"
+    exit 1
+fi
+
+# Prepare grill-me context
+cat > /tmp/grill-me-context-product-brief.txt <<EOF
+Goal: Product Brief for ${PRODUCT_NAME}
+Timeout: ${agent_timeout} minutes
+
+Questions must cover:
+- Product Vision & Goals
+- Target Users & Personas
+- Core Value Proposition
+- High-Level Features
+- Success Metrics
+- Technical Context
+- Known Constraints
+EOF
+```
+
+**Agent Invocation:**
+
+```bash
+if [ "$CLI" = "claude" ]; then
+    # Claude Code: Agent tool with automatic selection (uses matd-specifier agent)
+    echo "Starting grill-me session for Product Brief..."
+    # Agent invoked automatically by Claude Code harness
+    
+elif [ "$CLI" = "opencode" ]; then
+    # OpenCode: Task tool with explicit @mention
+    opencode task create "Product Brief discovery for ${PRODUCT_NAME}" \
+        --assign @matd-specifier \
+        --skill general-grill-me \
+        --context "$(cat /tmp/grill-me-context-product-brief.txt)" \
+        --interactive
+fi
+```
+
 Use the `general-grill-me` skill throughout this step.
 
 **Goal:** Reach consensus on product vision, goals, and high-level features through relentless questioning.

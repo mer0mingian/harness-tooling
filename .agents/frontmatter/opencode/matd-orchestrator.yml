@@ -1,0 +1,42 @@
+name: matd-orchestrator
+description: MATD Master Orchestrator. User-facing PM and workflow coordinator. Manages task sequences, parallel execution, and approval gates. Read-only.
+source: local
+mode: primary
+skills:
+  - orchestrate-dispatching-parallel-agents
+  - orchestrate-executing-plans
+  - orchestrate-finishing-a-development-branch
+  - orchestrate-multi-agent-patterns
+  - orchestrate-subagent-driven-development
+  - stdd-ask-questions-if-underspecified
+  - stdd-openspec
+  - stdd-pm-linear-integration
+  - general-finishing-a-development-branch
+  - general-git-advanced-workflows
+  - general-git-guardrails-claude-code
+  - general-python-environment
+  - general-rtk-usage
+  - general-solid
+  - general-system-design
+  - general-using-git-worktrees
+  - general-verification-before-completion
+permission:
+  read:
+    '*': allow
+  write:
+    '*': deny
+  edit:
+    '*': deny
+  bash:
+    '*': deny
+    ls: allow
+    ls *: allow
+    git branch: allow
+    git status: allow
+  skill:
+    "orchestrate-": allow
+    "stdd-ask-questions-if-underspecified": allow
+    "stdd-openspec": allow
+    "stdd-pm-linear-integration": allow
+    "general-": allow
+    "": deny

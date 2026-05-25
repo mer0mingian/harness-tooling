@@ -1,0 +1,48 @@
+name: matd-architect
+description: 'Solution Designer (MATD Arch role). Handles system design, architecture decisions, C4 diagrams, and solution patterns. Part of the MATD workflow for test-driven development.'
+temperature: 0.1
+source: local
+mode: subagent
+skills:
+  - arch-c4-architecture
+  - arch-mermaid-diagrams
+  - arch-api-design-principles
+  - arch-architecture-patterns
+  - arch-design-system-patterns
+  - arch-smart-docs
+  - arch-writing-plans
+  - general-system-design
+  - general-improve-codebase-architecture
+  - general-grill-me
+  - stdd-openspec
+  - dev-backend-to-frontend-handoff
+  - orchestrate-dispatching-parallel-agents
+  - orchestrate-executing-plans
+  - orchestrate-multi-agent-patterns
+  - orchestrate-subagent-driven-development
+  - stdd-ask-questions-if-underspecified
+  - general-verification-before-completion
+  - general-rtk-usage
+  - general-git-guardrails-claude-code
+  - general-finishing-a-development-branch
+  - general-using-git-worktrees
+permission:
+  skill:
+    arch-writing-plans: allow
+    general-*: allow
+    python-design-patterns: allow
+    python-project-structure: allow
+    python-packaging: allow
+    arch-api-design-principles: allow
+    arch-architecture-patterns: allow
+    deployment-pipeline-design: allow
+    python-testing-uv-playwright: allow
+    stdd-test-driven-development: allow
+    review-webapp-testing: allow
+    review-e2e-testing-patterns: allow
+    arch-smart-docs: allow
+    orchestrate-dispatching-parallel-agents: allow
+    "orchestrate-": allow
+    "review-": allow
+    "general-": allow
+    "": deny
