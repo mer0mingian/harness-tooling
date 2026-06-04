@@ -99,6 +99,296 @@ specify extension add harness-tdd-workflow \
 
 For detailed installation instructions, troubleshooting, and advanced topics, see [docs/PLUGIN_REGISTRATION_GUIDE.md](docs/PLUGIN_REGISTRATION_GUIDE.md).
 
+---
+
+## Creating Custom Agents and Skills
+
+**Target Audience:** Developers extending the harness tooling with team-specific agents or skills.
+
+### Agent Creation
+
+Agents are autonomous assistants with specific expertise. Each agent has:
+- **Frontmatter** (YAML) - Capabilities, permissions, tools
+- **Body** (Markdown) - Role, responsibilities, communication style
+
+#### Agent File Structure
+
+```markdown
+---
+# Claude Code format
+name: custom-agent-name
+description: Brief description of when to use this agent
+skills:
+  - skill-one
+  - skill-two
+tools:
+  - Read
+  - Bash
+model: sonnet
+---
+
+# Agent Name
+
+You are an expert in [domain].
+
+## Role
+Your primary responsibility is [main task].
+
+## Responsibilities
+- Task 1
+- Task 2
+- Task 3
+
+## Communication Style
+- Be concise but thorough
+- Use specific file paths and line numbers
+- Escalate blockers immediately
+```
+
+#### CLI Compatibility
+
+**Important:** Agent frontmatter differs between CLIs!
+
+| CLI | Frontmatter Requirements | Location |
+|-----|-------------------------|----------|
+| **Claude Code** | `name:`, `description:`, `skills:[]`, `tools:[]` | `.agents/agents/<name>/agent.md` |
+| **OpenCode** | `description:`, `mode:`, `permission:{}` (filename = agent name) | `.agents/agents/<name>/agent.md` |
+| **agy** | TBD (research needed) | TBD |
+| **Codex** | TBD (research needed) | TBD |
+
+**Cross-CLI Strategy (Current):**
+- Maintain separate agent.md files per CLI (temporary)
+- Or: Manual frontmatter conversion when installing
+- **Future (v0.3+):** Generator script for CLI-specific agent files (see TARGET_STATE.md Section 3.2)
+
+#### Example: Custom Stepstone Agent
+
+```markdown
+---
+# Claude Code format
+name: stepstone-integration
+description: Handles Stepstone-specific integrations (Jira, internal APIs)
+skills:
+  - general-verification-before-completion
+  - general-rtk-usage
+  - stepstone-jira-workflow
+tools:
+  - Read
+  - Bash
+  - WebFetch
+model: sonnet
+---
+
+# Stepstone Integration Specialist
+
+You are an expert in Stepstone's internal systems and APIs.
+
+## Role
+Assist with integrations to Jira, Confluence, internal services.
+
+## Responsibilities
+- Query Jira tickets via REST API
+- Sync artifacts to Confluence
+- Handle corporate authentication (Okta, AWS)
+- Follow Stepstone architecture patterns
+
+## Communication Style
+- Reference internal docs (developer-context-md)
+- Use corporate terminology
+- Escalate access issues to user
+```
+
+---
+
+### Skill Creation
+
+Skills are reusable expertise modules that agents can invoke. Each skill is a single markdown file with instructions.
+
+#### Skill File Structure
+
+```markdown
+# Skill Name
+
+**Category:** general | arch | dev | review | orchestrate | python | context | file-ops | manage  
+**Tier:** core | extension
+
+## Purpose
+Brief description of what this skill provides.
+
+## When to Use
+- Scenario 1
+- Scenario 2
+
+## Instructions
+
+[Detailed instructions for the agent...]
+
+## Examples
+
+### Example 1: [Description]
+\`\`\`python
+# Example code
+\`\`\`
+
+## Related Skills
+- [Related Skill 1](../related-skill-1.md)
+- [Related Skill 2](../related-skill-2.md)
+```
+
+#### Skill Guidelines
+
+**Best Practices:**
+- **Single Responsibility** - One skill, one area of expertise
+- **CLI-Agnostic** - Skills are markdown, work across all agent CLIs
+- **Self-Contained** - Include examples, don't assume external context
+- **Cross-Reference** - Link to related skills for discovery
+- **Version Control** - Document when skill updated, why
+
+**Category Conventions:**
+- `general-*` - Cross-cutting skills (git, verification, rtk)
+- `arch-*` - Architecture and design skills
+- `dev-*` - Development and implementation
+- `review-*` - Code review and quality
+- `orchestrate-*` - Multi-agent coordination
+- `python-*` - Python-specific skills
+- `context-*` - Context management skills
+- `file-ops-*` - File manipulation (xlsx, pptx, pdf)
+- `manage-*` - Marketplace management (skill creation, auditing)
+
+#### Example: Custom Stepstone Skill
+
+```markdown
+# stepstone-jira-workflow
+
+**Category:** manage  
+**Tier:** extension
+
+## Purpose
+Automate Jira ticket creation and updates for Stepstone projects.
+
+## When to Use
+- Creating tickets from specs
+- Syncing implementation status to Jira
+- Querying sprint planning data
+
+## Instructions
+
+When creating Jira tickets:
+1. Use Stepstone project key (e.g., PROJ, DEV, QA)
+2. Set appropriate issue type (Story, Task, Bug)
+3. Link to parent Epic if applicable
+4. Add labels: `ai-assisted`, team identifier
+5. Use Stepstone Jira field conventions:
+   - Story Points: estimate in SP (1,2,3,5,8)
+   - Sprint: current active sprint
+   - Components: backend, frontend, data, infra
+
+Example REST API call:
+\`\`\`bash
+curl -X POST https://jira.stepstone.com/rest/api/2/issue \
+  -H "Authorization: Bearer $JIRA_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fields": {
+      "project": {"key": "PROJ"},
+      "summary": "Feature summary",
+      "description": "Feature description",
+      "issuetype": {"name": "Story"},
+      "labels": ["ai-assisted", "team-xyz"]
+    }
+  }'
+\`\`\`
+
+## Related Skills
+- general-git-advanced-workflows
+- manage-command-creator
+```
+
+---
+
+### Testing Your Agents/Skills
+
+**Before contributing:**
+
+1. **Syntax Validation**
+   ```bash
+   # Validate YAML frontmatter
+   yq eval '.name' .agents/agents/custom-agent/agent.md
+   
+   # Markdown lint
+   markdownlint .agents/skills/custom-skill.md
+   ```
+
+2. **Agent Invocation Test**
+   ```bash
+   # Inside sandbox
+   claude .
+   # In chat:
+   /agents     # Verify your agent listed
+   /skills     # Verify your skill listed
+   
+   # Test invocation
+   # Create test scenario, invoke agent, verify response
+   ```
+
+3. **Cross-CLI Compatibility**
+   - Test with Claude Code (primary)
+   - Test with OpenCode (if applicable)
+   - Document known limitations per CLI
+
+4. **Integration Test**
+   - Add to MATD workflow if relevant
+   - Verify skill accessible from agents
+   - Test with realistic project scenario
+
+---
+
+### Contributing to Marketplace
+
+**Submission Process:**
+
+1. Fork harness-tooling repository
+2. Add agent/skill following structure above
+3. Update [AGENT_SKILL_MATRIX.md](../AGENT_SKILL_MATRIX.md):
+   - Add skill to matrix
+   - Assign to appropriate agents
+   - Mark as core/extension tier
+4. Test thoroughly (see Testing section)
+5. Submit PR with:
+   - Description of new agent/skill
+   - Use cases / rationale
+   - Test results
+   - CLI compatibility notes
+
+**Review Criteria:**
+- Follows naming conventions
+- Self-contained and documented
+- No sensitive/corporate data
+- CLI compatibility clear
+- Tested with at least one agent CLI
+
+---
+
+### CLI Compatibility Reference
+
+See [AGENT_SKILL_MATRIX.md](../AGENT_SKILL_MATRIX.md) "CLI Compatibility Matrix" section for:
+- Supported CLIs and their status
+- Feature compatibility per CLI
+- Agent invocation patterns
+- Known limitations
+
+**Quick Reference:**
+
+| Aspect | Claude Code | OpenCode | agy | Codex |
+|--------|-------------|----------|-----|-------|
+| **Skills** | ✅ Native | ✅ Plugin | ❓ TBD | ❓ TBD |
+| **Agents** | ✅ Native | ✅ Task tool | ❓ TBD | ❓ TBD |
+| **Marketplace** | ✅ Plugin | ✅ Discovery | ❓ TBD | ❓ TBD |
+
+---
+
+For questions or support, see [docs/PLUGIN_REGISTRATION_GUIDE.md](docs/PLUGIN_REGISTRATION_GUIDE.md).
+
 **Note:** Gemini CLI support is scaffolded but not implemented in v1.
 
 ---
