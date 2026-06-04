@@ -96,6 +96,61 @@ Update ADR: set `status: accepted`, record chosen alternative in `## Decision` s
 
 ## Step 5: Invoke @c4-context Agent (Sequential)
 
+**CLI Detection:**
+
+```bash
+# Detect CLI environment
+detect_cli() {
+    if command -v claude >/dev/null 2>&1; then
+        echo "claude"
+    elif command -v opencode >/dev/null 2>&1; then
+        echo "opencode"
+    else
+        echo "none"
+    fi
+}
+
+CLI=$(detect_cli)
+
+if [ "$CLI" = "none" ]; then
+    echo "Error: No supported CLI detected (claude or opencode required)"
+    exit 1
+fi
+
+# Prepare agent context
+cat > /tmp/c4-context-${FEATURE_ID}.txt <<EOF
+Feature: ${FEATURE_ID}
+Chosen solution: ${chosen_solution}
+Timeout: ${agent_timeout} minutes
+
+Context:
+- Spec: ${spec_path}
+- System Constitution: ${constitution_path}
+- ADR: ${adr_path}
+- Codebase analysis: ${codebase_analysis}
+
+Task: Generate C1 Context diagram for the chosen solution showing system boundary, external actors, and high-level interactions.
+EOF
+```
+
+**Agent Invocation:**
+
+```bash
+if [ "$CLI" = "claude" ]; then
+    # Claude Code: Agent tool with automatic selection (uses c4-context agent)
+    echo "Invoking @c4-context agent for C1 Context diagram..."
+    # Agent invoked automatically by Claude Code harness
+    
+elif [ "$CLI" = "opencode" ]; then
+    # OpenCode: Task tool with explicit @mention
+    opencode task create "Generate C1 Context diagram for ${FEATURE_ID}" \
+        --assign @c4-context \
+        --skill arch-c4-architecture \
+        --context "$(cat /tmp/c4-context-${FEATURE_ID}.txt)" \
+        --output "${solution_design_path}"
+fi
+```
+
 Delegate to **@c4-context** agent with `arch-c4-architecture` and `arch-mermaid-diagrams` skills.
 
 **Provide ALL context:** Spec + System Constitution + ADR (chosen solution summary) + codebase analysis (if available)
@@ -109,6 +164,40 @@ Delegate to **@c4-context** agent with `arch-c4-architecture` and `arch-mermaid-
 
 ## Step 6: Invoke @c4-container Agent (Sequential)
 
+**Agent Invocation:**
+
+```bash
+# Prepare agent context
+cat > /tmp/c4-container-${FEATURE_ID}.txt <<EOF
+Feature: ${FEATURE_ID}
+Chosen solution: ${chosen_solution}
+Timeout: ${agent_timeout} minutes
+
+Context:
+- Spec: ${spec_path}
+- System Constitution: ${constitution_path}
+- ADR: ${adr_path}
+- C1 Context: ${c1_output}
+- Codebase analysis: ${codebase_analysis}
+
+Task: Generate C2 Container diagram for the chosen solution.
+EOF
+
+if [ "$CLI" = "claude" ]; then
+    # Claude Code: Agent tool with automatic selection (uses c4-container agent)
+    echo "Invoking @c4-container agent for C2 Container diagram..."
+    # Agent invoked automatically by Claude Code harness
+    
+elif [ "$CLI" = "opencode" ]; then
+    # OpenCode: Task tool with explicit @mention
+    opencode task create "Generate C2 Container diagram for ${FEATURE_ID}" \
+        --assign @c4-container \
+        --skill arch-c4-architecture \
+        --context "$(cat /tmp/c4-container-${FEATURE_ID}.txt)" \
+        --output "${solution_design_path}"
+fi
+```
+
 Delegate to **@c4-container** agent with `arch-c4-architecture` and `arch-mermaid-diagrams` skills.
 
 **Provide ALL context:** Spec + Constitution + ADR + C1 output from Step 5 + codebase analysis
@@ -120,6 +209,41 @@ Delegate to **@c4-container** agent with `arch-c4-architecture` and `arch-mermai
 **If contradiction detected:** interrupt and request resolution. ❌ Exit 2 if unresolved.
 
 ## Step 7: Invoke @c4-component Agent (Sequential)
+
+**Agent Invocation:**
+
+```bash
+# Prepare agent context
+cat > /tmp/c4-component-${FEATURE_ID}.txt <<EOF
+Feature: ${FEATURE_ID}
+Chosen solution: ${chosen_solution}
+Timeout: ${agent_timeout} minutes
+
+Context:
+- Spec: ${spec_path}
+- System Constitution: ${constitution_path}
+- ADR: ${adr_path}
+- C1 Context: ${c1_output}
+- C2 Container: ${c2_output}
+- Codebase analysis: ${codebase_analysis}
+
+Task: Generate C3 Component diagram for the chosen solution (internal structure of primary container).
+EOF
+
+if [ "$CLI" = "claude" ]; then
+    # Claude Code: Agent tool with automatic selection (uses c4-component agent)
+    echo "Invoking @c4-component agent for C3 Component diagram..."
+    # Agent invoked automatically by Claude Code harness
+    
+elif [ "$CLI" = "opencode" ]; then
+    # OpenCode: Task tool with explicit @mention
+    opencode task create "Generate C3 Component diagram for ${FEATURE_ID}" \
+        --assign @c4-component \
+        --skill arch-c4-architecture \
+        --context "$(cat /tmp/c4-component-${FEATURE_ID}.txt)" \
+        --output "${solution_design_path}"
+fi
+```
 
 Delegate to **@c4-component** agent with `arch-c4-architecture` and `arch-mermaid-diagrams` skills.
 

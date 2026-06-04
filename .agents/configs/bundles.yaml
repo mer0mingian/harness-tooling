@@ -17,37 +17,10 @@
 
 bundles:
 
-  # PRIES-aligned subagents and commands (PM → Make → Test → Review →
-  # Simplify). Pulls in the workflow's core agents, slash commands, and the
-  # complexity-review skill the simplify step relies on.
-  pries-core:
-    skills:
-      - review-simplify-complexity
-      - review-check-correctness
-      - review-differential-review
-      - review-orchestrate-dual-review
-      - orchestrate-executing-plans
-      - orchestrate-subagent-driven-development
-      - general-verification-before-completion
-    agents:
-      - pries-pm
-      - pries-make
-      - pries-test
-      - pries-check
-      - pries-simplify
-    commands:
-      - pries-implement
-      - pries-validate
-      - pries-review-only
-      - pries-test-only
-    plugins:
-      - harness-workflow-runtime
-
-  # General-purpose review/simplify/security skills used outside the strict
-  # PRIES loop. Note: there is no `init` skill in this marketplace — Claude
-  # Code's `/init` is a CLI builtin, not a skill — and there is no
-  # standalone `security-review` skill yet. The closest current equivalents
-  # are listed below.
+  # General-purpose review/simplify/security skills. Note: there is no `init`
+  # skill in this marketplace — Claude Code's `/init` is a CLI builtin, not a
+  # skill — and there is no standalone `security-review` skill yet. The closest
+  # current equivalents are listed below.
   essentials:
     skills:
       - review-simplify-complexity

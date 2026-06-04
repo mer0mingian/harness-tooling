@@ -1,0 +1,20 @@
+name: matd-orchestrator
+description: MATD Master Orchestrator. User-facing PM and workflow coordinator. Manages task sequences, parallel execution, and approval gates. Strictly read-only.
+model: opus
+tools: [Read, Agent]
+skills:
+  - orchestrate-dispatching-parallel-agents
+  - orchestrate-executing-plans
+  - orchestrate-finishing-a-development-branch
+  - orchestrate-multi-agent-patterns
+  - orchestrate-subagent-driven-development
+  - general-finishing-a-development-branch
+  - general-git-advanced-workflows
+  - general-git-guardrails-claude-code
+  - general-python-environment
+  - general-rtk-usage
+  - general-solid
+  - general-system-design
+  - general-using-git-worktrees
+  - general-verification-before-completion
+memory: project

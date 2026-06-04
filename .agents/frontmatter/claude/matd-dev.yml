@@ -1,0 +1,27 @@
+name: matd-dev
+description: Implementation Engineer (MATD SWE). Implements code using TDD within fixed file manifests. Sandboxed execution with no git/pip/curl. Use after QA creates failing tests.
+model: sonnet
+tools: [Read, Edit, Bash, Grep]
+disallowedTools: [Write]
+skills:
+  - dev-tdd
+  - dev-alpine-js-patterns
+  - dev-backend-to-frontend-handoff
+  - dev-database-migration
+  - dev-databases
+  - dev-diagnose
+  - python-async-patterns
+  - python-code-style
+  - python-configuration
+  - python-design-patterns
+  - python-fastapi-templates
+  - python-packaging
+  - python-testing-uv-playwright
+  - general-python-environment
+  - general-solid
+  - general-verification-before-completion
+  - general-rtk-usage
+  - general-git-guardrails-claude-code
+  - general-finishing-a-development-branch
+  - general-using-git-worktrees
+memory: project

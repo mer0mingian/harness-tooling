@@ -129,41 +129,75 @@ Generate implementation notes artifact from template.
 
 ### Step 6: Invoke matd-dev Agent
 
-Invoke @matd-dev agent with implementation context:
+**CLI Detection and Agent Invocation:**
 
-**Agent**: matd-dev
+```bash
+# Detect CLI environment
+detect_cli() {
+    if command -v claude >/dev/null 2>&1; then
+        echo "claude"
+    elif command -v opencode >/dev/null 2>&1; then
+        echo "opencode"
+    else
+        echo "none"
+    fi
+}
 
-**Context**:
-- `feature_id`: Feature identifier
-- `test_design_path`: Path to test design artifact
-- `spec_path`: Path to spec artifact (if available)
-- `test_file_patterns`: List of test file patterns from config
+CLI=$(detect_cli)
 
-**Instructions**:
-1. Read test design artifact at `test_design_path`
-2. Read spec artifact at `spec_path` (if provided)
+if [ "$CLI" = "none" ]; then
+    echo "Error: No supported CLI detected (claude or opencode required)"
+    exit 1
+fi
+
+# Prepare agent context
+cat > /tmp/impl-context-${FEATURE_ID}.txt <<EOF
+Feature: ${FEATURE_ID}
+Test design: ${test_design_path}
+Feature spec: ${spec_path}
+
+Instructions:
+1. Read test design artifact at ${test_design_path}
+2. Read spec artifact at ${spec_path} (if provided)
 3. Implement code to make tests pass
 4. DO NOT modify test files (unless fixing broken tests)
 5. Focus on minimal implementation to achieve GREEN state
 
-**Timeout**: Complete this task within ${agent_timeout} minutes (default: 30). If you cannot achieve GREEN state within the time limit, output partial results with a summary of completed work, then escalate to human with what remains and the current test state.
+Test file patterns:
+  - tests/**/*.py
+  - **/test_*.py
+  - **/*_test.py
 
-**Print agent invocation instructions**:
-```
-==========================================================
+Timeout: ${agent_timeout} minutes
+If you cannot achieve GREEN state within the time limit, output partial results with a summary of completed work, then escalate to human with what remains and the current test state.
+EOF
+
+# Invoke agent based on CLI
+if [ "$CLI" = "claude" ]; then
+    # Claude Code: Agent tool with automatic selection
+    echo "==========================================================
 NEXT STEP: Invoke implementation agent
 ==========================================================
 
 Agent: matd-dev
 Instructions: Implement code to make tests pass
-Test design: /path/to/test-design-feat-123.md
-Feature spec: /path/to/feat-123.md  # if available
-Output artifact: /path/to/impl-notes-feat-123.md
+Test design: ${test_design_path}
+Feature spec: ${spec_path}
+Output artifact: ${impl_notes_path}
 
 NOTE: Agent will read test files from patterns:
   - tests/**/*.py
   - **/test_*.py
-  - **/*_test.py
+  - **/*_test.py"
+    # Agent tool invoked automatically by Claude Code harness
+    
+elif [ "$CLI" = "opencode" ]; then
+    # OpenCode: Task tool with explicit @mention
+    opencode task create "Implement feature ${FEATURE_ID} (RED → GREEN)" \
+        --assign @matd-dev \
+        --context "$(cat /tmp/impl-context-${FEATURE_ID}.txt)" \
+        --output "src/"
+fi
 ```
 
 ### Step 7: Validate GREEN State

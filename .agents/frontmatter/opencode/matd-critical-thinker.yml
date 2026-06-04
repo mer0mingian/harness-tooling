@@ -1,0 +1,34 @@
+name: matd-critical-thinker
+description: Red Team Validator (MATD Crit role). Analyzes specs and plans for completeness, edge cases, and risk. Part of the MATD workflow for test-driven development.
+source: local
+mode: subagent
+skills:
+  - stdd-ask-questions-if-underspecified
+  - review-check-correctness
+  - general-grill-me
+  - general-grill-with-docs
+  - general-verification-before-completion
+  - general-rtk-usage
+  - general-git-guardrails-claude-code
+  - general-finishing-a-development-branch
+  - general-using-git-worktrees
+permission:
+  read:
+    '*': allow
+  write:
+    '*': deny
+  edit:
+    '*': deny
+  bash:
+    '*': deny
+    ls: allow
+    ls *: allow
+    grep *: allow
+  skills:
+    daniels-ask-questions-if-underspecified: allow
+    review-*: allow
+    general-*: allow
+  skill:
+    "stdd-": allow
+    "general-": allow
+    "": deny

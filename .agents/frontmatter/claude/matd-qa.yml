@@ -1,0 +1,19 @@
+name: matd-qa
+description: Quality Assurance Engineer (MATD QA). Creates E2E/Integration tests before implementation and audits completed work. Use proactively after architect delivers designs.
+model: sonnet
+tools: [Read, Grep, Bash, Write]
+skills:
+  - review-check-correctness
+  - review-differential-review
+  - review-e2e-testing-patterns
+  - review-systematic-debugging
+  - review-webapp-testing
+  - review-simplify-complexity
+  - python-testing-uv-playwright
+  - dev-tdd
+  - general-verification-before-completion
+  - general-rtk-usage
+  - general-git-guardrails-claude-code
+  - general-finishing-a-development-branch
+  - general-using-git-worktrees
+memory: project

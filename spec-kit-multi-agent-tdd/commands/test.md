@@ -64,9 +64,27 @@ Load `.specify/matd-config.yml` or use defaults:
 
 ### 4. Invoke matd-qa Agent
 
-Build agent context and invoke @matd-qa:
+**CLI Detection and Agent Invocation:**
 
 ```bash
+# Detect CLI environment
+detect_cli() {
+    if command -v claude >/dev/null 2>&1; then
+        echo "claude"
+    elif command -v opencode >/dev/null 2>&1; then
+        echo "opencode"
+    else
+        echo "none"
+    fi
+}
+
+CLI=$(detect_cli)
+
+if [ "$CLI" = "none" ]; then
+    echo "Error: No supported CLI detected (claude or opencode required)"
+    exit 1
+fi
+
 # Prepare agent context
 cat > /tmp/agent-context-${FEATURE_ID}.txt <<EOF
 Feature: ${FEATURE_ID}
@@ -87,11 +105,19 @@ Instructions:
 - Timeout: ${agent_timeout} minutes
 EOF
 
-# Invoke matd-qa subagent
-invoke_subagent matd-qa \
-  --context "/tmp/agent-context-${FEATURE_ID}.txt" \
-  --mode "red-state" \
-  --output "tests/"
+# Invoke agent based on CLI
+if [ "$CLI" = "claude" ]; then
+    # Claude Code: Agent tool with automatic selection
+    echo "Creating failing tests (RED state) for feature ${FEATURE_ID} based on acceptance criteria from ${spec_file}"
+    # Agent tool invoked automatically by Claude Code harness
+    
+elif [ "$CLI" = "opencode" ]; then
+    # OpenCode: Task tool with explicit @mention
+    opencode task create "Create failing tests (RED state) for feature ${FEATURE_ID}" \
+        --assign @matd-qa \
+        --context "$(cat /tmp/agent-context-${FEATURE_ID}.txt)" \
+        --output "tests/"
+fi
 ```
 
 ### 5. Validate RED State (if --run-tests)

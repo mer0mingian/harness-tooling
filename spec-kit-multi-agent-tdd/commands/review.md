@@ -117,7 +117,41 @@ Collect review context for both agents:
 
 ## Step 7: Invoke Parallel Reviewers
 
-**NOTE**: Execution mode is controlled by `workflow.parallel_enabled` from `.specify/matd-config.yml`. Default is `false` (sequential) when the key is missing.
+**CLI Detection and Agent Invocation:**
+
+```bash
+# Detect CLI environment
+detect_cli() {
+    if command -v claude >/dev/null 2>&1; then
+        echo "claude"
+    elif command -v opencode >/dev/null 2>&1; then
+        echo "opencode"
+    else
+        echo "none"
+    fi
+}
+
+CLI=$(detect_cli)
+
+if [ "$CLI" = "none" ]; then
+    echo "Error: No supported CLI detected (claude or opencode required)"
+    exit 1
+fi
+
+# Prepare review context
+cat > /tmp/review-context-${FEATURE_ID}.txt <<EOF
+Feature: ${FEATURE_ID}
+Implementation notes: ${impl_notes_path}
+Spec: ${spec_path}
+
+Implementation files: ${changed_files}
+Test files: ${test_files}
+Diff: ${git_diff_output}
+
+Timeout: ${agent_timeout} minutes
+If you cannot finish within the time limit, output partial results covering findings identified so far, then escalate to human for manual review of the remaining items.
+EOF
+```
 
 **@check agent (architecture review)**:
 - Context: implementation files, notes, spec, diff
@@ -131,14 +165,52 @@ Collect review context for both agents:
 - Focus: Complexity, duplication, readability, maintainability
 - Verdict: APPROVED | NEEDS_REVISION | BLOCKED
 
-**Conditional dispatch** (based on `workflow.parallel_enabled`):
+**Conditional dispatch** (based on `workflow.parallel_enabled` from `.specify/matd-config.yml`, default: `false`):
 
-- **If `parallel_enabled: true`**: Invoke @check and @simplify simultaneously (parallel execution). Wait for both agents to complete before proceeding to Step 8. Both agents receive the same review context.
-
-- **If `parallel_enabled: false`**: Run @check first (architecture review). Wait for @check to complete and record its verdict. Then run @simplify sequentially (code quality review). Wait for @simplify to complete before proceeding to Step 8.
-
-**Agent timeout instruction**:
-Each reviewer must complete their review within ${agent_timeout} minutes (default: 30). If a reviewer cannot finish within the time limit, output partial results covering findings identified so far, then escalate to human for manual review of the remaining items.
+```bash
+if [ "$CLI" = "claude" ]; then
+    # Claude Code: Agent tool with automatic selection
+    if [ "$parallel_enabled" = "true" ]; then
+        # Parallel execution
+        echo "Invoking @check and @simplify agents in parallel..."
+        # Both agents invoked automatically by Claude Code harness
+    else
+        # Sequential execution
+        echo "Invoking @check agent (architecture review)..."
+        # Agent invoked automatically
+        echo "Invoking @simplify agent (code quality review)..."
+        # Agent invoked automatically
+    fi
+    
+elif [ "$CLI" = "opencode" ]; then
+    # OpenCode: Task tool with explicit @mention
+    if [ "$parallel_enabled" = "true" ]; then
+        # Parallel execution
+        opencode task create "Architecture review for ${FEATURE_ID}" \
+            --assign @check \
+            --context "$(cat /tmp/review-context-${FEATURE_ID}.txt)" \
+            --output "${arch_review_path}" &
+        
+        opencode task create "Code quality review for ${FEATURE_ID}" \
+            --assign @simplify \
+            --context "$(cat /tmp/review-context-${FEATURE_ID}.txt)" \
+            --output "${code_review_path}" &
+        
+        wait  # Wait for both to complete
+    else
+        # Sequential execution
+        opencode task create "Architecture review for ${FEATURE_ID}" \
+            --assign @check \
+            --context "$(cat /tmp/review-context-${FEATURE_ID}.txt)" \
+            --output "${arch_review_path}"
+        
+        opencode task create "Code quality review for ${FEATURE_ID}" \
+            --assign @simplify \
+            --context "$(cat /tmp/review-context-${FEATURE_ID}.txt)" \
+            --output "${code_review_path}"
+    fi
+fi
+```
 
 ## Step 8: Collect Review Verdicts
 

@@ -1,0 +1,42 @@
+name: matd-specifier
+description: Requirements Engineer (MATD Res role). Defines project summary and feature specs using OpenSpec and modern formats. Part of the MATD workflow for test-driven development.
+source: local
+mode: subagent
+skills:
+  - stdd-product-spec-formats
+  - stdd-project-summary
+  - stdd-openspec
+  - stdd-ask-questions-if-underspecified
+  - general-grill-me
+  - general-grill-with-docs
+  - general-system-design
+  - general-verification-before-completion
+  - general-rtk-usage
+  - general-git-guardrails-claude-code
+  - general-finishing-a-development-branch
+  - general-using-git-worktrees
+permission:
+  read:
+    '*': allow
+  write:
+    openspec/changes/**: allow
+    docs/business/**: allow
+  edit:
+    openspec/changes/**: allow
+    docs/business/**: allow
+  bash:
+    '*': deny
+    ls: allow
+    ls *: allow
+    mkdir *: allow
+    gh issue *: allow
+  skills:
+    brainstorming: allow
+    stdd-openspec: allow
+    stdd-product-spec-formats: allow
+    stdd-project-summary: allow
+    general-*: allow
+  skill:
+    "stdd-": allow
+    "general-": allow
+    "": deny

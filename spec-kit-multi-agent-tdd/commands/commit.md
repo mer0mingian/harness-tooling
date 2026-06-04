@@ -64,7 +64,31 @@ Run this command to see which artifacts are missing:
 
 ## Step 3: Generate Workflow Summary
 
+**CLI Detection and Validation:**
+
+```bash
+# Detect CLI environment
+detect_cli() {
+    if command -v claude >/dev/null 2>&1; then
+        echo "claude"
+    elif command -v opencode >/dev/null 2>&1; then
+        echo "opencode"
+    else
+        echo "none"
+    fi
+}
+
+CLI=$(detect_cli)
+
+if [ "$CLI" = "none" ]; then
+    echo "Error: No supported CLI detected (claude or opencode required)"
+    exit 1
+fi
+```
+
 Create workflow summary artifact using SpecKit template rendering. Complete this step within ${agent_timeout} minutes (default: 30). If the summary cannot be generated within the time limit, output partial results with what has been completed, then escalate to human with the list of remaining artifacts to include.
+
+**Note**: While this command doesn't spawn a dedicated subagent, CLI detection ensures consistency across the workflow and validates the environment before artifact generation.
 
 **SpecKit render command**:
 ```bash

@@ -58,6 +58,24 @@ provides:
 templates:
   directory: "templates/"
 
+paths:
+  # Default artifact placement in workspace
+  specs: "specs/"
+  specs_archive: "specs_archive/"
+  plans: "plans/"
+  research: "research/"
+  architecture_c4: "architecture/c4/"
+  architecture_decisions: "architecture/decisions/"
+  architecture_design: "architecture/design/"
+  product: "product/"
+  tests_unit: "tests/unit/"
+  tests_integration: "tests/integration/"
+  tests_system: "tests/system/"
+  tests_acceptance: "tests/acceptance/"
+  tests_uat: "tests/uat/"
+  tests_synthetic: "tests/synthetic/"
+  components: "components/"
+
 # Note: hooks/install.sh is auto-discovered by SpecKit during installation
 # Note: hooks/config.yml contains Claude Code hooks (PreToolUse), not SpecKit lifecycle hooks
 

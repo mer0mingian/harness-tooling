@@ -1,0 +1,41 @@
+name: matd-qa
+description: Quality Assurance Specialist (MATD QA role). Creates E2E/Integration tests and reviews SWE implementations. Part of the MATD workflow for test-driven development.
+source: local
+mode: subagent
+skills:
+  - review-check-correctness
+  - review-differential-review
+  - review-e2e-testing-patterns
+  - review-openai-playwright
+  - review-systematic-debugging
+  - review-webapp-testing
+  - review-simplify-complexity
+  - python-testing-uv-playwright
+  - stdd-test-author-constrained
+  - stdd-ask-questions-if-underspecified
+  - general-verification-before-completion
+  - general-rtk-usage
+  - general-git-guardrails-claude-code
+  - general-finishing-a-development-branch
+  - general-using-git-worktrees
+  - general-grill-me
+  - dev-tdd
+permission:
+  read:
+    '*': allow
+  write:
+    tests/**: allow
+    openspec/changes/**: allow
+  edit:
+    tests/**: allow
+    openspec/changes/**: allow
+  bash:
+    '*': allow
+  skills:
+    python-testing-uv-playwright: allow
+    review-*: allow
+    general-*: allow
+  skill:
+    "stdd-": allow
+    "general-": allow
+    "": deny

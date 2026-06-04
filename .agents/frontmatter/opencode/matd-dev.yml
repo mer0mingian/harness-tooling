@@ -1,0 +1,86 @@
+name: matd-dev
+description: MATD Implementation Engineer (SWE). Implements code using TDD within fixed file manifests. Combines enterprise Python expertise with hard boundary enforcement. Sandboxed bash - no git, no pip, no curl. Verifies via fresh test output.
+source: local
+mode: subagent
+temperature: 0.2
+skills:
+  - dev-tdd
+  - dev-alpine-js-patterns
+  - dev-backend-to-frontend-handoff
+  - dev-database-migration
+  - dev-databases
+  - dev-diagnose
+  - python-async-patterns
+  - python-code-style
+  - python-configuration
+  - python-design-patterns
+  - python-fastapi-templates
+  - python-packaging
+  - python-testing-uv-playwright
+  - stdd-test-driven-development
+  - stdd-make-constrained-implementation
+  - stdd-ask-questions-if-underspecified
+  - general-python-environment
+  - general-solid
+  - general-verification-before-completion
+  - general-rtk-usage
+  - general-git-guardrails-claude-code
+  - general-finishing-a-development-branch
+  - general-using-git-worktrees
+permission:
+  read:
+    '*': allow
+  write:
+    "app/**": allow
+    "src/**": allow
+    "lib/**": allow
+    "pyproject.toml": deny
+    "package.json": deny
+    "uv.lock": deny
+    "poetry.lock": deny
+  edit:
+    "app/**": allow
+    "src/**": allow
+    "lib/**": allow
+    "tests/**": allow
+    "pyproject.toml": deny
+    "package.json": deny
+    "uv.lock": deny
+    "poetry.lock": deny
+  bash:
+    '*': deny
+    ls: allow
+    ls *: allow
+    cat *: allow
+    grep *: allow
+    "pytest *": allow
+    "uv run pytest *": allow
+    "python -m pytest *": allow
+    "ruff check *": allow
+    "ruff format *": allow
+    "mypy *": allow
+    "git diff --name-only *": allow
+    git: deny
+    pip: deny
+    "uv add *": deny
+    "uv pip *": deny
+    "poetry add *": deny
+    "npm install *": deny
+    "yarn add *": deny
+    curl: deny
+    wget: deny
+    sudo: deny
+    "rm -rf *": deny
+  skill:
+    "dev-": allow
+    "python-": allow
+    "stdd-test-driven-development": allow
+    "stdd-make-constrained-implementation": allow
+    "general-python-environment": allow
+    "general-solid": allow
+    "general-verification-before-completion": allow
+    "general-rtk-usage": allow
+    "general-git-guardrails-claude-code": allow
+    "general-finishing-a-development-branch": allow
+    "general-using-git-worktrees": allow
+    "": deny

@@ -1,0 +1,15 @@
+name: matd-critical-thinker
+description: Red Team Validator (MATD Crit). Analyzes specs and designs for completeness, edge cases, and technical risks. Use proactively after specifier or architect delivers artifacts.
+model: sonnet
+tools: [Read, Grep]
+skills:
+  - review-check-correctness
+  - review-systematic-debugging
+  - general-grill-me
+  - general-grill-with-docs
+  - general-verification-before-completion
+  - general-rtk-usage
+  - general-git-guardrails-claude-code
+  - general-finishing-a-development-branch
+  - general-using-git-worktrees
+memory: project
