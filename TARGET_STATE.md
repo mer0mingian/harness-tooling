@@ -73,7 +73,35 @@ Both ship the same agents; agent files declare required skills. (See `docs/AGENT
 - Per-step agent assignment via the `spec-kit-agent-assign` pattern (`agent-assignments.yml`,
   assign→validate→execute).
 
+## 5. Atlassian / SDP skills → matd plugin, MCP-first
+
+> **Deferred** to future spec `005-atlassian-sdp-skill-migration` (validate-first: StepStone's
+> marketplace may already ship Jira/SDP MCP plugins — adopt before building). **Assumption going
+> forward:** the `atlassian-write` MCP is **installed & running in each agent workspace** (a
+> precondition, like Stash auth) — commands use it, they do not install/manage it.
+
+The local corporate skills `stepstone-atlassian-skills` and `stepstone-sdp-planning` migrate into
+the **matd Claude Code plugin**, restructured **MCP-first**:
+
+- **Mechanism → the `atlassian-write` MCP** (sooperset `mcp-atlassian`, write-enabled, tested
+  2026-06-08 against Cloud `stepstone.atlassian.net`): `jira_create_issue`, `jira_transition_issue`,
+  `jira_update_issue`, `jira_create_remote_issue_link`, `jira_search`, `confluence_create_page`/
+  `update_page`. **Drop** the old Python `.atlassian-venv`/`requests` patterns and DC/`vulcan` snippets.
+- **Knowledge stays, but OSS-safe-split:** generic SDP/Atlassian *workflow logic* (the command/skill
+  prose, status lifecycle, dual-linking, quarterly planning) can live in the OSS matd plugin;
+  **StepStone-specific data** (custom-field ids, allowed-value ids, team UUIDs, Stonehenge domains,
+  transition ids) **stays in the agent-workspace live config** (per the FR-055 scaffold pattern),
+  **never** in the OSS marketplace.
+- **Verified field facts to carry** (live createmeta 2026-06-08): Initiative type `11110`; required
+  selects Stonehenge Domain `customfield_11259`, Initiative Category `customfield_11313`, Initiative
+  Goal `customfield_11389`; Team `customfield_10001` (UUID, e.g. Mamba `f46fee6d-…-1425`); Target
+  start/end `10022`/`10023`; Sprint `10020`; Story Points `10091`; create-default `To Do` (11092) →
+  transition `101` → Idea Backlog (`11256`). Full reference: core repo `docs/references/sdp-jira-fields.md`.
+- **Slim `stepstone-atlassian-skills`** (approved): drop Python-vs-MCP/venv/requests + generic CRUD;
+  keep references (`custom_fields`, project structures, epic-linking, confluence markup) + best-practices.
+
 ## Open items
 - Generic OSS-safe framework for the system-constitution skill (filled content stays private).
-- `matd-ops` agent definition + permissions (bash/scripts/git allowed; no `.md`-prose authoring).
-- Bundled SDP-creation scripts (extracted from `stepstone-sdp-planning`).
+- `matd-ops` agent definition + permissions (bash/scripts/git allowed; no `.md`-prose authoring). *(Note: matd-ops dropped from PRD-command v1; may still be useful elsewhere.)*
+- Migrate `stepstone-atlassian-skills` + `stepstone-sdp-planning` into the matd plugin (MCP-first, OSS-safe split — §5).
+- Bundled SDP-creation flow via `atlassian-write` MCP (was: scripts extracted from `stepstone-sdp-planning`).
