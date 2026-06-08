@@ -24,12 +24,12 @@ with a template + a content-test compliance gate:
 
 | Command | Artefact | Owner | Persistence | Template / schema |
 |---|---|---|---|---|
-| `speckit-matd-specify-project-brief` | Project Brief (**business** invariants) | Product | persistent | from Confluence "Project Charter" |
+| `speckit-matd-specify-product-brief` (enhance existing) | Product Brief (**business** invariants; business case as invariant) | Product | persistent | from Confluence **Product Charter** |
 | `speckit-matd-specify-constitution` | System Constitution (**technical** invariants) | Tech/EA | persistent | compliance-checklist template |
 | `speckit-matd-specify-prd` | PRD (**change request**) | Product | transient (archived) | `prd-schema.yml` |
 | `speckit-matd-specify-solution-design` | Solution Design | Tech | per-change | alt. 9-section StepStone template |
 
-**Three-input DESIGN model:** Solution Design = f(Project Brief, System Constitution, PRD).
+**Three-input DESIGN model:** Solution Design = f(Product Brief, System Constitution, PRD).
 
 ## 2. MATD agent roster & skill re-scoping
 
