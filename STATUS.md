@@ -1,0 +1,218 @@
+# STATUS — DESIGN-stage MATD Commands
+
+**Last Updated:** 2026-06-09  
+**Branch:** `dev`  
+**Session:** Spec design + MCP validation (2026-06-08..09)
+
+---
+
+## Summary
+
+Four **DESIGN-stage SpecKit MATD command specs** designed (PRD, product-brief, constitution, solution-design), grounded in live Jira/Confluence verification. **Spec 001 (PRD command) is implementation-ready** with a lean v1 scope (~20-24 SP). Atlassian/SDP MCP integration tested and proven. All specs committed to core repo `dev` branch (`be8d63c`).
+
+## Spec Status
+
+| Spec | Command | Status | Key Decisions |
+|------|---------|--------|---------------|
+| **001** | `speckit-matd-specify-prd` | ✅ **Implementation-ready** (lean v1) | SDP via `atlassian-write` MCP, drop matd-ops/agent-assign, human-push, Team UUID field verified |
+| **002** | `speckit-matd-specify-product-brief` (enhance) | 🔄 **Stub** (OQ-B1..5 resolved, B6 open) | Schema-driven gap-fill, Charter-informed template, workspace SoT |
+| **003** | `speckit-matd-specify-constitution` | 🔄 **Stub** (full skill design captured) | EA/DigiGov/TechOps sources, team-specific section, compliance checklist |
+| **004** | `speckit-matd-specify-solution-design` (alt template) | 🔄 **Stub** (9-section structure captured) | StepStone official EA template, moved from 001 |
+| **005** | Atlassian/SDP skill migration | ⏸️ **Deferred** (validation gate) | Check StepStone marketplace first; MCP-first, OSS-safe split |
+
+## What's Implementation-Ready (Spec 001)
+
+**Lean v1 scope (~20-24 SP):**
+- ✅ Thin `prd-schema.yml` (sections + grill prompts)
+- ✅ Command (schema-driven grill → render → PRD-NNN/index) — calls scripts directly, no matd-ops agent
+- ✅ Advisory validator (structural only) + LLM eval rubric
+- ✅ SDP create+transition via `atlassian-write` MCP (tested 2026-06-08 against live Cloud)
+- ✅ Local commit + remote-link + SDP-key write-back (human pushes to Stash)
+- ✅ Jira config scaffold in marketplace / live per-team config in workspace only (OSS-safe)
+
+**Agents:** `matd-specifier` (smart, .md-only authoring) + `matd-critical-thinker` (smart, read-only review)
+
+**Build order:** schema → command → validator+rubric → SDP MCP script → commit/link (sequential, single builder)
+
+**Critical path:** ~20-24 SP, no external blockers (only a 5-min Team UUID write-format verification at build time)
+
+## Key Achievements This Session
+
+### 1. SDP/Jira MCP Integration — Verified & Tested ✅
+
+- **Path proven:** The `atlassian-write` MCP (sooperset `mcp-atlassian`, write-enabled) works end-to-end against `stepstone.atlassian.net` (Cloud).
+- **Tools confirmed:** `jira_create_issue`, `jira_transition_issue`, `jira_update_issue`, `jira_create_remote_issue_link`, `jira_search`, `confluence_create_page`/`update_page`.
+- **Auth:** via env token (`JIRA_*`) + cert bundle — handled at MCP layer, not in code.
+- **Test:** live read of SDP-7768 (Initiative, status "To Do", `isError:false`) validated auth + field access.
+- **Assumption going forward:** the `atlassian-write` MCP is **installed & running in each agent workspace** (a precondition, like Stash auth).
+
+### 2. SDP Initiative Fields — Live-Verified (2026-06-08)
+
+Authoritative createmeta from `stepstone.atlassian.net` captured in [core repo `docs/references/sdp-jira-fields.md`](../../docs/references/sdp-jira-fields.md):
+
+**6 required to create:**
+- `summary`, `project=SDP`, `issuetype=11110` (Initiative)
+- **Stonehenge Domain** `customfield_11259` (28 options, e.g. Search & Match 12579)
+- **Initiative Category** `customfield_11313` (Strategic Capability 17550 / KTLO / Paying Down Debt)
+- **Initiative Goal** `customfield_11389` (Delivery 17653 / Enablement / Research)
+
+**Plus Team** `customfield_10001` (value = team **UUID**, e.g. Mamba `f46fee6d-7a22-4189-9d0d-6767aec4ebb8-1425` — verified on SDP-6701; not on createmeta create screen but set on Initiatives).
+
+**Optional:** Target start/end `10022`/`10023`, Sprint `10020`, Story Points `10091`.
+
+**Create-default status:** **To Do (11092)** → transition **101** → **Idea Backlog (11256)**.
+
+**Corrections applied:** outdated pre-Cloud-migration ids (16713/16714, 10005, 13301/15001, `vulcan.stepstone.com`) were wrong; corrected in local skills (gitignored) and core repo references.
+
+### 3. Lean v1 Scope — Risk Mitigation Applied
+
+Per critical review + user decisions:
+- **Dropped:** `matd-ops` agent (→ command calls scripts directly), `agent-assignments.yml` + assign/validate/execute, multi-agent build orchestration, automated Stash push (→ human), alternative Solution Design template (→ spec 004).
+- **Kept:** SDP-key write-back, full `index.yml` (`specs[]` + archival), archived-specs folder schema.
+- **Changed:** SDP via MCP (not REST-with-token), structural validator **advisory** in v1, Jira config scaffold (marketplace) / live config (workspace only, OSS-safe).
+
+**Top risks mitigated:**
+- R2 (MCP can't create/transition) → ✅ proven viable
+- R3 (Stash push fragility) → human pushes in v1
+- R6 (OSS-safe leak) → corp IDs in workspace config only, never marketplace
+
+### 4. Three-Input DESIGN Model Defined
+
+**Solution Design = f(Product Brief [business invariants], System Constitution [technical invariants], PRD [the change])**
+
+- **Product Brief** (spec 002): persistent, business case as invariant (Vision, Scope, Value, RACI, Governance, Budget, Metrics) — from Confluence "Project Charter Template" (ME/170265460), workspace `product/brief.md` is SoT.
+- **System Constitution** (spec 003): persistent, technical invariants (EA principles, Tech Radar, AWS, data/API standards, team skills, Stonehenge) — mirrors EA/DigiGov/TechOps Confluence, workspace `architecture/system-constitution.md` is working doc.
+- **PRD** (spec 001): transient, the change request (Problem, Goals, Hypothesis, Metrics, User Workflows) — numbered `PRD-NNN`, archived on completion.
+- **Solution Design** (spec 004): transient, Tech-owned "how" (FRs+NFRs, C4, cost, capacity) — 9-section EA structure, frozen at gate, links `PRD-NNN ↔ SPEC/EPIC`.
+
+### 5. V-Model & Content Tests
+
+- **V-model traceability:** `PRD-NNN ↔ SDP-key (1:1), PRD → Specs (1:many), Spec ↔ Epic (1:1)`. Hierarchical permanent IDs (never renumbered, only deprecated).
+- **Content tests:** "unit tests for English" — deterministic validators (structural) + LLM eval rubrics (advisory). Gate PRD → SDP in spec 001.
+- **Three enforcement layers:** in-prompt gates, deterministic validators, AI peer-review (matd-critical-thinker).
+
+### 6. Documentation Created
+
+**Core repo (`docs/`):**
+- [specs/001-speckit-matd-specify-prd/spec.md](../../docs/specs/001-speckit-matd-specify-prd/spec.md) — PRD command (OQ-1..11 resolved), plus [plan.md](../../docs/specs/001-speckit-matd-specify-prd/plan.md) + [dependency-map.md](../../docs/specs/001-speckit-matd-specify-prd/dependency-map.md)
+- [specs/002-speckit-matd-specify-product-brief/spec.md](../../docs/specs/002-speckit-matd-specify-product-brief/spec.md) — Product Brief (stub)
+- [specs/003-speckit-matd-specify-constitution/spec.md](../../docs/specs/003-speckit-matd-specify-constitution/spec.md) — System Constitution (stub, full skill design)
+- [specs/004-speckit-matd-specify-solution-design/spec.md](../../docs/specs/004-speckit-matd-specify-solution-design/spec.md) — Solution Design alt template (stub)
+- [specs/005-atlassian-sdp-skill-migration/spec.md](../../docs/specs/005-atlassian-sdp-skill-migration/spec.md) — Migration plan (deferred, validation gate)
+- [references/sdp-jira-fields.md](../../docs/references/sdp-jira-fields.md) ✅ — Authoritative SDP Initiative field reference
+- [references/jira-mcp-sdp-creation.md](../../docs/references/jira-mcp-sdp-creation.md) — MCP path analysis + correction
+- [references/architecture-designs-confluence.md](../../docs/references/architecture-designs-confluence.md), [agentic-pdlc-workspace-summary.md](../../docs/references/agentic-pdlc-workspace-summary.md), [spec-kit-v-model-summary.md](../../docs/references/spec-kit-v-model-summary.md), [spec-kit-agent-assign-summary.md](../../docs/references/spec-kit-agent-assign-summary.md), [confluence-project-charter.md](../../docs/references/confluence-project-charter.md), [confluence-constitution-sources.md](../../docs/references/confluence-constitution-sources.md)
+
+**Harness-tooling:**
+- [TARGET_STATE.md](./TARGET_STATE.md) §5 — Atlassian/SDP skill migration deferred; MCP-first + OSS-safe split; running-MCP assumption
+
+**Memory (core repo `.claude/projects/.../memory/`):**
+- `sdp-jira-field-truth.md` — notes that gitignored local skills can vanish; durable truth in committed `docs/references/`
+- `ea-maps-constitution-input.md` — reminder for Daniel to provide EA-Maps content
+
+## Next Steps (Priority Order)
+
+### 1. Build Spec 001 (PRD Command) — Implementation-Ready
+
+**Lean v1 deliverables:**
+- `prd-schema.yml` (thin: sections + grill prompts)
+- Command file (`commands/speckit-matd-specify-prd.md`)
+- Advisory validator script (structural only)
+- LLM eval rubric
+- SDP create+transition script (MCP `jira_create_issue` → `jira_transition_issue` 101 → Idea Backlog)
+- Local commit + remote-link script (`jira_create_remote_issue_link`)
+- SDP-key write-back script
+- `index.yml` maintenance scripts (`allocate_prd_id.py`)
+- Jira config scaffold (marketplace, blank template)
+
+**Build estimate:** ~20-24 SP, single builder, sequential
+
+**Blockers:** none (only a 5-min Team UUID write-format check at build time)
+
+**Dependencies:** assume `atlassian-write` MCP installed & running in workspace
+
+### 2. Detail Specs 002/003 (Product Brief, Constitution)
+
+**Spec 002 (product-brief):**
+- **Remaining:** derive `product-brief-schema.yml` from the Project Charter Template (ME/170265460) + validate against 1-2 real Charter examples (OQ-B6)
+- **Build after:** schema derivation + template alignment
+
+**Spec 003 (constitution):**
+- **Remaining:** none; full skill design captured (placement `.claude/skills/stepstone-system-constitution/`, template checklist, references/pdlc/, team-specific section)
+- **Build after:** spec 001 ships (not blocking)
+
+### 3. Execute Spec 005 Validation Gate
+
+**Before** migrating `stepstone-atlassian-skills` + `stepstone-sdp-planning` into the matd plugin:
+- **Search** StepStone's internal Claude Code / agent marketplace(s) and `stst-ai-tools-marketplace` for existing Jira/SDP/Atlassian MCP plugins
+- **If maintained plugin exists** → adopt/depend on it; reduce local skills to thin workspace-config layer
+- **If not** → migrate per TARGET_STATE §5 (MCP-first, OSS-safe split)
+
+### 4. Detail Spec 004 (Solution Design Alt Template)
+
+**After** spec 001 ships and PRD→SDP flow is proven:
+- Enhance existing `speckit-matd-specify-solution-design` vs. add template variant (OQ-S1)
+- 9-section EA structure vs. existing C4-centric template reconciliation (OQ-S2)
+- ADR handling (inline vs. separate command) (OQ-S3)
+- Freeze-gate mechanics (OQ-S4)
+- yml schema + content-test rubric (OQ-S5)
+
+## Key Decisions & Rationale
+
+| Decision | Rationale | Impact |
+|----------|-----------|--------|
+| **SDP via `atlassian-write` MCP** | Tested & proven; auth at MCP layer; write tools available | R2 risk mitigated; cleaner than REST-with-token |
+| **Drop matd-ops agent** | Command calls scripts directly → simpler, no LLM indirection for deterministic plumbing | -5 SP, token savings |
+| **Drop agent-assignments.yml** | Fixed 3-step flow doesn't need yml-driven assignment engine | -3 SP, defer until 2nd command |
+| **Human pushes to Stash (v1)** | Removes auth/non-fast-forward fragility from automated path | R3 risk mitigated |
+| **Team = customfield_10001 (UUID)** | Verified on live SDP-6701; not on createmeta but set on Initiatives | Corrects outdated DC-era ids |
+| **Jira config: scaffold (marketplace) / live (workspace only)** | OSS-safe: corp IDs never in marketplace, always in workspace | R6 risk mitigated |
+| **Product Brief = workspace SoT** | Product-team-owned; Confluence becomes a markdown view (linked outward) | Matches PRD pattern (workspace repo authoritative) |
+| **Constitution mirrors EA/Confluence** | EA owns tech invariants in Confluence; workspace holds refreshed mirror | Different ownership ⇒ different authority direction |
+| **Defer skill migration to spec 005** | StepStone marketplace may already have Jira/SDP plugins — validate before building | Avoids reinventing; cleaner OSS-safe split |
+
+## Assumptions & Preconditions
+
+1. **`atlassian-write` MCP installed & running** in each agent workspace (env vars + cert configured) — workspace precondition, like Stash auth.
+2. **Stash auth works** — commands assume working SSH/token; humans push in v1.
+3. **Agent workspace repo exists** (one per system, workspace-template structure) — Staff Engineer/EM provisions for new systems; PMs use existing.
+4. **Jira is Atlassian Cloud** `stepstone.atlassian.net` — post-migration; DC-era ids (`vulcan.stepstone.com`, 16713/16714, 10005, 13301/15001) are deprecated.
+
+## References
+
+- **Core repo:** `harness-sandbox-stony/docs/specs/`, `docs/references/`, `DOCUMENT_INDEX.md`
+- **Harness-tooling:** `TARGET_STATE.md`, `AGENT_SKILL_MATRIX.md`
+- **Committed state:** core `be8d63c` (dev), harness-tooling `e27e13a` (dev)
+- **Confluence sources:**
+  - Project Charter Template (ME/170265460)
+  - Solution Design (ARCH/205793182, 205853106)
+  - EA Standards, Principles, Tech Radar, AWS Structure (ARCH 205816680+)
+  - AI Principles, EU AI-Act (DIG 126059588+)
+- **External repos:** `spec-kit-v-model`, `spec-kit-agent-assign` (GitHub, cloned to `submodules/watching/`)
+
+## Risks & Mitigations
+
+See [core repo `docs/specs/001-.../spec.md` §v1 scope & risk register](../../docs/specs/001-speckit-matd-specify-prd/spec.md) for the full table. Key points:
+
+| Risk | Severity | Status |
+|------|----------|--------|
+| **Jira MCP can't create/transition** | High | ✅ **Mitigated** — tested OK 2026-06-08 |
+| **Stash push fragility** | Med-High | ✅ **Mitigated** — human pushes in v1 |
+| **OSS-safe leak of corp IDs** | High | ✅ **Mitigated** — scaffold (marketplace) / live config (workspace only) |
+| **Content-test false gates** | Med | ✅ **Mitigated** — advisory (warn) in v1; only frontmatter/sections are hard |
+| **Jira transition-id drift** | Med | **Managed** — runtime lookup via `GET /transitions` |
+
+## Session Artifacts
+
+**Conversations:**
+- 2026-06-08..09: Spec design + MCP validation + SDP field verification + critical review (core repo `.claude/projects/.../c34f470f-7bce-4a7b-b3b4-fe6bf5d0371c.jsonl`)
+
+**Commits:**
+- Core `be8d63c`: "docs(specs): lean v1 PRD command + SDP MCP path, verified Jira fields, future stubs"
+- Harness-tooling `e27e13a`: "docs(TARGET_STATE): SDP/Atlassian skill migration deferred to spec 005; MCP-write path + verified SDP fields; running-MCP assumption"
+
+**Gitignored local skills** (corrected, not committed): `stepstone-atlassian-skills/references/sdp-custom-fields.md`, `stepstone-sdp-planning/references/02-workflow.md`, `jira-teams-config.yaml` (Sprint 10005→10020)
+
+---
+
+**Bottom line:** Spec 001 is ready to build. The three-input DESIGN model (Product Brief + System Constitution + PRD → Solution Design) is fully specified. SDP/Jira MCP integration is proven. All verification gates passed.
