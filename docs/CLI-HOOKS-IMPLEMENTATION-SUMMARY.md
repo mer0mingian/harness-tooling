@@ -1,7 +1,7 @@
 # CLI Hooks for Automated Documentation - Implementation Summary
 
-**Date**: 2026-05-12  
-**Status**: ✅ Complete  
+**Date**: 2026-05-12
+**Status**: ✅ Complete
 **Story Points**: 8 SP
 
 ---
@@ -372,7 +372,7 @@ Each level references next level without overwhelming new users.
 ### Documentation Created
 
 1. [AUTOMATION.md](../spec-kit-multi-agent-tdd/docs/AUTOMATION.md) - Comprehensive user guide
-2. [DESIGN-CLI-HOOKS-AUTOMATION.md](DESIGN-CLI-HOOKS-AUTOMATION.md) - Design decisions
+2. [DESIGN-CLI-HOOKS-AUTOMATION.md](archive/superpowers/DESIGN-CLI-HOOKS-AUTOMATION.md) - Design decisions
 3. [update-docs.md](../spec-kit-multi-agent-tdd/commands/update-docs.md) - Command spec
 4. [hooks.yml.example](../spec-kit-multi-agent-tdd/.specify/hooks.yml.example) - Hook template
 

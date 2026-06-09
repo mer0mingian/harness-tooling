@@ -24,7 +24,7 @@ Sibling repo runtime docs: [../../harness-sandbox/docs/](../../harness-sandbox/d
 
 - **[Solution Design.md](Solution%20Design.md)** — Hierarchical plugin architecture, monorepo + symlink registry, artifact pipeline.
 - **[CLI-HOOKS-IMPLEMENTATION-SUMMARY.md](CLI-HOOKS-IMPLEMENTATION-SUMMARY.md)** — Hybrid command + hooks approach for automated doc updates (2026-05-12).
-- **[DESIGN-CLI-HOOKS-AUTOMATION.md](DESIGN-CLI-HOOKS-AUTOMATION.md)** — Design notes for the same.
+- **[DESIGN-CLI-HOOKS-AUTOMATION.md](archive/superpowers/DESIGN-CLI-HOOKS-AUTOMATION.md)** — Design notes for the same.
 - **[architecture/](architecture/)** — Tldraw boards (`Agentic Engineering Tool build`, `Agentic Engineering Workflow`, `Scaling Agentic Engineering to Teams`).
 - **[deep-research/](deep-research/)** — Background research:
   - `operational-architectures.md` — Operational architecture patterns
