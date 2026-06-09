@@ -57,43 +57,100 @@ They differ in:
 
 ## Quick Install
 
-### Claude Code (Recommended)
+### Claude Code Marketplace
 
+**Step 1: Add Marketplace**
 ```bash
-cd /path/to/harness-tooling
+# Clone repository (for marketplace manifest only)
+git clone https://stash.stepstone.com/scm/~minged01/harness-tooling.git ./harness-tooling
 
+# Add marketplace to Claude Code
+claude plugin marketplace add ./harness-tooling/.claude-plugin/marketplace.json
+```
+
+**Step 2: Install MATD Plugin**
+```bash
 # Project-scoped (this project only)
-claude plugin install ./.claude-plugin/plugin.json --scope project
+claude plugin install matd --scope project
 
-# User-scoped (all projects)
-claude plugin install ./.claude-plugin/plugin.json --scope user
+# Or user-scoped (all projects)
+claude plugin install matd --scope user
 ```
 
-Verify installation:
+**Verify Installation:**
 ```bash
-claude .
-# In chat:
-/agents    # Should list 5 matd-* agents
-/skills    # Should list 70+ skills
-```
-
-### OpenCode
-
-OpenCode reads directly from the flat `.agents/` structure. No installation needed - just clone this repo.
-
-```bash
-# In your project
-git clone <harness-tooling-url> .harness-tooling
-
-# OpenCode auto-discovers agents/skills in .agents/
+cat .claude/settings.json  # Should show: matd@harness-tooling-marketplace
 ```
 
 ### SpecKit Extension
 
+**Option A: Remote Installation (Recommended)**
 ```bash
-specify extension add harness-tdd-workflow \
-  --from /path/to/harness-tooling/spec-kit-multi-agent-tdd
+# Install from hosted ZIP (no cloning needed)
+specify extension add matd \
+  --from https://artifacts.stepstone.com/speckit/matd-extension-v1.0.0.zip
 ```
+
+**Option B: Development Mode (Local)**
+```bash
+# For development/testing with live updates
+git clone https://stash.stepstone.com/scm/~minged01/harness-tooling.git ./harness-tooling
+
+specify extension add --dev ./harness-tooling/spec-kit-multi-agent-tdd
+```
+
+**Additional Extensions:**
+```bash
+# Agent assignment extension
+specify extension add agent-assign \
+  --from https://github.com/xymelon/spec-kit-agent-assign/archive/refs/tags/v1.1.0.zip
+
+# V-Model extension pack
+specify extension add v-model \
+  --from https://github.com/leocamello/spec-kit-v-model/archive/refs/tags/v0.7.2.zip
+```
+
+### OpenCode
+
+OpenCode reads directly from the flat `.agents/` structure. Clone the repository in your project:
+
+```bash
+git clone https://stash.stepstone.com/scm/~minged01/harness-tooling.git .harness-tooling
+# OpenCode auto-discovers agents/skills in .agents/
+```
+
+### SpecKit Multi-Catalog Support
+
+SpecKit supports multiple extension catalogs operating in parallel with priority-based resolution.
+
+**Create Project Catalog Config** (`.specify/extension-catalogs.yml`):
+```yaml
+catalogs:
+  # Default public catalog
+  - name: "default"
+    url: "https://raw.githubusercontent.com/github/spec-kit/main/extensions/catalog.json"
+    priority: 2
+    install_allowed: true
+    
+  # Organization internal catalog (higher priority)
+  - name: "stepstone-internal"
+    url: "https://artifacts.stepstone.com/speckit/catalog.json"
+    priority: 1
+    install_allowed: true
+    description: "Stepstone curated extensions"
+    
+  # Community discovery (no installs)
+  - name: "community"
+    url: "https://raw.githubusercontent.com/github/spec-kit/main/extensions/catalog.community.json"
+    priority: 3
+    install_allowed: false
+```
+
+**Benefits:**
+- Mix public + private extension catalogs
+- Priority-based conflict resolution (1 = highest)
+- Selective installation control (`install_allowed`)
+- Separate repos for different extension lifecycles
 
 ### Complete Registration Guide
 
@@ -174,18 +231,13 @@ docs/                       # Planning and specifications
 
 ---
 
-## Sibling Repositories
+## Repository Architecture
 
-This repo is part of a 4-repo workspace:
+This repository is part of the harness sandbox ecosystem:
 
-| Repository | Purpose | Location |
-|-----------|---------|----------|
-| **harness-tooling** (this repo) | Marketplace - skills, agents, commands | `./` |
-| **harness-sandbox** | Docker runtime - sandbox environment | `../harness-sandbox/` |
-| **sta2e-vtt-lite** | Test project - application code | `../sta2e-vtt-lite/` |
-| **sta2e-vtt-lite-system** | Test project - specs and docs | `../sta2e-vtt-lite-system/` |
-
-See [`../GETTING_STARTED.md`](../GETTING_STARTED.md) for complete workspace setup.
+- **harness-tooling** (this repo) - Marketplace for skills, agents, commands, and SpecKit extensions
+- **harness-sandbox-stony** - Docker runtime environment with integrated tooling
+- Additional project-specific configurations can reference this marketplace
 
 ---
 

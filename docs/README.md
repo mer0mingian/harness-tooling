@@ -9,7 +9,10 @@ Sibling repo runtime docs: [../../harness-sandbox/docs/](../../harness-sandbox/d
 ## Setup
 
 - **[../README.md](../README.md)** — Repo overview, quick install for Claude Code / OpenCode / SpecKit.
+- **[STREAMLINED-INSTALLATION-PROPOSAL.md](STREAMLINED-INSTALLATION-PROPOSAL.md)** — Recommended installation approach (git clone + local install).
 - **[PLUGIN_REGISTRATION_GUIDE.md](PLUGIN_REGISTRATION_GUIDE.md)** — Full install + register guide. Plugin manifest lives at `.claude-plugin/plugin.json` (root) and `.agents/plugins/<name>/.claude-plugin/plugin.json` (per-plugin).
+- **[PLUGIN-COMPARISON-TABLE.md](PLUGIN-COMPARISON-TABLE.md)** — Detailed comparison: harness-agents vs matd plugin vs matd extension.
+- **[QUICK-REFERENCE.md](QUICK-REFERENCE.md)** — Quick reference for plugins, extensions, and slash commands.
 
 ## Usage
 
