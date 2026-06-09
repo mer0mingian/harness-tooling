@@ -364,8 +364,8 @@ content to migrate there:
 ---
 
 **Verification Checklist:**
-- [ ] All required sections present
-- [ ] YAML frontmatter valid (type: spec)
-- [ ] Feature ID and timestamp filled
-- [ ] Open Questions enumerated (OQ-1..8)
-- [ ] No unresolved placeholder content beyond explicit [NEEDS CLARIFICATION] markers
+- [x] All required sections present
+- [x] YAML frontmatter valid (type: spec)
+- [x] Feature ID and timestamp filled
+- [x] Open Questions enumerated (OQ-1..8)
+- [x] No unresolved placeholder content beyond explicit [NEEDS CLARIFICATION] markers
