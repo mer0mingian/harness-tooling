@@ -25,6 +25,8 @@ Eleven **DESIGN-stage SpecKit MATD command specs** designed (specs 001-011), gro
 | **009** | SpecKit preset /specify override | 🔄 **Stub** (implementation path clear) | Multi-template support, preset field, template discovery |
 | **010** | `speckit-determine-change-level` skill | 🔄 **Stub** (CLI API defined) | MATD/matd-ops only, single-file Confluence check, no git integration |
 | **011** | `speckit-estimate-complexity` skill | 🔄 **Stub** (story-point focus) | Story points (Agile), no hourly estimates, calibrated examples |
+| **012** | STDD skills cleanup | ✅ **Completed** (commit f0bb38a) | Deleted 7 obsolete skills, renamed 1 skill, updated 55 files |
+| **013** | Enhanced workspace structure | 📋 **Design complete** (implementation-ready) | Specs-as-folders, matd-config.yml, traceability chain, 8 SP |
 
 ## What's Implementation-Ready (Spec 001)
 
@@ -189,14 +191,24 @@ Per critical review + user decisions:
 
 **Dependencies:** assume `atlassian-write` MCP installed & running in workspace
 
-### 2. Execute STDD Cleanup
+### 2. ✅ STDD Cleanup — Completed
 
-**Ready to execute:**
-- Delete 7 skills: `stepstone-tech-design-doc-{author,critical-review,reviewer,test-reviewer}`, `stepstone-backend-dev`, `stepstone-debugger`, `stepstone-implementer`
-- Rename 1 skill: `stepstone-agent-restrictions` → `stepstone-matd-agent-restrictions`
-- Rationale captured in [STDD_CLEANUP.md](./STDD_CLEANUP.md)
+**Executed 2026-06-10** (Spec 012, commit f0bb38a):
+- ✅ Deleted 7 obsolete skills: stdd-ask-questions-if-underspecified, stdd-make-constrained-implementation, stdd-openspec, stdd-pm-linear-integration, stdd-project-summary, stdd-test-author-constrained, stdd-test-driven-development
+- ✅ Renamed 1 skill: stdd-product-spec-formats → spec-product-requirement-formats
+- ✅ Updated 55 files (plugins, agents, documentation)
+- Rationale: [docs/context/stdd-skills-analysis.md](./docs/context/stdd-skills-analysis.md)
 
-### 3. Detail Specs 006-011
+### 3. Implement Spec 013 (Enhanced Workspace Structure) — Implementation-Ready
+
+**Design complete, ready to build** (8 SP):
+- Specs-as-folders pattern (specs/SPEC-XXXX/ with spec.md, plan.md, tasks.md, dependency-map.md)
+- matd-config.yml schema and defaults
+- Traceability chain (PRD→SD→Spec frontmatter)
+- Migration script for existing flat specs
+- Reference: [docs/context/matd-enhanced-structure.md](./docs/context/matd-enhanced-structure.md)
+
+### 4. Detail Specs 006-011
 
 **Specs ready for detailing:**
 - **006:** Agent restrictions experiment (formal decision gates, cascading restrictions)
@@ -206,7 +218,7 @@ Per critical review + user decisions:
 - **010:** determine-change-level skill (MATD/matd-ops CLI API, single-file Confluence check)
 - **011:** estimate-complexity skill (story points, calibrated examples)
 
-### 4. Detail Specs 002/003/004 (Product Brief, Constitution, Solution Design)
+### 5. Detail Specs 002/003/004 (Product Brief, Constitution, Solution Design)
 
 **Spec 002 (product-brief):**
 - **Remaining:** derive `product-brief-schema.yml` from the Project Charter Template (ME/170265460) + validate against 1-2 real Charter examples (OQ-B6)
@@ -220,14 +232,14 @@ Per critical review + user decisions:
 - **Remaining:** enhance existing vs. add template variant (OQ-S1), 9-section EA structure reconciliation (OQ-S2), ADR handling (OQ-S3), freeze-gate mechanics (OQ-S4), yml schema + content-test rubric (OQ-S5)
 - **Build after:** spec 001 ships and PRD→SDP flow is proven
 
-### 5. Execute Spec 005 Validation Gate
+### 6. Execute Spec 005 Validation Gate
 
 **Before** migrating `stepstone-atlassian-skills` + `stepstone-sdp-planning` into the matd plugin:
 - **Search** StepStone's internal Claude Code / agent marketplace(s) and `stst-ai-tools-marketplace` for existing Jira/SDP/Atlassian MCP plugins
 - **If maintained plugin exists** → adopt/depend on it; reduce local skills to thin workspace-config layer
 - **If not** → migrate per TARGET_STATE §5 (MCP-first, OSS-safe split)
 
-### 6. Complete Remaining Grilling Items
+### 7. Complete Remaining Grilling Items
 
 **Section 3 (Tier 1-2):** Still open from original grilling scope
 **Section 8 (Tier 3):** 8 items remaining (lower priority, nice-to-have)

@@ -1,7 +1,7 @@
 # Enhanced Workspace Structure
 
 ---
-spec_id: SPEC-0012
+spec_id: SPEC-0013
 title: Enhanced Workspace Structure
 status: design-complete
 created: 2026-06-10
