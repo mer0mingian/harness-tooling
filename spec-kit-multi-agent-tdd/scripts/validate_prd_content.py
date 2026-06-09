@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 validate_prd_content.py — PRD content validator (V-model right-side check).
 Validates a PRD markdown file against prd-schema.yml rules.
