@@ -36,13 +36,16 @@ beyond what is appropriate per role — `dev-tdd`, `review-check-correctness`, `
 
 **Target state** per `docs/AGENT_SKILL_MATRIX.md` (this repo):
 
+7-agent architecture supporting full PDLC workflow:
+
 | Agent | Role-defining skills | Excluded |
 |---|---|---|
-| `matd-specifier` | `general-grill-me`, `general-grill-with-docs`, `arch-writing-plans`, `stdd-product-spec-formats` | `dev-tdd`, `review-*` |
-| `matd-critical-thinker` | `review-check-correctness`, `general-grill-me`, `general-grill-with-docs`, `review-simplify-complexity`, `review-systematic-debugging`, `review-differential-review`, `general-improve-codebase-architecture`, `review-orchestrate-dual-review` | `dev-tdd`, `stdd-openspec` |
+| `matd-product-manager` | `general-grill-me`, `general-grill-with-docs`, `arch-writing-plans`, Jira MCP (inline scope) | `dev-tdd`, `review-*`, `arch-*` |
+| `matd-requirements-engineer` | `general-grill-me`, `general-grill-with-docs`, `arch-writing-plans`, `brainstorming`, Confluence MCP (inline scope) | `dev-tdd`, `review-*`, `arch-*` |
 | `matd-architect` | `arch-c4-architecture`, `arch-architecture-patterns`, `arch-api-design-principles`, `arch-mermaid-diagrams`, `arch-design-system-patterns`, `arch-smart-docs`, `general-system-design`, `general-solid`, `general-improve-codebase-architecture`, `review-simplify-complexity`, `arch-writing-plans`, `dev-database-migration`, `docker-expert` | `dev-tdd`, `review-check-correctness` |
-| `matd-dev` | `dev-tdd`, `dev-databases`, `dev-database-migration`, `dev-backend-to-frontend-handoff`, `dev-diagnose`, `dev-mobile-android-design`, `dev-alpine-js-patterns`, `python-*`, `general-solid`, `arch-api-design-principles`, `filesystem-context`, `file-ops-*`, `docker-expert` | `review-check-correctness`, `arch-c4-architecture` |
+| `matd-critical-thinker` | `review-check-correctness`, `general-grill-me`, `general-grill-with-docs`, `review-simplify-complexity`, `review-systematic-debugging`, `review-differential-review`, `general-improve-codebase-architecture`, `review-orchestrate-dual-review` | `dev-tdd`, `stdd-openspec` |
 | `matd-qa` | `review-check-correctness`, `review-systematic-debugging`, `review-differential-review`, `review-e2e-testing-patterns`, `review-webapp-testing`, `review-orchestrate-dual-review`, `dev-tdd`, `dev-diagnose`, `python-*`, `python-testing-uv-playwright` | `arch-*`, `stdd-openspec` |
+| `matd-dev` | `dev-tdd`, `dev-databases`, `dev-database-migration`, `dev-backend-to-frontend-handoff`, `dev-diagnose`, `dev-mobile-android-design`, `dev-alpine-js-patterns`, `python-*`, `general-solid`, `arch-api-design-principles`, `filesystem-context`, `file-ops-*`, `docker-expert` | `review-check-correctness`, `arch-c4-architecture` |
 | `matd-orchestrator` (OpenCode-only) | `orchestrate-subagent-driven-development`, `orchestrate-dispatching-parallel-agents`, `orchestrate-executing-plans`, `orchestrate-multi-agent-patterns`, `manage-*`, `update-config`, `arch-writing-plans`, `context-degradation`, `context-compression` | — |
 
 **Shared baseline skills** accepted as overlap across all roles (do not de-duplicate):
@@ -58,14 +61,15 @@ per-role and does not create false "cross-role overlap" findings).
   rtk, git guardrails, git advanced, context-optimization, arch-writing-plans, dev-tdd,
   review-check-correctness, orchestration (3 skills), grill-me, grill-with-docs.
 - **`harness-matd-extensions`** — role-specific packs loaded opt-in:
-  - `specifier-pack`: `stdd-product-spec-formats` (`brainstorming` is in shared baseline)
-  - `critic-pack`: `review-simplify-complexity`, `review-systematic-debugging`, `review-differential-review`, `review-orchestrate-dual-review`, `general-improve-codebase-architecture`
+  - `product-pack`: Jira MCP configuration (inline agent scope)
+  - `requirements-pack`: Confluence MCP configuration (inline agent scope)
   - `architect-pack`: `arch-*`, `general-system-design`, `general-solid`, `dev-database-migration`, `docker-expert`
-  - `dev-pack`: `python-*`, `dev-*`, `file-ops-*`, `filesystem-context`, `general-solid`, `arch-api-design-principles`
+  - `critic-pack`: `review-simplify-complexity`, `review-systematic-debugging`, `review-differential-review`, `review-orchestrate-dual-review`, `general-improve-codebase-architecture`
   - `qa-pack`: `review-e2e-testing-patterns`, `review-webapp-testing`, `python-testing-uv-playwright`
+  - `dev-pack`: `python-*`, `dev-*`, `file-ops-*`, `filesystem-context`, `general-solid`, `arch-api-design-principles`
   - `orchestrator-pack`: `manage-*`, `update-config`, `context-degradation`, `context-compression`
 
-Both plugins ship the same 6 agent definitions; agent files declare their required skills.
+Both plugins ship the same 7 agent definitions; agent files declare their required skills.
 See `docs/AGENT_SKILL_MATRIX.md` in this repo for the authoritative per-skill assignment.
 
 ---

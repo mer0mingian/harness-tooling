@@ -1,14 +1,14 @@
 # STATUS — DESIGN-stage MATD Commands
 
-**Last Updated:** 2026-06-09  
+**Last Updated:** 2026-06-10  
 **Branch:** `dev`  
-**Session:** Spec design + MCP validation (2026-06-08..09)
+**Session:** Grilling session + 7-agent architecture finalization (2026-06-09..10)
 
 ---
 
 ## Summary
 
-Four **DESIGN-stage SpecKit MATD command specs** designed (PRD, product-brief, constitution, solution-design), grounded in live Jira/Confluence verification. **Spec 001 (PRD command) is implementation-ready** with a lean v1 scope (~20-24 SP). Atlassian/SDP MCP integration tested and proven. All specs committed to core repo `dev` branch (`be8d63c`).
+Eleven **DESIGN-stage SpecKit MATD command specs** designed (specs 001-011), grounded in live Jira/Confluence verification and comprehensive grilling session (2026-06-09/10). **Spec 001 (PRD command) is implementation-ready** with a lean v1 scope (~20-24 SP). Atlassian/SDP MCP integration tested and proven. 7-agent architecture finalized. Enhanced workspace structure designed. All specs committed to core repo `dev` branch.
 
 ## Spec Status
 
@@ -19,6 +19,12 @@ Four **DESIGN-stage SpecKit MATD command specs** designed (PRD, product-brief, c
 | **003** | `speckit-matd-specify-constitution` | 🔄 **Stub** (full skill design captured) | EA/DigiGov/TechOps sources, team-specific section, compliance checklist |
 | **004** | `speckit-matd-specify-solution-design` (alt template) | 🔄 **Stub** (9-section structure captured) | StepStone official EA template, moved from 001 |
 | **005** | Atlassian/SDP skill migration | ⏸️ **Deferred** (validation gate) | Check StepStone marketplace first; MCP-first, OSS-safe split |
+| **006** | Agent restrictions experiment | 🔄 **Stub** (concept validated via grilling) | Formal decision gates, cascading restrictions, agent-level enforcement |
+| **007** | Split Claude Code plugin | 🔄 **Stub** (architecture defined) | Command marketplace (plugins) vs. SpecKit extension (preset/settings) |
+| **008** | Split SpecKit extension | 🔄 **Stub** (7-section design) | v-model + workspace + skills + agent-restrictions + budget + MATD |
+| **009** | SpecKit preset /specify override | 🔄 **Stub** (implementation path clear) | Multi-template support, preset field, template discovery |
+| **010** | `speckit-determine-change-level` skill | 🔄 **Stub** (CLI API defined) | MATD/matd-ops only, single-file Confluence check, no git integration |
+| **011** | `speckit-estimate-complexity` skill | 🔄 **Stub** (story-point focus) | Story points (Agile), no hourly estimates, calibrated examples |
 
 ## What's Implementation-Ready (Spec 001)
 
@@ -38,7 +44,50 @@ Four **DESIGN-stage SpecKit MATD command specs** designed (PRD, product-brief, c
 
 ## Key Achievements This Session
 
-### 1. SDP/Jira MCP Integration — Verified & Tested ✅
+### 1. Grilling Session Completed (Specs 002-011) ✅
+
+Two-day comprehensive grilling session (2026-06-09/10) covering all design-stage specs:
+- **Spec 002-004:** Three-input DESIGN model (Product Brief, Constitution, Solution Design) architecture finalized
+- **Spec 005:** Atlassian/SDP skill migration validation gate confirmed
+- **Spec 006-011:** Six new stub specs created (agent restrictions, plugin/extension split, /specify override, change-level, complexity estimation)
+- **Open questions resolved:** 50+ OQ items addressed, 6 remaining (Section 3 + 8 Tier 3 items)
+- **Command inventory catalogued:** 72 commands analyzed, gaps identified
+- **STDD cleanup plan:** 7 skills for deletion, 1 rename
+
+### 2. 7-Agent Architecture Finalized ✅
+
+**Core Agents (7):**
+- `matd-specifier` (smart, .md-only authoring, workflow orchestration)
+- `matd-critical-thinker` (smart, read-only review, compliance checks)
+- `matd-reviewer` (smart, diff/spec review, traceability validation)
+- `matd-test-reviewer` (smart, PR review, test coverage enforcement)
+- `matd-ops` (caveman, deterministic plumbing, Jira/git/workspace maintenance)
+- `matd-implementer` (smart, code authoring, TDD execution)
+- `matd-debugger` (smart, verification-first debugging, error analysis)
+
+**Agent-Skill Matrix:** All agents mapped to skills with restriction levels (required, suggested, forbidden)
+
+**Key decisions:**
+- matd-ops remains caveman for deterministic operations (v1 PRD command calls scripts directly)
+- Formal decision gates enforce restrictions (not just prompt hints)
+- Cascading restrictions: forbidden > suggested > required
+
+### 3. Enhanced Workspace Structure Designed ✅
+
+**Workspace layout refinements:**
+- `docs/product/brief.md` (SoT, Product-team owned)
+- `docs/architecture/system-constitution.md` (working mirror of EA/Confluence)
+- `docs/PRD-NNN/` (numbered PRDs, archived on completion)
+- `docs/solution-designs/` (frozen at gate, 1:1 with Epics)
+- `docs/specs/SPEC-NNN/` (hierarchical permanent IDs)
+- `docs/references/pdlc/` (Constitution source material)
+
+**Key principles:**
+- Workspace is SoT for Product Brief (Confluence is markdown view)
+- Constitution mirrors EA/Confluence (EA owns tech invariants)
+- V-model traceability: PRD-NNN ↔ SDP-key (1:1), PRD → Specs (1:many), Spec ↔ Epic (1:1)
+
+### 4. SDP/Jira MCP Integration — Verified & Tested ✅
 
 - **Path proven:** The `atlassian-write` MCP (sooperset `mcp-atlassian`, write-enabled) works end-to-end against `stepstone.atlassian.net` (Cloud).
 - **Tools confirmed:** `jira_create_issue`, `jira_transition_issue`, `jira_update_issue`, `jira_create_remote_issue_link`, `jira_search`, `confluence_create_page`/`update_page`.
@@ -46,7 +95,7 @@ Four **DESIGN-stage SpecKit MATD command specs** designed (PRD, product-brief, c
 - **Test:** live read of SDP-7768 (Initiative, status "To Do", `isError:false`) validated auth + field access.
 - **Assumption going forward:** the `atlassian-write` MCP is **installed & running in each agent workspace** (a precondition, like Stash auth).
 
-### 2. SDP Initiative Fields — Live-Verified (2026-06-08)
+### 5. SDP Initiative Fields — Live-Verified (2026-06-08)
 
 Authoritative createmeta from `stepstone.atlassian.net` captured in [core repo `docs/references/sdp-jira-fields.md`](../../docs/references/sdp-jira-fields.md):
 
@@ -64,7 +113,7 @@ Authoritative createmeta from `stepstone.atlassian.net` captured in [core repo `
 
 **Corrections applied:** outdated pre-Cloud-migration ids (16713/16714, 10005, 13301/15001, `vulcan.stepstone.com`) were wrong; corrected in local skills (gitignored) and core repo references.
 
-### 3. Lean v1 Scope — Risk Mitigation Applied
+### 6. Lean v1 Scope — Risk Mitigation Applied
 
 Per critical review + user decisions:
 - **Dropped:** `matd-ops` agent (→ command calls scripts directly), `agent-assignments.yml` + assign/validate/execute, multi-agent build orchestration, automated Stash push (→ human), alternative Solution Design template (→ spec 004).
@@ -76,7 +125,7 @@ Per critical review + user decisions:
 - R3 (Stash push fragility) → human pushes in v1
 - R6 (OSS-safe leak) → corp IDs in workspace config only, never marketplace
 
-### 4. Three-Input DESIGN Model Defined
+### 7. Three-Input DESIGN Model Defined
 
 **Solution Design = f(Product Brief [business invariants], System Constitution [technical invariants], PRD [the change])**
 
@@ -85,13 +134,13 @@ Per critical review + user decisions:
 - **PRD** (spec 001): transient, the change request (Problem, Goals, Hypothesis, Metrics, User Workflows) — numbered `PRD-NNN`, archived on completion.
 - **Solution Design** (spec 004): transient, Tech-owned "how" (FRs+NFRs, C4, cost, capacity) — 9-section EA structure, frozen at gate, links `PRD-NNN ↔ SPEC/EPIC`.
 
-### 5. V-Model & Content Tests
+### 8. V-Model & Content Tests
 
 - **V-model traceability:** `PRD-NNN ↔ SDP-key (1:1), PRD → Specs (1:many), Spec ↔ Epic (1:1)`. Hierarchical permanent IDs (never renumbered, only deprecated).
 - **Content tests:** "unit tests for English" — deterministic validators (structural) + LLM eval rubrics (advisory). Gate PRD → SDP in spec 001.
 - **Three enforcement layers:** in-prompt gates, deterministic validators, AI peer-review (matd-critical-thinker).
 
-### 6. Documentation Created
+### 9. Documentation Created
 
 **harness-tooling (`docs/`):**
 - [specs/001-speckit-matd-specify-prd/spec.md](./docs/specs/001-speckit-matd-specify-prd/spec.md) — PRD command (OQ-1..11 resolved), plus [plan.md](./docs/specs/001-speckit-matd-specify-prd/plan.md) + [dependency-map.md](./docs/specs/001-speckit-matd-specify-prd/dependency-map.md)
