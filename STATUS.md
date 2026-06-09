@@ -93,12 +93,12 @@ Per critical review + user decisions:
 
 ### 6. Documentation Created
 
-**Core repo (`docs/`):**
-- [specs/001-speckit-matd-specify-prd/spec.md](../../docs/specs/001-speckit-matd-specify-prd/spec.md) — PRD command (OQ-1..11 resolved), plus [plan.md](../../docs/specs/001-speckit-matd-specify-prd/plan.md) + [dependency-map.md](../../docs/specs/001-speckit-matd-specify-prd/dependency-map.md)
-- [specs/002-speckit-matd-specify-product-brief/spec.md](../../docs/specs/002-speckit-matd-specify-product-brief/spec.md) — Product Brief (stub)
-- [specs/003-speckit-matd-specify-constitution/spec.md](../../docs/specs/003-speckit-matd-specify-constitution/spec.md) — System Constitution (stub, full skill design)
-- [specs/004-speckit-matd-specify-solution-design/spec.md](../../docs/specs/004-speckit-matd-specify-solution-design/spec.md) — Solution Design alt template (stub)
-- [specs/005-atlassian-sdp-skill-migration/spec.md](../../docs/specs/005-atlassian-sdp-skill-migration/spec.md) — Migration plan (deferred, validation gate)
+**harness-tooling (`docs/`):**
+- [specs/001-speckit-matd-specify-prd/spec.md](./docs/specs/001-speckit-matd-specify-prd/spec.md) — PRD command (OQ-1..11 resolved), plus [plan.md](./docs/specs/001-speckit-matd-specify-prd/plan.md) + [dependency-map.md](./docs/specs/001-speckit-matd-specify-prd/dependency-map.md)
+- [specs/002-speckit-matd-specify-product-brief/spec.md](./docs/specs/002-speckit-matd-specify-product-brief/spec.md) — Product Brief (stub)
+- [specs/003-speckit-matd-specify-constitution/spec.md](./docs/specs/003-speckit-matd-specify-constitution/spec.md) — System Constitution (stub, full skill design)
+- [specs/004-speckit-matd-specify-solution-design/spec.md](./docs/specs/004-speckit-matd-specify-solution-design/spec.md) — Solution Design alt template (stub)
+- [specs/005-atlassian-sdp-skill-migration/spec.md](./docs/specs/005-atlassian-sdp-skill-migration/spec.md) — Migration plan (deferred, validation gate)
 - [references/sdp-jira-fields.md](../../docs/references/sdp-jira-fields.md) ✅ — Authoritative SDP Initiative field reference
 - [references/jira-mcp-sdp-creation.md](../../docs/references/jira-mcp-sdp-creation.md) — MCP path analysis + correction
 - [references/architecture-designs-confluence.md](../../docs/references/architecture-designs-confluence.md), [agentic-pdlc-workspace-summary.md](../../docs/references/agentic-pdlc-workspace-summary.md), [spec-kit-v-model-summary.md](../../docs/references/spec-kit-v-model-summary.md), [spec-kit-agent-assign-summary.md](../../docs/references/spec-kit-agent-assign-summary.md), [confluence-project-charter.md](../../docs/references/confluence-project-charter.md), [confluence-constitution-sources.md](../../docs/references/confluence-constitution-sources.md)

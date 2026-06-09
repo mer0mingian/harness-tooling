@@ -7,8 +7,8 @@ owner: "Daniel Mingers"
 # harness-tooling — Target State
 
 Target architecture for the MATD tooling shipped from this marketplace. Captures decisions surfaced
-during the DESIGN-stage command design (2026-06-08). The driving specs live in the **harness core
-repo** under `docs/specs/001..004-*` and `docs/AGENT_SKILL_MATRIX.md`.
+during the DESIGN-stage command design (2026-06-08). The driving specs live in **this repo**
+under `docs/specs/001..004-*` and `docs/AGENT_SKILL_MATRIX.md`.
 
 > **OSS-safe invariant:** This repo is the OSS marketplace. StepStone-specific content (EA
 > principles, AWS accounts, internal endpoints, Confluence mirrors) **must not** live here — it
@@ -34,7 +34,7 @@ DESIGN-stage command implementation status:
 beyond what is appropriate per role — `dev-tdd`, `review-check-correctness`, `stdd-openspec`, and
 `general-system-design` appear across agents that should not carry them.
 
-**Target state** per `docs/AGENT_SKILL_MATRIX.md` (core repo):
+**Target state** per `docs/AGENT_SKILL_MATRIX.md` (this repo):
 
 | Agent | Role-defining skills | Excluded |
 |---|---|---|
@@ -66,7 +66,7 @@ per-role and does not create false "cross-role overlap" findings).
   - `orchestrator-pack`: `manage-*`, `update-config`, `context-degradation`, `context-compression`
 
 Both plugins ship the same 6 agent definitions; agent files declare their required skills.
-See `docs/AGENT_SKILL_MATRIX.md` in the core repo for the authoritative per-skill assignment.
+See `docs/AGENT_SKILL_MATRIX.md` in this repo for the authoritative per-skill assignment.
 
 ---
 
