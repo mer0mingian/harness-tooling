@@ -1,0 +1,349 @@
+# prd-schema.yml
+# Single source of truth for PRD structure.
+# Drives both the grill interview (grill_prompts) and the deterministic
+# content-test validator (validation_rules).
+# Version: 1.0
+
+version: "1.0"
+
+sections:
+  - id: header
+    name: Header
+    required: true
+    id_prefix: null
+    grill_prompts:
+      - "What is the change_id for this PRD (e.g. PRD-YYYY-NNN)?"
+      - "Who is the owner (PM name + team)?"
+      - "What is the current status: Draft | Review | Approved | Superseded?"
+      - "Is there an initiative_link (SDP/Jira epic URL)? If so, provide it."
+      - "Is there a parent_product_brief? If yes, what is its reference?"
+    validation_rules:
+      - id: HEADER-V001
+        severity: CRITICAL
+        description: "change_id field must be present and non-empty"
+        rule: "frontmatter key 'change_id' exists and is not empty string"
+      - id: HEADER-V002
+        severity: CRITICAL
+        description: "title field must be present and non-empty"
+        rule: "frontmatter key 'title' exists and is not empty string"
+      - id: HEADER-V003
+        severity: CRITICAL
+        description: "owner field must be present and non-empty"
+        rule: "frontmatter key 'owner' exists and is not empty string"
+      - id: HEADER-V004
+        severity: CRITICAL
+        description: "status field must be one of: Draft, Review, Approved, Superseded"
+        rule: "frontmatter key 'status' matches regex '^(Draft|Review|Approved|Superseded)$'"
+      - id: HEADER-V005
+        severity: CRITICAL
+        description: "created date field must be present"
+        rule: "frontmatter key 'created' exists and matches regex '\\d{4}-\\d{2}-\\d{2}'"
+      - id: HEADER-V006
+        severity: WARNING
+        description: "initiative_link should be present for traceability"
+        rule: "frontmatter key 'initiative_link' exists and is not empty string"
+
+  - id: tldr
+    name: TL;DR
+    required: true
+    id_prefix: null
+    grill_prompts:
+      - "In one sentence: what problem are we solving and for whom?"
+      - "In one sentence: what change are we making?"
+      - "In one sentence: what outcome do we expect for the user or business?"
+    validation_rules:
+      - id: TLDR-V001
+        severity: CRITICAL
+        description: "TL;DR section must be present and non-empty"
+        rule: "section 'tldr' or '## TL;DR' heading exists with non-empty body"
+      - id: TLDR-V002
+        severity: CRITICAL
+        description: "No [PLACEHOLDER] or TODO residue in TL;DR"
+        rule: "section body does not match regex '\\[PLACEHOLDER\\]|TODO'"
+      - id: TLDR-V003
+        severity: WARNING
+        description: "TL;DR should contain approximately 3 sentences covering problem, change, and outcome"
+        rule: "section body contains at least 2 sentence-ending punctuation marks"
+
+  - id: problem_framing
+    name: Problem Framing
+    required: true
+    id_prefix: "PF-"
+    grill_prompts:
+      - "Who specifically is affected by this problem (persona, segment, or user type)?"
+      - "Describe the current experience — what does the user have to do today and why is it painful?"
+      - "What evidence do you have that this is a real problem (data, user research, support tickets)?"
+      - "Why must we solve this now — what changes if we wait 6 months?"
+    validation_rules:
+      - id: PF-V001
+        severity: CRITICAL
+        description: "Problem Framing section must be present and non-empty"
+        rule: "section 'problem_framing' heading exists with non-empty body"
+      - id: PF-V002
+        severity: CRITICAL
+        description: "No [PLACEHOLDER] or TODO residue in Problem Framing"
+        rule: "section body does not match regex '\\[PLACEHOLDER\\]|TODO'"
+      - id: PF-V003
+        severity: WARNING
+        description: "Problem Framing should include at least one PF- prefixed item"
+        rule: "section body contains at least one match for regex 'PF-\\d+'"
+
+  - id: goals_and_non_goals
+    name: Goals and Non-Goals
+    required: true
+    id_prefix: "G-"
+    grill_prompts:
+      - "List the top 2-4 goals this change must achieve (use G-NNN format)."
+      - "What explicitly is out of scope — what are we NOT trying to do (use NG-NNN format)?"
+      - "How will you know if each goal has been achieved?"
+    validation_rules:
+      - id: GNG-V001
+        severity: CRITICAL
+        description: "Goals and Non-Goals section must be present and non-empty"
+        rule: "section 'goals_and_non_goals' heading exists with non-empty body"
+      - id: GNG-V002
+        severity: CRITICAL
+        description: "No [PLACEHOLDER] or TODO residue in Goals and Non-Goals"
+        rule: "section body does not match regex '\\[PLACEHOLDER\\]|TODO'"
+      - id: GNG-V003
+        severity: WARNING
+        description: "At least one G- goal item should be present"
+        rule: "section body contains at least one match for regex 'G-\\d+'"
+      - id: GNG-V004
+        severity: WARNING
+        description: "At least one NG- non-goal item should be present"
+        rule: "section body contains at least one match for regex 'NG-\\d+'"
+
+  - id: hypothesis
+    name: Hypothesis
+    required: true
+    id_prefix: "HYP-"
+    grill_prompts:
+      - "Complete the template: 'If we [change], then [user/business outcome]...'"
+      - "What is the baseline metric B — the specific measured value before the change (e.g. conversion rate 3.2%)?"
+      - "What is the target metric T — the specific measured value we expect after the change (e.g. conversion rate 4.5%)?"
+      - "What is the timeframe W — how many weeks/months after release will we measure this?"
+      - "What is the 'Because' rationale — why do you believe this change will cause that outcome?"
+    validation_rules:
+      - id: HYP-V001
+        severity: CRITICAL
+        description: "Hypothesis section must be present and non-empty"
+        rule: "section 'hypothesis' heading exists with non-empty body"
+      - id: HYP-V002
+        severity: CRITICAL
+        description: "No [PLACEHOLDER] or TODO residue in Hypothesis"
+        rule: "section body does not match regex '\\[PLACEHOLDER\\]|TODO'"
+      - id: HYP-V003
+        severity: CRITICAL
+        description: "Hypothesis must include a measurable baseline value (B)"
+        rule: "section body contains regex 'baseline[:\\s]+[\\d\\.]+|B[:\\s]+[\\d\\.]+%?|current[:\\s]+[\\d\\.]+'"
+      - id: HYP-V004
+        severity: CRITICAL
+        description: "Hypothesis must include a measurable target value (T)"
+        rule: "section body contains regex 'target[:\\s]+[\\d\\.]+|T[:\\s]+[\\d\\.]+%?|goal[:\\s]+[\\d\\.]+'"
+      - id: HYP-V005
+        severity: CRITICAL
+        description: "Hypothesis must include a timeframe (W)"
+        rule: "section body contains regex 'week|month|day|W[:\\s]+\\d+|timeframe|within \\d+'"
+      - id: HYP-V006
+        severity: WARNING
+        description: "At least one HYP- prefixed item should be present"
+        rule: "section body contains at least one match for regex 'HYP-\\d+'"
+
+  - id: success_metrics
+    name: Success Metrics
+    required: true
+    id_prefix: "SM-"
+    grill_prompts:
+      - "What is the primary metric — the single most important number that will tell you this succeeded (SM-NNN)?"
+      - "What secondary metrics support or contextualize the primary metric (SM-NNN)?"
+      - "What guardrail metrics must NOT regress (SM-NNN)?"
+      - "For each metric: how will it be measured — what tool, event, or query?"
+      - "For each metric: what is the baseline value, or if unknown, who owns the baselining and by when?"
+    validation_rules:
+      - id: SM-V001
+        severity: CRITICAL
+        description: "Success Metrics section must be present and non-empty"
+        rule: "section 'success_metrics' heading exists with non-empty body"
+      - id: SM-V002
+        severity: CRITICAL
+        description: "No [PLACEHOLDER] or TODO residue in Success Metrics"
+        rule: "section body does not match regex '\\[PLACEHOLDER\\]|TODO'"
+      - id: SM-V003
+        severity: CRITICAL
+        description: "Each SM- item must include a measurement method. Surrounding context is defined as: the same line as the SM-NNN marker and the 3 lines immediately following it."
+        rule: "for each 'SM-\\d+' occurrence, the surrounding context contains 'measurement' or 'measured by' or 'via' or 'using'"
+      - id: SM-V004
+        severity: CRITICAL
+        description: "Each SM- item must have either a baseline value or a TBC plan (owner + date). Surrounding context is defined as: the same line as the SM-NNN marker and the 3 lines immediately following it."
+        rule: "for each 'SM-\\d+' occurrence, the surrounding context contains a numeric baseline or 'TBC' with owner/date"
+      - id: SM-V005
+        severity: WARNING
+        description: "At least one SM- item should be designated as primary"
+        rule: "section body contains regex 'primary|SM-\\d+.*primary|primary.*SM-\\d+'"
+
+  - id: user_workflows_and_outcomes
+    name: User Workflows and Outcomes
+    required: true
+    id_prefix: "UW-"
+    grill_prompts:
+      - "Who is the user? Describe each distinct user type involved in this change."
+      - "Walk through the user journey step by step — what does the user do and experience?"
+      - "What is the outcome for the user at the end of each workflow?"
+      - "Are there multiple workflow variants (happy path vs. error path, different user roles)?"
+    validation_rules:
+      - id: UW-V001
+        severity: CRITICAL
+        description: "User Workflows and Outcomes section must be present and non-empty"
+        rule: "section 'user_workflows_and_outcomes' heading exists with non-empty body"
+      - id: UW-V002
+        severity: CRITICAL
+        description: "No [PLACEHOLDER] or TODO residue in User Workflows and Outcomes"
+        rule: "section body does not match regex '\\[PLACEHOLDER\\]|TODO'"
+      - id: UW-V003
+        severity: WARNING
+        description: "Flags specific implementation-detail terms (API, endpoint, database, schema, microservice, REST, GraphQL, SQL) that should not appear in the user-workflows section."
+        rule: "section body does not match regex '(?i)\\bAPI\\b|\\bendpoint\\b|\\bdatabase\\b|\\bschema\\b|\\bmicroservice\\b|\\bservice name\\b|\\bREST\\b|\\bGraphQL\\b|\\bSQL\\b|\\btable name\\b|\\bDynamoDB\\b|\\bS3\\b'"
+      - id: UW-V004
+        severity: WARNING
+        description: "At least one UW- prefixed item should be present"
+        rule: "section body contains at least one match for regex 'UW-\\d+'"
+
+  - id: scope
+    name: Scope
+    required: true
+    id_prefix: "IN-"
+    grill_prompts:
+      - "What is explicitly IN scope for this change (IN-NNN)?"
+      - "What is explicitly OUT of scope (OUT-NNN)?"
+      - "Are there related areas that could easily creep in — make sure they are listed as OUT?"
+    validation_rules:
+      - id: SCOPE-V001
+        severity: CRITICAL
+        description: "Scope section must be present and non-empty"
+        rule: "section 'scope' heading exists with non-empty body"
+      - id: SCOPE-V002
+        severity: CRITICAL
+        description: "No [PLACEHOLDER] or TODO residue in Scope"
+        rule: "section body does not match regex '\\[PLACEHOLDER\\]|TODO'"
+      - id: SCOPE-V003
+        severity: WARNING
+        description: "At least one IN- item should be present"
+        rule: "section body contains at least one match for regex 'IN-\\d+'"
+      - id: SCOPE-V004
+        severity: WARNING
+        description: "At least one OUT- item should be present"
+        rule: "section body contains at least one match for regex 'OUT-\\d+'"
+
+  - id: outcome_level_requirements
+    name: Outcome-Level Requirements
+    required: false
+    id_prefix: "REQ-"
+    grill_prompts:
+      - "Are there any capability-level requirements the PM wants to specify (REQ-NNN)?"
+      - "Remember: these should be outcome/capability statements, NOT functional requirements or NFRs — those go in Solution Design."
+    validation_rules:
+      - id: REQ-V001
+        severity: WARNING
+        description: "If REQ- items are present, they must follow REQ-NNN format"
+        rule: "all requirement IDs in section match regex 'REQ-\\d{3}'"
+      - id: REQ-V002
+        severity: WARNING
+        description: "REQ- items should not contain FR/NFR language (functional or non-functional details)"
+        rule: "section body does not match regex '(?i)\\bFR-\\d+\\b|\\bNFR-\\d+\\b|shall|MUST NOT|latency < |response time'"
+
+  - id: risks_and_assumptions
+    name: Risks and Assumptions
+    required: true
+    id_prefix: "R-"
+    secondary_prefix: "A-"
+    grill_prompts:
+      - "What are the top risks that could prevent this from succeeding (R-NNN)? For each: likelihood and impact."
+      - "What assumptions are you making that, if wrong, would change the approach (A-NNN)?"
+      - "How will you validate or mitigate each major risk or assumption?"
+    validation_rules:
+      - id: RA-V001
+        severity: CRITICAL
+        description: "Risks and Assumptions section must be present and non-empty"
+        rule: "section 'risks_and_assumptions' heading exists with non-empty body"
+      - id: RA-V002
+        severity: CRITICAL
+        description: "No [PLACEHOLDER] or TODO residue in Risks and Assumptions"
+        rule: "section body does not match regex '\\[PLACEHOLDER\\]|TODO'"
+      - id: RA-V003
+        severity: WARNING
+        description: "At least one R- risk item should be present"
+        rule: "section body contains at least one match for regex 'R-\\d+'"
+      - id: RA-V004
+        severity: WARNING
+        description: "At least one A- assumption item should be present"
+        rule: "section body contains at least one match for regex 'A-\\d+'"
+
+  - id: dependencies
+    name: Dependencies
+    required: true
+    id_prefix: "DEP-"
+    grill_prompts:
+      - "Which other teams or systems must deliver something for this to succeed (DEP-NNN)?"
+      - "Are there any sequencing constraints — things that must happen before this can ship?"
+      - "Have these dependencies been communicated to and accepted by the owning teams?"
+    validation_rules:
+      - id: DEP-V001
+        severity: CRITICAL
+        description: "Dependencies section must be present and non-empty"
+        rule: "section 'dependencies' heading exists with non-empty body"
+      - id: DEP-V002
+        severity: CRITICAL
+        description: "No [PLACEHOLDER] or TODO residue in Dependencies"
+        rule: "section body does not match regex '\\[PLACEHOLDER\\]|TODO'"
+      - id: DEP-V003
+        severity: WARNING
+        description: "At least one DEP- item should be present or explicit 'none' stated"
+        rule: "section body contains at least one match for regex 'DEP-\\d+|none|N\\/A|no dependencies'"
+
+  - id: open_questions
+    name: Open Questions
+    required: true
+    id_prefix: "OQ-"
+    grill_prompts:
+      - "What questions remain unresolved that could affect scope, approach, or metrics (OQ-NNN)?"
+      - "For each open question: who owns the answer and by what date?"
+    validation_rules:
+      - id: OQ-V001
+        severity: CRITICAL
+        description: "Open Questions section must be present and non-empty"
+        rule: "section 'open_questions' heading exists with non-empty body"
+      - id: OQ-V002
+        severity: CRITICAL
+        description: "No [PLACEHOLDER] or TODO residue in Open Questions"
+        rule: "section body does not match regex '\\[PLACEHOLDER\\]|TODO'"
+      - id: OQ-V003
+        severity: WARNING
+        description: "If the PRD body mentions 'TBD' or 'unclear', corresponding OQ- items should exist"
+        rule: "if overall PRD contains regex 'TBD|unclear|to be determined' then section contains 'OQ-\\d+'"
+
+  - id: rollout_and_kill_condition
+    name: Rollout and Kill Condition
+    required: true
+    id_prefix: "RK-"
+    grill_prompts:
+      - "What is the rollout plan — phased, flag-gated, A/B, all-at-once (RK-NNN)?"
+      - "What specific trigger or threshold would cause you to kill or roll back this change?"
+      - "Who has the authority to pull the kill switch, and what is the process?"
+    validation_rules:
+      - id: RK-V001
+        severity: CRITICAL
+        description: "Rollout and Kill Condition section must be present and non-empty"
+        rule: "section 'rollout_and_kill_condition' heading exists with non-empty body"
+      - id: RK-V002
+        severity: CRITICAL
+        description: "No [PLACEHOLDER] or TODO residue in Rollout and Kill Condition"
+        rule: "section body does not match regex '\\[PLACEHOLDER\\]|TODO'"
+      - id: RK-V003
+        severity: WARNING
+        description: "A kill condition trigger should be explicitly stated"
+        rule: "section body contains regex 'kill|rollback|revert|trigger|threshold'"
+      - id: RK-V004
+        severity: WARNING
+        description: "At least one RK- prefixed item should be present"
+        rule: "section body contains at least one match for regex 'RK-\\d+'"

@@ -1,0 +1,83 @@
+# jira-config.yml — team-specific Jira configuration
+#
+# ============================================================
+# ⚠️  WARNING: The filled copy of this file (with your team's actual values)
+#    MUST NOT be committed to the marketplace, this repo, or any public repo.
+#    Add it to .gitignore in your agent workspace.
+#
+#    This SCAFFOLD template (placeholder values only) is safe to ship in the
+#    marketplace — it contains no real credentials or corporate identifiers.
+# ============================================================
+#
+# HOW TO USE:
+#   1. Copy this file into your agent workspace:
+#        cp spec-kit-multi-agent-tdd/templates/jira-config-scaffold.yml \
+#           .specify/jira-config.yml
+#      (or architecture/jira-config.yml — whichever your team uses)
+#   2. Fill every <angle-bracket-placeholder> with your team's live values.
+#   3. Validate: python3 -c "import yaml; yaml.safe_load(open('.specify/jira-config.yml').read()); print('VALID')"
+#   4. Add the file to .gitignore in your workspace repo.
+#
+# Field IDs below are from live Jira Cloud createmeta (2026-06-08).
+# The old sdp-custom-fields.md (DC-era) IDs are DEPRECATED — do not use.
+
+jira:
+  instance_url: "https://<your-org>.atlassian.net"  # Jira Cloud URL
+
+sdp:
+  # SDP Initiative creation config — all values resolved from live Jira
+  project_key: "SDP"
+  issue_type_id: "11110"  # Initiative issue type (do not change)
+
+  # Required select custom fields — fill with your team's values.
+  # To discover current option IDs, run:
+  #   GET /rest/api/3/issue/createmeta/SDP/issuetypes/11110
+  # or use the Jira MCP: jira_get_field_options(field_id="customfield_XXXXX")
+
+  stonehenge_domain:
+    field_id: "customfield_11259"
+    option_id: "<your-domain-option-id>"   # e.g. 12579 for Search & Match
+    option_name: "<your-domain-name>"      # human-readable label
+
+  initiative_category:
+    field_id: "customfield_11313"
+    option_id: "<your-category-option-id>" # known values: 17550=Strategic Capability, 17551=KTLO, 17552=Paying Down Debt
+    option_name: "<your-category-name>"
+
+  initiative_goal:
+    field_id: "customfield_11389"
+    option_id: "<your-goal-option-id>"     # known values: 17653=Delivery, 17654=Enablement, 17655=Research
+    option_name: "<your-goal-name>"
+
+  # Team identifier (UUID format).
+  # To find your team UUID:
+  #   Option A: GET /rest/api/3/teams
+  #   Option B: Open an existing SDP Initiative on your team's board and inspect the Team field value.
+  team:
+    field_id: "customfield_10001"
+    uuid: "<your-team-uuid>"               # e.g. "f46fee6d-7a22-4189-9d0d-6767aec4ebb8-1425"
+    name: "<your-team-name>"               # human-readable
+
+  # Optional: quarterly sprint for the SDP board.
+  # Set sprint_id to your current SDP quarterly sprint ID, or leave null to skip.
+  # To find sprint IDs: jira_get_sprints_from_board(board_id="<sdp-board-id>")
+  sprint:
+    field_id: "customfield_10020"
+    sprint_id: null                        # set to integer sprint id, or null
+
+  # Transition IDs — NEVER hard-code in scripts.
+  # Always resolve at runtime via: GET /rest/api/3/issue/{key}/transitions
+  # Values below are for documentation / sanity-check only; re-verify before use.
+  transitions:
+    # After create (issue lands in "To Do"), apply this transition to reach "Idea Backlog".
+    idea_backlog:
+      name: "Idea Backlog"
+      status_id: "11256"                   # Idea Backlog status ID (do not change)
+      last_known_transition_id: "101"      # REFERENCE ONLY — re-resolve at runtime
+
+stash:
+  # Stash/Bitbucket workspace repo where PRDs are committed.
+  # The speckit-matd-specify-prd command commits locally; a human pushes.
+  workspace_repo_url: "<your-workspace-repo-stash-url>"
+  # Example: https://stash.mycompany.com/scm/team/my-service-workspace.git
+  branch: "main"                           # branch to commit PRDs to

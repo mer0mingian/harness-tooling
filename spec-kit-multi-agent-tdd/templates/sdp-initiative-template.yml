@@ -1,0 +1,205 @@
+# SDP Initiative field-mapping template
+#
+# Purpose: documents how PRD fields map to the Jira REST `fields` payload for
+#   creating an SDP Initiative (issue type id 11110, project SDP).
+#   Used at runtime by create_sdp_initiative.py and as a human-readable reference.
+#
+# Authoritative field ids: docs/references/sdp-jira-fields.md  ← always use this
+# ⚠️  sdp-custom-fields.md (old DC-era doc) is OUTDATED — do NOT use those ids.
+#
+# OSS-safe: no corporate UUIDs or real team ids are stored here.
+#   All per-team values are read from the workspace jira-config at runtime.
+
+# ---------------------------------------------------------------------------
+# 1. PRD → Jira field mapping
+# ---------------------------------------------------------------------------
+mapping:
+  # PRD frontmatter field  →  Jira field id  (notes)
+  title:
+    jira_field: summary
+    transform: "prefix with quarter, e.g. '[Q3 2026] {title}'"
+    source: PRD frontmatter
+
+  description_tldr:
+    jira_field: description
+    transform: "ADF (Atlassian Document Format) on REST v3; plain text on v2"
+    content: "TL;DR paragraph + PRD Stash URL"
+    source: PRD body (first paragraph) + PRD frontmatter.stash_url
+
+  target_start:
+    jira_field: customfield_10022
+    format: YYYY-MM-DD
+    source: PRD frontmatter.quarter_start
+
+  target_end:
+    jira_field: customfield_10023
+    format: YYYY-MM-DD
+    source: PRD frontmatter.quarter_end
+
+  stonehenge_domain:
+    jira_field: customfield_11259
+    type: option  # send as {"id": "<option-id>"}
+    source: workspace jira-config key → sdp_domain_id
+    # Domain option ids (from live createmeta — may change; re-resolve before shipping):
+    #   Search & Match = 12579, AI Internal Tools = 12543, Apply = 12546,
+    #   Data & AI Platform = 12558, Developer Platform = 12565, Native Apps = 12573,
+    #   Job Discovery = 12568, Recruiter Platform = 12576, User Dialogue = 12583,
+    #   (see sdp-jira-fields.md for full list of 28 values)
+    default_note: "team's primary domain — resolved from workspace jira-config"
+
+  initiative_category:
+    jira_field: customfield_11313
+    type: option  # send as {"id": "<option-id>"}
+    source: workspace jira-config key → sdp_category_id
+    # Allowed values: Strategic Capability (17550), KTLO (17551), Paying Down Debt (17552)
+    default: "17550"  # Strategic Capability
+
+  initiative_goal:
+    jira_field: customfield_11389
+    type: option  # send as {"id": "<option-id>"}
+    source: workspace jira-config key → sdp_goal_id
+    # Allowed values: Delivery (17653), Enablement (17654), Research (17655)
+    default: "17653"  # Delivery
+
+  team:
+    jira_field: customfield_10001
+    type: string  # team UUID — NOT a numeric id
+    source: workspace jira-config key → sdp_team_uuid
+    write_format_note: >
+      Pass the UUID string directly, e.g. "<team-uuid-from-jira-config>".
+      If that fails try {"id": "<uuid>"}. Verify write format against your Jira instance.
+    note: >
+      customfield_10001 does NOT appear on the createmeta create screen but IS
+      settable on Initiatives. Set during create or via a follow-up update call.
+
+  sprint:
+    jira_field: customfield_10020
+    type: array  # e.g. [{"id": <sprint-id>}]
+    source: workspace jira-config key → sdp_sprint_id
+    note: "SDP quarterly sprint; optional but recommended"
+
+# ---------------------------------------------------------------------------
+# 2. Payload template (filled by create_sdp_initiative.py at runtime)
+# ---------------------------------------------------------------------------
+payload_template:
+  fields:
+    project:
+      key: SDP                          # fixed — always SDP project
+
+    issuetype:
+      id: "11110"                       # fixed — Initiative issue type id
+
+    summary: "[{quarter}] {prd_title}"  # populated from PRD frontmatter
+
+    description:                        # ADF format for REST v3; plain string for v2
+      type: doc
+      version: 1
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: "{tldr}"             # PRD TL;DR
+        - type: paragraph
+          content:
+            - type: text
+              text: "Source PRD: {stash_url}"
+
+    customfield_11259:                  # Stonehenge Domain — REQUIRED
+      id: "{sdp_domain_id}"             # read from workspace jira-config → sdp_domain_id
+
+    customfield_11313:                  # Initiative Category — REQUIRED
+      id: "{sdp_category_id}"           # default 17550 (Strategic Capability)
+
+    customfield_11389:                  # Initiative Goal — REQUIRED
+      id: "{sdp_goal_id}"              # default 17653 (Delivery)
+
+    customfield_10001: "{sdp_team_uuid}" # Team UUID — from workspace jira-config
+
+    customfield_10022: "{quarter_start}" # Target start date YYYY-MM-DD (optional)
+    customfield_10023: "{quarter_end}"   # Target end date YYYY-MM-DD (optional)
+
+    customfield_10020:                   # SDP quarterly sprint (optional)
+      - id: "{sdp_sprint_id}"           # sprint id from workspace jira-config
+
+# ---------------------------------------------------------------------------
+# 3. Workspace jira-config keys the script reads at runtime
+# ---------------------------------------------------------------------------
+jira_config_keys:
+  # Key in workspace jira-config  →  used for
+  sdp_domain_id:
+    maps_to: customfield_11259 (Stonehenge Domain)
+    required: true
+    example: "12579"  # placeholder — Search & Match shown for illustration only
+
+  sdp_category_id:
+    maps_to: customfield_11313 (Initiative Category)
+    required: false
+    default: "17550"  # Strategic Capability
+
+  sdp_goal_id:
+    maps_to: customfield_11389 (Initiative Goal)
+    required: false
+    default: "17653"  # Delivery
+
+  sdp_team_uuid:
+    maps_to: customfield_10001 (Team)
+    required: false
+    example: "<team-uuid-from-jira-config>"
+    note: "Never store real UUIDs in this marketplace template"
+
+  sdp_sprint_id:
+    maps_to: customfield_10020 (Sprint)
+    required: false
+    example: "<sprint-id-from-jira-config>"
+
+  sdp_quarter:
+    maps_to: summary prefix  # e.g. "Q3 2026"
+    required: false
+
+  jira_base_url:
+    maps_to: REST API base
+    required: true
+    example: "https://<instance>.atlassian.net"
+
+# ---------------------------------------------------------------------------
+# 4. Transition — move to "Idea Backlog" after create
+# ---------------------------------------------------------------------------
+transition:
+  initial_status:
+    name: To Do
+    id: "11092"   # status id after create
+
+  target_status:
+    name: Idea Backlog
+    id: "11256"   # status id after transition
+
+  # ⚠️  IMPORTANT: transition IDs change between Jira instances and over time.
+  #   The documented transition id is 101 (observed on live SDP as of 2026-06-08)
+  #   but MUST be re-resolved at runtime via:
+  #     GET /rest/api/3/issue/{issueKey}/transitions
+  #   Do NOT hard-code transition id 101 in the script.
+  #   Filter the response for transition.to.id == "11256" to find the correct id.
+  observed_transition_id: "101"  # informational only — re-resolve at runtime
+  how_to_resolve: >
+    GET /rest/api/3/issue/{issueKey}/transitions
+    → filter for to.id == "11256" (Idea Backlog)
+    → use that transition id in POST /rest/api/3/issue/{issueKey}/transitions
+
+# ---------------------------------------------------------------------------
+# 5. Remote link — attach the source PRD on Stash
+# ---------------------------------------------------------------------------
+remote_link:
+  # POST /rest/api/3/issue/{issueKey}/remotelink
+  # See: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-remote-links/
+  payload:
+    globalId: "stash-prd-{prd_id}"  # stable id; prevents duplicate links on re-run
+    relationship: "Source PRD"
+    object:
+      url: "{stash_url}"            # PRD Stash URL from PRD frontmatter
+      title: "Source PRD — {prd_id}"  # e.g. "Source PRD — PRD-042"
+      icon:
+        url16x16: "https://confluence.atlassian.com/images/logo/confluence_48_white.png"
+        title: "Confluence / Stash"
+  note: >
+    stash_url and prd_id are read from PRD frontmatter at runtime.
+    If the Stash URL is absent the remote link step is skipped (non-fatal).
