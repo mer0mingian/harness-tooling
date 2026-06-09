@@ -48,9 +48,6 @@ claude plugin install harness-agents --scope project
 - `review-e2e-testing-patterns`
 - `review-simplify-complexity`
 - `review-webapp-testing`
-- `stdd-make-constrained-implementation`
-- `stdd-test-author-constrained`
-- `stdd-test-driven-development`
 
 **Claude Code Usage:**
 ```

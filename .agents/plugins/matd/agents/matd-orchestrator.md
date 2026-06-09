@@ -10,9 +10,6 @@ skills:
   - orchestrate-finishing-a-development-branch
   - orchestrate-multi-agent-patterns
   - orchestrate-subagent-driven-development
-  - stdd-ask-questions-if-underspecified
-  - stdd-openspec
-  - stdd-pm-linear-integration
   - general-finishing-a-development-branch
   - general-git-advanced-workflows
   - general-git-guardrails-claude-code
@@ -37,9 +34,6 @@ permission:
     git status: allow
   skill:
     "orchestrate-": allow
-    "stdd-ask-questions-if-underspecified": allow
-    "stdd-openspec": allow
-    "stdd-pm-linear-integration": allow
     "general-": allow
     "": deny
 ---

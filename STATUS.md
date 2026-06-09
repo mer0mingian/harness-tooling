@@ -142,18 +142,27 @@ Per critical review + user decisions:
 
 ### 9. Documentation Created
 
-**harness-tooling (`docs/`):**
-- [specs/001-speckit-matd-specify-prd/spec.md](./docs/specs/001-speckit-matd-specify-prd/spec.md) — PRD command (OQ-1..11 resolved), plus [plan.md](./docs/specs/001-speckit-matd-specify-prd/plan.md) + [dependency-map.md](./docs/specs/001-speckit-matd-specify-prd/dependency-map.md)
-- [specs/002-speckit-matd-specify-product-brief/spec.md](./docs/specs/002-speckit-matd-specify-product-brief/spec.md) — Product Brief (stub)
-- [specs/003-speckit-matd-specify-constitution/spec.md](./docs/specs/003-speckit-matd-specify-constitution/spec.md) — System Constitution (stub, full skill design)
-- [specs/004-speckit-matd-specify-solution-design/spec.md](./docs/specs/004-speckit-matd-specify-solution-design/spec.md) — Solution Design alt template (stub)
-- [specs/005-atlassian-sdp-skill-migration/spec.md](./docs/specs/005-atlassian-sdp-skill-migration/spec.md) — Migration plan (deferred, validation gate)
+**Core repo (`docs/`):**
+- [specs/001-speckit-matd-specify-prd/spec.md](../../docs/specs/001-speckit-matd-specify-prd/spec.md) — PRD command (OQ-1..11 resolved), plus [plan.md](../../docs/specs/001-speckit-matd-specify-prd/plan.md) + [dependency-map.md](../../docs/specs/001-speckit-matd-specify-prd/dependency-map.md)
+- [specs/002-speckit-matd-specify-product-brief/spec.md](../../docs/specs/002-speckit-matd-specify-product-brief/spec.md) — Product Brief (stub, OQ-B1..5 resolved)
+- [specs/003-speckit-matd-specify-constitution/spec.md](../../docs/specs/003-speckit-matd-specify-constitution/spec.md) — System Constitution (stub, full skill design)
+- [specs/004-speckit-matd-specify-solution-design/spec.md](../../docs/specs/004-speckit-matd-specify-solution-design/spec.md) — Solution Design alt template (stub, 9-section structure)
+- [specs/005-atlassian-sdp-skill-migration/spec.md](../../docs/specs/005-atlassian-sdp-skill-migration/spec.md) — Migration plan (deferred, validation gate)
+- [specs/006-agent-restrictions-experiment/spec.md](../../docs/specs/006-agent-restrictions-experiment/spec.md) — Agent restrictions (stub, formal decision gates)
+- [specs/007-split-claude-code-plugin/spec.md](../../docs/specs/007-split-claude-code-plugin/spec.md) — Plugin split (stub, command marketplace vs. extension)
+- [specs/008-split-speckit-extension/spec.md](../../docs/specs/008-split-speckit-extension/spec.md) — Extension split (stub, 7-section design)
+- [specs/009-speckit-preset-specify-override/spec.md](../../docs/specs/009-speckit-preset-specify-override/spec.md) — /specify override (stub, multi-template support)
+- [specs/010-speckit-determine-change-level/spec.md](../../docs/specs/010-speckit-determine-change-level/spec.md) — Change-level skill (stub, MATD/matd-ops CLI API)
+- [specs/011-speckit-estimate-complexity/spec.md](../../docs/specs/011-speckit-estimate-complexity/spec.md) — Complexity estimation skill (stub, story-point focus)
 - [references/sdp-jira-fields.md](../../docs/references/sdp-jira-fields.md) ✅ — Authoritative SDP Initiative field reference
 - [references/jira-mcp-sdp-creation.md](../../docs/references/jira-mcp-sdp-creation.md) — MCP path analysis + correction
 - [references/architecture-designs-confluence.md](../../docs/references/architecture-designs-confluence.md), [agentic-pdlc-workspace-summary.md](../../docs/references/agentic-pdlc-workspace-summary.md), [spec-kit-v-model-summary.md](../../docs/references/spec-kit-v-model-summary.md), [spec-kit-agent-assign-summary.md](../../docs/references/spec-kit-agent-assign-summary.md), [confluence-project-charter.md](../../docs/references/confluence-project-charter.md), [confluence-constitution-sources.md](../../docs/references/confluence-constitution-sources.md)
 
 **Harness-tooling:**
 - [TARGET_STATE.md](./TARGET_STATE.md) §5 — Atlassian/SDP skill migration deferred; MCP-first + OSS-safe split; running-MCP assumption
+- [AGENT_SKILL_MATRIX.md](./AGENT_SKILL_MATRIX.md) — 7-agent architecture, agent-skill mappings, restriction levels
+- [COMMAND_INVENTORY.md](./COMMAND_INVENTORY.md) — 72 commands catalogued, gaps identified
+- [STDD_CLEANUP.md](./STDD_CLEANUP.md) — 7 skills for deletion, 1 rename
 
 **Memory (core repo `.claude/projects/.../memory/`):**
 - `sdp-jira-field-truth.md` — notes that gitignored local skills can vanish; durable truth in committed `docs/references/`
@@ -180,7 +189,24 @@ Per critical review + user decisions:
 
 **Dependencies:** assume `atlassian-write` MCP installed & running in workspace
 
-### 2. Detail Specs 002/003 (Product Brief, Constitution)
+### 2. Execute STDD Cleanup
+
+**Ready to execute:**
+- Delete 7 skills: `stepstone-tech-design-doc-{author,critical-review,reviewer,test-reviewer}`, `stepstone-backend-dev`, `stepstone-debugger`, `stepstone-implementer`
+- Rename 1 skill: `stepstone-agent-restrictions` → `stepstone-matd-agent-restrictions`
+- Rationale captured in [STDD_CLEANUP.md](./STDD_CLEANUP.md)
+
+### 3. Detail Specs 006-011
+
+**Specs ready for detailing:**
+- **006:** Agent restrictions experiment (formal decision gates, cascading restrictions)
+- **007:** Split Claude Code plugin (command marketplace vs. extension)
+- **008:** Split SpecKit extension (7-section design: v-model + workspace + skills + agent-restrictions + budget + MATD)
+- **009:** SpecKit preset /specify override (multi-template support, preset field, template discovery)
+- **010:** determine-change-level skill (MATD/matd-ops CLI API, single-file Confluence check)
+- **011:** estimate-complexity skill (story points, calibrated examples)
+
+### 4. Detail Specs 002/003/004 (Product Brief, Constitution, Solution Design)
 
 **Spec 002 (product-brief):**
 - **Remaining:** derive `product-brief-schema.yml` from the Project Charter Template (ME/170265460) + validate against 1-2 real Charter examples (OQ-B6)
@@ -190,21 +216,21 @@ Per critical review + user decisions:
 - **Remaining:** none; full skill design captured (placement `.claude/skills/stepstone-system-constitution/`, template checklist, references/pdlc/, team-specific section)
 - **Build after:** spec 001 ships (not blocking)
 
-### 3. Execute Spec 005 Validation Gate
+**Spec 004 (solution-design alt template):**
+- **Remaining:** enhance existing vs. add template variant (OQ-S1), 9-section EA structure reconciliation (OQ-S2), ADR handling (OQ-S3), freeze-gate mechanics (OQ-S4), yml schema + content-test rubric (OQ-S5)
+- **Build after:** spec 001 ships and PRD→SDP flow is proven
+
+### 5. Execute Spec 005 Validation Gate
 
 **Before** migrating `stepstone-atlassian-skills` + `stepstone-sdp-planning` into the matd plugin:
 - **Search** StepStone's internal Claude Code / agent marketplace(s) and `stst-ai-tools-marketplace` for existing Jira/SDP/Atlassian MCP plugins
 - **If maintained plugin exists** → adopt/depend on it; reduce local skills to thin workspace-config layer
 - **If not** → migrate per TARGET_STATE §5 (MCP-first, OSS-safe split)
 
-### 4. Detail Spec 004 (Solution Design Alt Template)
+### 6. Complete Remaining Grilling Items
 
-**After** spec 001 ships and PRD→SDP flow is proven:
-- Enhance existing `speckit-matd-specify-solution-design` vs. add template variant (OQ-S1)
-- 9-section EA structure vs. existing C4-centric template reconciliation (OQ-S2)
-- ADR handling (inline vs. separate command) (OQ-S3)
-- Freeze-gate mechanics (OQ-S4)
-- yml schema + content-test rubric (OQ-S5)
+**Section 3 (Tier 1-2):** Still open from original grilling scope
+**Section 8 (Tier 3):** 8 items remaining (lower priority, nice-to-have)
 
 ## Key Decisions & Rationale
 
@@ -219,6 +245,9 @@ Per critical review + user decisions:
 | **Product Brief = workspace SoT** | Product-team-owned; Confluence becomes a markdown view (linked outward) | Matches PRD pattern (workspace repo authoritative) |
 | **Constitution mirrors EA/Confluence** | EA owns tech invariants in Confluence; workspace holds refreshed mirror | Different ownership ⇒ different authority direction |
 | **Defer skill migration to spec 005** | StepStone marketplace may already have Jira/SDP plugins — validate before building | Avoids reinventing; cleaner OSS-safe split |
+| **7-agent architecture** | Fixed core agents (matd-specifier, matd-critical-thinker, matd-reviewer, matd-test-reviewer, matd-ops, matd-implementer, matd-debugger) | Clean separation of concerns; matd-ops caveman for deterministic ops |
+| **Formal decision gates for restrictions** | Agent-level enforcement (not just prompt hints), cascading priority (forbidden > suggested > required) | Prevents accidental violations; supports spec 006 experiment |
+| **Command marketplace split** | Commands/plugins vs. SpecKit extension (preset/settings) | OSS-safe, reusable command marketplace; SpecKit-specific config separate |
 
 ## Assumptions & Preconditions
 
@@ -226,12 +255,15 @@ Per critical review + user decisions:
 2. **Stash auth works** — commands assume working SSH/token; humans push in v1.
 3. **Agent workspace repo exists** (one per system, workspace-template structure) — Staff Engineer/EM provisions for new systems; PMs use existing.
 4. **Jira is Atlassian Cloud** `stepstone.atlassian.net` — post-migration; DC-era ids (`vulcan.stepstone.com`, 16713/16714, 10005, 13301/15001) are deprecated.
+5. **7-agent architecture is fixed** — no dynamic agent creation/assignment in v1; fixed roles per AGENT_SKILL_MATRIX.md.
+6. **Story points, not hours** — complexity estimation uses Agile story points (calibrated examples), never hourly time estimates.
+7. **Lean v1 focus** — specs 001 implementation-ready; specs 002-011 stub/design stage; no parallel builds until 001 ships.
 
 ## References
 
-- **Core repo:** `harness-sandbox-stony/docs/specs/`, `docs/references/`, `DOCUMENT_INDEX.md`
-- **Harness-tooling:** `TARGET_STATE.md`, `AGENT_SKILL_MATRIX.md`
-- **Committed state:** core `be8d63c` (dev), harness-tooling `e27e13a` (dev)
+- **Core repo:** `harness-sandbox-stony/docs/specs/` (specs 001-011), `docs/references/`, `DOCUMENT_INDEX.md`
+- **Harness-tooling:** `TARGET_STATE.md`, `AGENT_SKILL_MATRIX.md`, `COMMAND_INVENTORY.md`, `STDD_CLEANUP.md`
+- **Committed state:** core `dev` branch, harness-tooling `dev` branch (post-grilling 2026-06-10)
 - **Confluence sources:**
   - Project Charter Template (ME/170265460)
   - Solution Design (ARCH/205793182, 205853106)
@@ -254,14 +286,15 @@ See [core repo `docs/specs/001-.../spec.md` §v1 scope & risk register](../../do
 ## Session Artifacts
 
 **Conversations:**
-- 2026-06-08..09: Spec design + MCP validation + SDP field verification + critical review (core repo `.claude/projects/.../c34f470f-7bce-4a7b-b3b4-fe6bf5d0371c.jsonl`)
+- 2026-06-08..09: Spec design + MCP validation + SDP field verification + critical review
+- 2026-06-09..10: Grilling session (specs 002-011), 7-agent architecture, command inventory, STDD cleanup
 
-**Commits:**
-- Core `be8d63c`: "docs(specs): lean v1 PRD command + SDP MCP path, verified Jira fields, future stubs"
-- Harness-tooling `e27e13a`: "docs(TARGET_STATE): SDP/Atlassian skill migration deferred to spec 005; MCP-write path + verified SDP fields; running-MCP assumption"
+**Commits (pending):**
+- Core repo `dev`: specs 006-011 stub files, updated references
+- Harness-tooling `dev`: AGENT_SKILL_MATRIX.md, COMMAND_INVENTORY.md, STDD_CLEANUP.md, STATUS.md update
 
 **Gitignored local skills** (corrected, not committed): `stepstone-atlassian-skills/references/sdp-custom-fields.md`, `stepstone-sdp-planning/references/02-workflow.md`, `jira-teams-config.yaml` (Sprint 10005→10020)
 
 ---
 
-**Bottom line:** Spec 001 is ready to build. The three-input DESIGN model (Product Brief + System Constitution + PRD → Solution Design) is fully specified. SDP/Jira MCP integration is proven. All verification gates passed.
+**Bottom line:** Spec 001 is ready to build (~20-24 SP). Specs 002-011 are stub/design stage with architecture and key decisions captured. 7-agent architecture finalized. Enhanced workspace structure designed. STDD cleanup ready to execute. Grilling session completed with 6 open questions remaining (Section 3 + 8 Tier 3 items). SDP/Jira MCP integration proven. Lean v1 focus maintained.

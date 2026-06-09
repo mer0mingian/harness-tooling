@@ -11,7 +11,6 @@ temperature: 0.1
 skills:
   - review-check-correctness
   - review-differential-review
-  - stdd-test-driven-development
   - general-verification-before-completion
 permission:
   read:
@@ -35,7 +34,6 @@ permission:
     gh pr diff *: allow
   skill:
     "review-": allow
-    "stdd-test-driven-development": allow
     "general-verification-before-completion": allow
     "governance-": allow
     "": deny

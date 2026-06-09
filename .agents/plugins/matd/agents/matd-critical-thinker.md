@@ -4,7 +4,6 @@ description: Red Team Validator (MATD Crit role). Analyzes specs and plans for c
 source: local
 mode: subagent
 skills:
-  - stdd-ask-questions-if-underspecified
   - review-check-correctness
   - general-grill-me
   - general-grill-with-docs

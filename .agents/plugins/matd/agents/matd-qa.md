@@ -12,8 +12,6 @@ skills:
   - review-webapp-testing
   - review-simplify-complexity
   - python-testing-uv-playwright
-  - stdd-test-author-constrained
-  - stdd-ask-questions-if-underspecified
   - general-verification-before-completion
   - general-rtk-usage
   - general-git-guardrails-claude-code

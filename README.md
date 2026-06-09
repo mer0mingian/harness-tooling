@@ -275,10 +275,7 @@ This repository is part of the harness sandbox ecosystem:
 - `orchestrate-subagent-driven-development` - Sequential delegation
 
 ### STDD (`stdd-*`)
-- `stdd-openspec` - OpenSpec directory structure
 - `stdd-product-spec-formats` - Job Stories, EARS, Gherkin
-- `stdd-test-driven-development` - Red-Green-Refactor
-- `stdd-ask-questions-if-underspecified` - Requirement clarification
 
 ### General (`general-*`)
 - `general-verification-before-completion` - Pre-completion checks

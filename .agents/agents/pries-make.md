@@ -9,7 +9,6 @@ source: local
 mode: subagent
 temperature: 0.2
 skills:
-  - stdd-make-constrained-implementation
   - general-python-environment
   - python-async-patterns
   - python-fastapi-templates
@@ -60,7 +59,6 @@ permission:
     sudo: deny
     "rm -rf *": deny
   skill:
-    "stdd-make-constrained-implementation": allow
     "general-python-environment": allow
     "python-": allow
     "orchestrate-executing-plans": allow
@@ -120,7 +118,7 @@ Given a task package + (optional) failing tests:
 
 ## Output Contract
 
-See `stdd-make-constrained-implementation` skill. Always include:
+ Always include:
 
 - `status` (GREEN / SCOPE_ESCALATION / BLOCKED).
 - `files_changed` list.

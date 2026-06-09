@@ -8,25 +8,43 @@
 
 ## Executive Summary
 
-This document outlines completed work and proposed improvements across the harness-workplace ecosystem based on comprehensive multi-agent analysis. Seven parallel agents investigated infrastructure usage, created new capabilities, and identified optimization opportunities totaling **70 story points** of improvements.
+This document outlines completed work and proposed improvements across the harness-workplace ecosystem based on comprehensive multi-agent analysis and grilling sessions. The scope has expanded from initial 70 SP to **177 SP total** following architectural refinement and planning work.
 
 ### Completed Work (Committed)
 
 - ✅ 3 new skills with progressive disclosure (dev-speckit-methodology, manage-plugin-creation, manage-speckit-extension)
 - ✅ harness-management-tools plugin created and integrated
 - ✅ Default sandbox configuration updated
+- ✅ Grilling session completed (2026-06-09) covering specs 002-011 and FUTURE-WORK items
+- ✅ 6 context documents created capturing architectural decisions
 
-### Proposed Improvements (73 SP)
+### Proposed Improvements (177 SP Total)
 
-- ⏳ MATD commands simplification (24 SP effort → 38 SP savings)
-- ⏳ Documentation cleanup (34 SP)
-- ⏳ Automated C4 and CGC updates on PR merge (12 SP)
-- ⏳ Test strategy template enhancement with AWS best practices (3 SP)
+**Phase 0: Foundation (15 SP)**
+- STDD skills cleanup (2 SP)
+- Enhanced workspace structure (8 SP)
+- Agent restrictions experiment (3 SP)
+- Tier 1 command: specify-constitution (5 SP via Spec 003)
+
+**Phase 1-2: Restructuring (58 SP)**
+- Plugin/extension splits (34 SP) - Specs 007-008
+- MATD v3 simplification (24 SP) - Commands cleanup
+
+**Phase 3-6: Enhancements (104 SP)**
+- Presets & new skills (13 SP) - Specs 009-011
+- Automated documentation (12 SP)
+- Maintenance commands (8 SP)
+- Documentation cleanup (34 SP)
+- Deferred work (37 SP) - Tier 4 commands, template enhancements
 
 ### Architectural Changes
 
 - ✅ Keep docker-compose profile system (no changes)
 - ✅ Keep .speckit-templates/ as separate shared resource (not merged into extension)
+- ➕ Split monolithic MATD plugin into 2-tier model (matd-agents-core, matd-skills-extended)
+- ➕ Split monolithic MATD extension into 4 focused extensions (discovery, solution-design, refinement, implement-tdd)
+- ➕ Enhanced workspace structure with specs-as-folders and matd-config.yml
+- ➕ SpecKit preset system for command override (/specify → matd-specify-prd)
 - ➕ Add automatic C4 smart-docs and code-graph-context updates **on PR merge to main/live**
 - 🔍 Simplify MATD commands while **preserving subagent architecture**
 
@@ -140,7 +158,7 @@ The MATD (Multi-Agent Test-Driven Development) extension implements a complete T
 | **2. Test Strategy**          | `/speckit.matd.specify-test-strategy`   | `docs/testing/{id}-strategy.md`                  | matd-qa                             | general-grill-me, dev-tdd                            | **PROPOSED: Remove (move to constitution)** <br />Approved. Remind me to update the tldraw                                                               |
 | **3. Solution Design**        | `/speckit.matd.specify-solution-design` | `docs/design/{id}-solution.md` + ADR             | matd-architect                        | arch-c4-*, general-grill-me                          | **PROPOSED: Remove (use /speckit.plan)**<br />Rejected. Keep command as-is, runs before /speckit.plan                                                        |
 | **4. ADR Creation**           | `/speckit.matd.specify-adr`             | `docs/adrs/{num}-{title}.md`                     | matd-architect                           | arch-design-principles                               | **PROPOSED: Simplify (thin wrapper)**<br />Rejected: keep as-is, needs to be sound and detailed |
-| **5. Test Generation (RED)**  | `/speckit.matd.test`                    | `docs/features/{id}-test-design.md` + test files | matd-qa          | stdd-test-author-constrained                         | **Keep - Simplify implementation**                                                                                                                       |
+| **5. Test Generation (RED)**  | `/speckit.matd.test`                    | `docs/features/{id}-test-design.md` + test files | matd-qa          | python-testing-uv-playwright                         | **Keep - Simplify implementation**                                                                                                                       |
 | **6. Implementation (GREEN)** | `/speckit.matd.implement`               | Source code files                                  | matd-dev            | dev-tdd, verification-before-completion              | **Keep - Simplify to single-phase**                                                                                                                      |
 | **7. Parallel Review**        | `/speckit.matd.review`                  | `docs/reviews/{id}-arch.md` + `{id}-code.md`   | matd-architect + matd-qa | review-check-correctness, review-simplify-complexity | **Keep as-is (unique value)**                                                                                                                            |
 | **8. Commit & Summary**       | `/speckit.matd.commit`                  | `docs/features/{id}-summary.md` + git commit     | matd-critical-thinker                      | verification-before-completion                       | **Keep - Add doc update hooks**                                                                                                                          |
@@ -375,7 +393,7 @@ workflow:
 
 - Test strategy is project-level, not feature-level
 - Should be in project constitution (SpecKit Phase 0)
-- Duplicates `dev-tdd` and `stdd-test-driven-development` skill content
+- Duplicates `dev-tdd` skill content
 
 **Subagent impact**: ✅ None - same skills used
 
@@ -990,46 +1008,86 @@ Full implementation details for:
 
 ## 8. Timeline & Resource Estimates
 
-### 8.1 Recommended Sequencing
+### 8.1 Recommended Sequencing (Revised Post-Grilling)
 
-#### Sprint 1: MATD Phase 1 - **APPROVAL REQUIRED** (10 SP)
+#### Phase 0: Foundation (Sprint 1-2, 15 SP) - **NEW**
 
-**Goal**: Remove redundant commands (pending approval)
+**Goal**: Clean foundation for architectural restructuring
 
 **Tasks**:
+- STDD skills cleanup (2 SP) - Delete 7 skills, rename 1
+- Enhanced workspace structure (8 SP) - Specs-as-folders, matd-config.yml
+- Spec 006: Agent restrictions experiment (3 SP)
+- Spec 003: specify-constitution command (5 SP via existing spec)
 
-- Obtain approval for 4 command removals
-- Convert execute to workflow YAML (3 SP)
-- Remove specification commands (7 SP)
+**Deliverable**: Clean skill library, enhanced workspace template, agent restriction validation
 
-**Deliverable**: Cleaner MATD with workflow orchestration
+#### Phase 1: Plugin Split (Sprint 3-4, 13 SP) - **NEW**
 
-#### Sprint 2: Automated Documentation (12 SP)
+**Goal**: Reorganize Claude Code matd plugin
+
+**Tasks**:
+- Spec 007: Split into matd-agents-core + matd-skills-extended (13 SP)
+- Agent skill matrix validation
+- Plugin manifest updates
+
+**Deliverable**: Modular, composable MATD plugin architecture
+
+#### Phase 2: Extension Split (Sprint 5-7, 21 SP) - **NEW**
+
+**Goal**: Break monolithic MATD extension into 4 focused extensions
+
+**Tasks**:
+- Spec 008: Create matd-discovery, matd-solution-design, matd-refinement, matd-implement-tdd (21 SP)
+- Shared templates/ directory
+- Path migration to matd-config.yml
+
+**Deliverable**: Focused, standalone MATD extensions
+
+#### Phase 3: MATD v3 Simplification (Sprint 8-9, 24 SP) - **APPROVAL REQUIRED**
+
+**Goal**: Simplify commands while preserving subagents
+
+**Tasks**:
+- MATD Phase 1: Remove redundant commands (10 SP) - **Pending approval**
+- MATD Phase 2: Simplify core commands (14 SP)
+
+**Deliverable**: Streamlined MATD workflow with 38 SP complexity removed
+
+#### Phase 4: Presets & Skills (Sprint 10-11, 13 SP) - **NEW**
+
+**Goal**: SpecKit preset system and new general skills
+
+**Tasks**:
+- Spec 009: MATD preset specify override (5 SP)
+- Spec 010: determine-change-level skill (3 SP)
+- Spec 011: estimate-complexity skill (5 SP)
+
+**Deliverable**: Preset system, enhanced skill library
+
+#### Phase 5: Automated Documentation (Sprint 12, 12 SP)
 
 **Goal**: C4 and CGC auto-updates on PR merge
 
 **Tasks**:
-
 - Create GitHub Actions workflow (4 SP)
 - Create update scripts (5 SP)
 - Testing and validation (3 SP)
 
 **Deliverable**: Auto-updating docs on merge to main/live
 
-#### Sprint 3: MATD Phase 2 (14 SP)
+#### Phase 6: Maintenance Commands (Sprint 13, 8 SP) - **NEW**
 
-**Goal**: Simplify core commands (preserve subagents)
+**Goal**: Complete command inventory with Tier 3 commands
 
 **Tasks**:
+- archive-spec command (3 SP)
+- update-traceability command (2 SP)
+- generate-dependency-map command (3 SP)
 
-- Simplify matd.test (4 SP)
-- Simplify matd.implement (5 SP)
-- Simplify matd.commit (3 SP)
-- Simplify matd.specify-adr (2 SP)
+**Deliverable**: Full MATD command suite
 
-**Deliverable**: Streamlined MATD commands
-
-#### Sprint 4-6: Documentation Cleanup (34 SP)
+#### Phase 7: Documentation Cleanup (Sprint 14-16, 34 SP)
 
 **Goal**: Consolidate and polish documentation
 
@@ -1037,29 +1095,35 @@ Full implementation details for:
 
 **Deliverable**: <10% redundancy, 1,500+ lines removed
 
-### 8.2 Resource Allocation
+### 8.2 Resource Allocation (Revised)
 
 **Single-track** (1 developer):
-
-- 6 sprints × 2 weeks = 12 weeks
+- 16 sprints × 2 weeks = 32 weeks
 - Velocity: 10-12 SP per sprint
-- Total: 70 SP → 12 weeks
+- Total: 140 SP active work (37 SP deferred)
 
 **Two-track** (2 developers):
+- Developer 1: Phases 0-5 (77 SP) - Foundation, restructuring, automation
+- Developer 2: Phases 6-7 (42 SP) - Maintenance commands, documentation
+- 10-12 sprints = 20-24 weeks
 
-- Developer 1: MATD + Automation (46 SP)
-- Developer 2: Documentation (34 SP)
-- 4-5 sprints = 8-10 weeks
+**Three-track** (3 developers):
+- Developer 1: Phases 0-2 (49 SP) - Foundation, plugin/extension splits
+- Developer 2: Phases 3-5 (49 SP) - MATD simplification, presets, automation
+- Developer 3: Phases 6-7 (42 SP) - Maintenance, documentation
+- 7-8 sprints = 14-16 weeks
 
-### 8.3 Milestone Definition
+### 8.3 Milestone Definition (Revised)
 
-| Milestone                      | Sprint          | Deliverable                  | Success Criteria                 |
-| ------------------------------ | --------------- | ---------------------------- | -------------------------------- |
-| **M0: Approval**         | Before Sprint 1 | Command removal approval     | **User approval obtained** |
-| **M1: MATD Streamlined** | End Sprint 1    | Workflow-based orchestration | 20 SP complexity removed         |
-| **M2: Auto-Docs**        | End Sprint 2    | C4/CGC on PR merge           | Docs update after merge          |
-| **M3: MATD Complete**    | End Sprint 3    | All simplifications done     | Subagents verified               |
-| **M4: Docs Clean**       | End Sprint 6    | All cleanup done             | <10% redundancy                  |
+| Milestone                      | Phase      | Deliverable                  | Success Criteria                 |
+| ------------------------------ | ---------- | ---------------------------- | -------------------------------- |
+| **M0: Foundation**       | Phase 0    | Clean workspace, skills      | STDD cleanup done, workspace enhanced |
+| **M1: Modular Architecture** | Phases 1-2 | Plugin/extension splits      | 4 extensions + 2-tier plugin     |
+| **M2: MATD Streamlined** | Phase 3    | Workflow-based orchestration | 38 SP complexity removed         |
+| **M3: Presets & Skills** | Phase 4    | Preset system, new skills    | /specify override working        |
+| **M4: Auto-Docs**        | Phase 5    | C4/CGC on PR merge           | Docs update after merge          |
+| **M5: Complete Suite**   | Phase 6    | All Tier 1-3 commands        | archive-spec, traceability done  |
+| **M6: Docs Clean**       | Phase 7    | All cleanup done             | <10% redundancy                  |
 
 ---
 
@@ -1067,14 +1131,29 @@ Full implementation details for:
 
 ### 9.1 Change Summary vs Previous Versions
 
-**v3 Changes (Current)**:
+**v4 Changes (Current - Post-Grilling)**:
+
+- ✅ Added Section 11: Grilling Session Results (107 SP new work)
+- ✅ Specs 006-011 planning (50 SP total)
+- ✅ STDD skills cleanup detailed (2 SP)
+- ✅ Enhanced workspace structure implementation plan (8 SP)
+- ✅ Plugin/extension splits architecture (34 SP)
+- ✅ Command inventory gap analysis with 4-tier prioritization (18 SP)
+- ✅ Revised sequencing: 6 phases → 7 phases (Phase 0 added for foundation)
+- ✅ Total scope expansion: 73 SP → 177 SP (140 SP active + 37 SP deferred)
+- ✅ Timeline extension: 12 weeks → 32 weeks (single-track) or 14-16 weeks (three-track)
+- ✅ Added 6 context documents reference for architectural decisions
+
+**v3 Changes**:
 
 - ✅ Reverted profile system removal (keeping as-is)
 - ✅ Changed auto-docs trigger to PR merge only (not every commit)
 - ✅ Added MATD workflow overview table (Section 2)
 - ✅ Clarified subagent preservation (matd-qa, matd-dev, matd-architect, matd-critical-thinker)
 - ✅ Created approval section for command removals (Section 4)
-- Adjusted complexity: 80 SP → 70 SP (removed profile work)
+- ✅ Added .speckit-templates analysis (Section 10)
+- ✅ Added AWS microservices test strategy research (Section 10.1)
+- Adjusted complexity: 80 SP → 73 SP (removed profile work, added template enhancement)
 
 **v2 Changes**:
 
@@ -1104,7 +1183,52 @@ Decisions confirmed:
 
 **Auto-docs trigger**: PR merge trigger (not every commit) - **APPROVED**
 
-### 9.3 Agent Session References
+### 9.3 Grilling Session Outcomes Summary
+
+**Date**: 2026-06-09
+**Scope**: Specs 002-011, FUTURE-WORK items
+**Documents Created**: 6 context files (40K total)
+**Specs Generated**: 6 stub specs (006-011)
+
+#### Architectural Decisions Captured
+
+1. **2-Tier Plugin Model** (Spec 007)
+   - matd-agents-core: 7 MATD agents + required skills only
+   - matd-skills-extended: Optional skills for advanced workflows
+   - Agent restrictions via disallowedTools
+   - MCP scoping via inline mcpServers
+
+2. **4-Extension Model** (Spec 008)
+   - matd-discovery: Product/requirements phase
+   - matd-solution-design: Architecture/design phase
+   - matd-refinement: Test planning (deferred)
+   - matd-implement-tdd: TDD workflow
+   - Monorepo with shared templates/
+   - All paths configurable via matd-config.yml
+
+3. **Enhanced Workspace Structure**
+   - Specs as folders (SPEC-0001/spec.md, plan.md, tasks.md)
+   - Traceability chain: PRD → SD → Spec
+   - Test linking: @pytest.mark.spec("SPEC-XXXX")
+   - matd-config.yml for path configuration
+
+4. **SpecKit Preset System** (Spec 009)
+   - Priority-based command resolution
+   - Allow /specify override with matd-specify-prd
+   - Project agents (priority 3) override plugin agents (priority 5)
+
+5. **Skills Cleanup**
+   - Delete 7 STDD workflow skills (now in agent presets)
+   - Rename spec-product-requirement-formats → spec-product-requirement-formats
+
+6. **Command Inventory**
+   - 10 existing commands catalogued
+   - 4-tier gap analysis (Tier 1: 1 command, Tier 3: 3 commands, Tier 4: 2 commands)
+   - specify-constitution identified as Tier 1 priority (Spec 003)
+
+**Impact**: 107 SP new work added to 73 SP v3 scope = 177 SP total
+
+### 9.4 Agent Session References
 
 - **MATD commands analyzer**: agentId `ac8b7c8af79a397b9`
 - **Documentation analyzer**: agentId `a318a932e54eeada0`
@@ -1112,6 +1236,7 @@ Decisions confirmed:
 - **Plugin creation skill creator**: agentId `adc68ee0fcfae5a73`
 - **Sandbox config updater**: agentId `a5aff6c5ed6e19e82`
 - **Skill merger/optimizer**: agentId `adcbd916700b484db`
+- **Grilling session 2026-06-09**: Specs 002-011, FUTURE-WORK items
 
 ### 9.4 File Inventory
 
@@ -1122,12 +1247,31 @@ harness-tooling/
 ├── .agents/plugins/harness-management-tools/
 ├── .agents/skills/dev-speckit-methodology/ (375 lines + 3 refs)
 ├── .agents/skills/manage-plugin-creation/ (216 lines)
-└── .agents/skills/manage-speckit-extension/ (216 lines + 5 refs)
+├── .agents/skills/manage-speckit-extension/ (216 lines + 5 refs)
+└── docs/context/
+    ├── agent-restrictions-learnings.md (2.2K)
+    ├── matd-artifact-mapping.md (21.0K)
+    ├── matd-enhanced-structure.md (8.1K)
+    ├── speckit-preset-mechanism.md (2.0K)
+    ├── stdd-skills-analysis.md (2.7K)
+    └── workspace-template-structure.md (2.8K)
 
 harness-sandbox/
-└── workspace-template/
-    ├── .harness.yml (modified)
-    └── CLAUDE.md (modified)
+├── workspace-template/
+│   ├── .harness.yml (modified)
+│   └── CLAUDE.md (modified)
+└── docs/specs/
+    ├── 001-speckit-matd-specify-prd/ (completed)
+    ├── 002-speckit-matd-specify-product-brief/ (completed)
+    ├── 003-speckit-matd-specify-constitution/ (in progress)
+    ├── 004-speckit-matd-specify-solution-design/ (completed)
+    ├── 005-atlassian-sdp-skill-migration/ (completed)
+    ├── 006-agent-skill-restriction-experiment/ (stub, ready for detailing)
+    ├── 007-split-claude-code-matd-plugin/ (stub, ready for detailing)
+    ├── 008-split-speckit-matd-extension/ (stub, ready for detailing)
+    ├── 009-matd-preset-specify-override/ (stub, ready for detailing)
+    ├── 010-determine-change-level-skill/ (stub, ready for detailing)
+    └── 011-estimate-complexity-skill/ (stub, ready for detailing)
 ```
 
 #### Proposed Files (Implementation Phase)
@@ -1238,6 +1382,333 @@ The research agent provided comprehensive AWS microservices testing best practic
 
 ---
 
+## 11. Grilling Session Results (2026-06-09)
+
+### 11.1 Overview
+
+Comprehensive grilling session completed covering specs 002-011 and FUTURE-WORK items. All major architectural decisions documented in context files under `docs/context/`.
+
+**Key Outcomes**:
+- 6 new stub specs created (006-011) ready for detailing
+- 4 SpecKit extension splits defined (matd-discovery, matd-solution-design, matd-refinement, matd-implement-tdd)
+- 2-tier plugin model specified (matd-agents-core, matd-skills-extended)
+- 7 STDD skills marked for deletion, 1 for rename
+- Enhanced workspace structure with specs-as-folders and matd-config.yml
+- Command inventory completed with 4-tier gap analysis
+
+### 11.2 Specs 006-011 Planning
+
+**Status**: Stub specs created, ready for implementation detailing
+
+#### Spec 006: Agent Skill Restriction Experiment
+- **Goal**: Validate disallowedTools, MCP scoping, skill restrictions work as documented
+- **Context**: `docs/context/agent-restrictions-learnings.md`
+- **Scope**: Test project with matd-qa agent restricted from git/docker skills
+- **Deliverables**: Test report with findings, restriction pattern examples
+- **Story Points**: 3 SP (experimental validation)
+
+#### Spec 007: Split Claude Code MATD Plugin
+- **Goal**: Reorganize matd plugin into composable, focused plugins
+- **Context**: FUTURE-WORK-SPECS-NEEDED.md Section 1
+- **Structure**:
+  - **matd-agents-core** (7 MATD agents + required skills from AGENT_SKILL_MATRIX.md)
+  - **matd-skills-extended** (optional skills for advanced workflows)
+- **Key Decision**: NO matd-commands plugin - commands live only in SpecKit extensions
+- **Story Points**: 13 SP (plugin restructuring, manifest updates, testing)
+
+#### Spec 008: Split SpecKit MATD Extension
+- **Goal**: Break monolithic MATD extension into 4 focused extensions
+- **Context**: FUTURE-WORK-SPECS-NEEDED.md Section 2
+- **Structure**:
+  - **matd-discovery** (specify-prd, specify-product-brief, specify-constitution)
+  - **matd-solution-design** (specify-solution-design, specify-adr)
+  - **matd-refinement** (test planning, review - deferred pending design)
+  - **matd-implement-tdd** (test, implement, review, commit, update-docs)
+- **Key Decision**: Monorepo structure with shared templates/ directory, all paths configurable via matd-config.yml
+- **Story Points**: 21 SP (extension splits, template refactoring, path migration)
+
+#### Spec 009: MATD Preset Specify Override
+- **Goal**: Allow users to override /specify with matd-specify-prd via preset
+- **Context**: `docs/context/speckit-preset-mechanism.md`
+- **Mechanism**: SpecKit preset system with priority-based resolution
+- **User Experience**: `specify extension add matd-discovery --preset` overrides /specify
+- **Story Points**: 5 SP (preset implementation, documentation, testing)
+
+#### Spec 010: Determine Change Level Skill
+- **Goal**: Create general skill for classifying changes (patch/minor/major)
+- **Context**: FUTURE-WORK-SPECS-NEEDED.md Section 3
+- **Use Cases**: Pre-commit assessment, review workflows, planning agents
+- **Needs Grilling**: Classification systems, output format, namespace (general-* vs matd-*)
+- **Story Points**: 3 SP (skill creation, testing, documentation)
+
+#### Spec 011: Estimate Complexity Skill
+- **Goal**: Create general skill for story point/effort estimation
+- **Context**: FUTURE-WORK-SPECS-NEEDED.md Section 3
+- **Output**: Structured complexity assessment (points, confidence, factors)
+- **Needs Grilling**: Integration with existing skills, estimation framework
+- **Story Points**: 5 SP (skill creation with estimation logic, testing)
+
+**Total Story Points (Specs 006-011)**: 50 SP
+
+### 11.3 STDD Skills Cleanup
+
+**Status**: Implementation-ready (context doc completed)
+**Context**: `docs/context/stdd-skills-analysis.md`
+
+#### Skills for Deletion (7 total)
+1. stdd-orchestrator-guide
+2. stdd-specification-workflow
+3. stdd-solution-design-workflow
+4. stdd-implementation-workflow
+5. stdd-testing-workflow
+6. stdd-critical-review-workflow
+7. stdd-phase-templates
+
+**Reason**: Workflows now embedded in MATD agent presets and extension commands
+
+#### Skill for Rename (1 total)
+- **Before**: `spec-product-requirement-formats`
+- **After**: `spec-product-requirement-formats`
+- **Reason**: Remove STDD prefix, clarify scope (general skill, not STDD-specific)
+
+**Story Points**: 2 SP (file deletion, rename, plugin manifest updates, verification)
+
+### 11.4 Enhanced Workspace Structure
+
+**Status**: Design complete, ready for implementation
+**Context**: `docs/context/matd-enhanced-structure.md`, `docs/context/workspace-template-structure.md`
+
+#### Key Changes from Current Structure
+
+**Specs as Folders** (not flat files):
+```
+specs/
+├── SPEC-0001/
+│   ├── spec.md
+│   ├── plan.md
+│   ├── tasks.md
+│   ├── dependency-map.md
+│   └── design/ (optional)
+└── SPEC-0002/
+    └── ...
+```
+
+**Traceability Chain**:
+```
+PRD-001 → SD-001 → SPEC-0001, SPEC-0002
+PRD-002 → SD-003 → SPEC-0005, SPEC-0006, SPEC-0007
+```
+
+**Test Linking**:
+```python
+@pytest.mark.spec("SPEC-0001")
+def test_login_flow():
+    ...
+```
+
+**Configuration File** (`matd-config.yml`):
+```yaml
+paths:
+  prds: product/prd/
+  solution_designs: architecture/design/
+  specs: specs/
+  specs_archive: specs_archive/
+  # ... all paths configurable
+```
+
+**Workspace Template Updates Needed**:
+- Add `product/prd/` directory
+- Add `product/context/` directory
+- Add `.specify/` directory
+- Create default `matd-config.yml`
+
+**Story Points**: 8 SP (workspace template updates, migration scripts, documentation)
+
+### 11.5 Plugin/Extension Split Plans
+
+**Status**: Architecture defined, implementation-ready
+**Context**: FUTURE-WORK-SPECS-NEEDED.md Sections 1-2
+
+#### Two-Tier Plugin Model
+
+**Tier 1: matd-agents-core**
+- 7 MATD agents (matd-product-manager, matd-requirements-engineer, matd-architect, matd-qa, matd-critical-thinker, matd-dev, matd-orchestrator)
+- Only skills referenced in AGENT_SKILL_MATRIX.md
+- Agent restrictions via disallowedTools
+- MCP scoping via inline mcpServers
+- **Use case**: Users who want MATD agents without commands
+
+**Tier 2: matd-skills-extended**
+- Skills relevant for MATD but not directly used by agents
+- Optional extensions for advanced workflows
+- Needs refinement session to identify skills
+- **Use case**: Power users customizing workflows
+
+#### Four Extension Model
+
+**Extension 1: matd-discovery**
+- Commands: specify-prd, specify-product-brief, specify-constitution
+- Focus: Product discovery and requirements
+- Standalone: Yes
+- Templates: From shared templates/ directory
+
+**Extension 2: matd-solution-design**
+- Commands: specify-solution-design, specify-adr
+- Focus: Architecture and design phase
+- Templates: From shared templates/ directory
+
+**Extension 3: matd-refinement**
+- Commands: TBD (deferred pending design)
+- Focus: Test planning and review
+- Status: May not need separate commands
+
+**Extension 4: matd-implement-tdd**
+- Commands: test, implement, review, commit, update-docs
+- Focus: TDD implementation workflow
+- Templates: From shared templates/ directory
+
+**Key Architectural Decision**: Monorepo structure with shared templates/ directory, all paths configurable via matd-config.yml
+
+**Story Points**: 34 SP total (13 SP plugin split + 21 SP extension split)
+
+### 11.6 Command Inventory & Gap Analysis
+
+**Status**: Complete inventory, 4-tier prioritization
+**Context**: FUTURE-WORK-SPECS-NEEDED.md Section 8
+
+#### Current Commands (10 total)
+
+**Discovery Phase**:
+- ✅ specify-product-brief (Spec 002)
+- ✅ specify-prd (Spec 001)
+- ❌ specify-constitution (Spec 003) - **MISSING, TIER 1**
+
+**Solution Design Phase**:
+- ✅ specify-solution-design (Spec 004)
+- ✅ specify-adr
+
+**Refinement Phase**:
+- ✅ test
+- ⏳ generate-plan (use /plan for now)
+- ⏳ generate-tasks (use /tasks for now)
+
+**Implementation Phase**:
+- ✅ implement
+- ✅ review
+- ✅ commit
+- ✅ update-docs
+
+#### Missing Commands by Tier
+
+**Tier 1: Must Have (Add Now)**
+- ❌ specify-constitution - System Constitution (Spec 003 ready for implementation)
+- **Story Points**: 5 SP
+
+**Tier 2: Native to SpecKit Core (Defer)**
+- ⏳ generate-plan - Bridge solution design → tasks
+- ⏳ generate-tasks - Tasks with dependencies + story points
+- **Status**: Use /plan and /tasks for now, enhance later
+
+**Tier 3: Maintenance Commands (Add Soon)**
+- ❌ archive-spec - Move completed spec to specs_archive/
+- ❌ update-traceability - Maintain PRD↔SD↔Spec chain
+- ❌ generate-dependency-map - Auto-generate from imports
+- **Story Points**: 8 SP total (3+2+3)
+
+**Tier 4: Future Quality Commands (Defer)**
+- ⏳ verify-spec-coverage - Coverage reports by spec
+- ⏳ validate-traceability - Chain integrity verification
+- **Story Points**: 5 SP total (deferred)
+
+**Total Story Points (Command Gaps)**: 18 SP (5 SP Tier 1 + 8 SP Tier 3 + 5 SP Tier 4)
+
+### 11.7 Revised Story Point Estimates
+
+#### New Work from Grilling Session
+
+| Area                              | Story Points | Status              |
+| --------------------------------- | ------------ | ------------------- |
+| Specs 006-011 Implementation      | 50 SP        | Ready for detailing |
+| STDD Skills Cleanup               | 2 SP         | Implementation-ready|
+| Enhanced Workspace Structure      | 8 SP         | Design complete     |
+| Plugin/Extension Splits           | 34 SP        | Architecture defined|
+| Command Gaps (Tier 1 + Tier 3)    | 13 SP        | Partially ready     |
+| **Subtotal (New Work)**     | **107 SP** | -                   |
+
+#### Previously Planned Work (v3)
+
+| Area                  | Story Points | Status |
+| --------------------- | ------------ | ------ |
+| MATD Simplification   | 24 SP        | Pending approval |
+| Automated Doc Updates | 12 SP        | Design complete  |
+| Documentation Cleanup | 34 SP        | High priority    |
+| **Subtotal (v3)** | **70 SP** | -          |
+
+**Grand Total**: 177 SP (107 SP new + 70 SP v3)
+
+### 11.8 Implementation Sequencing (Revised)
+
+#### Phase 0: Foundation (15 SP) - **NEW**
+- STDD Skills Cleanup (2 SP)
+- Enhanced Workspace Structure (8 SP)
+- Spec 006: Agent Restrictions Experiment (3 SP)
+- Tier 1 Command: specify-constitution (5 SP via Spec 003)
+
+**Deliverable**: Clean foundation for plugin/extension splits
+
+#### Phase 1: Plugin/Extension Splits (34 SP) - **NEW**
+- Spec 007: Split Claude Code matd Plugin (13 SP)
+- Spec 008: Split SpecKit MATD Extension (21 SP)
+
+**Deliverable**: Modular, composable MATD architecture
+
+#### Phase 2: MATD v3 Simplification (24 SP)
+- MATD Phase 1: Remove redundant commands (10 SP) - **Pending approval**
+- MATD Phase 2: Simplify core commands (14 SP)
+
+**Deliverable**: Streamlined MATD workflow
+
+#### Phase 3: Presets & Skills (13 SP) - **NEW**
+- Spec 009: MATD Preset Specify Override (5 SP)
+- Spec 010: Determine Change Level Skill (3 SP)
+- Spec 011: Estimate Complexity Skill (5 SP)
+
+**Deliverable**: Enhanced skill library, preset system
+
+#### Phase 4: Automation (12 SP)
+- Automated Documentation Updates (12 SP)
+
+**Deliverable**: Auto-updating C4 and CGC on PR merge
+
+#### Phase 5: Maintenance Commands (8 SP) - **NEW**
+- Tier 3: archive-spec, update-traceability, generate-dependency-map
+
+**Deliverable**: Complete command inventory
+
+#### Phase 6: Documentation Cleanup (34 SP)
+- High/medium/low priority documentation improvements
+
+**Deliverable**: <10% redundancy, polished docs
+
+**Total Timeline**: 6 phases, 140 SP active work + 37 SP deferred (Tier 4 commands, template enhancements)
+
+### 11.9 Context Documentation Reference
+
+All grilling session decisions captured in:
+
+| File | Content |
+| ---- | ------- |
+| `docs/context/matd-enhanced-structure.md` | Enhanced workspace structure with specs-as-folders |
+| `docs/context/workspace-template-structure.md` | Canonical workspace template paths |
+| `docs/context/speckit-preset-mechanism.md` | SpecKit preset system design |
+| `docs/context/agent-restrictions-learnings.md` | Agent capability restrictions (disallowedTools, MCP scoping) |
+| `docs/context/stdd-skills-analysis.md` | STDD skills cleanup decisions |
+| `docs/context/matd-artifact-mapping.md` | Artifact type to path mappings |
+
+Reference: `docs/FUTURE-WORK-SPECS-NEEDED.md` for complete grilling session summary
+
+---
+
 ## 11. Research Agent Output: AWS Microservices Test Strategy
 
 <details>
@@ -1295,17 +1766,19 @@ The research agent investigated best practices for backend teams working with AW
 
 ---
 
-**Document Version**: 3.0 (Revised per user requirements)
-**Last Updated**: 2026-05-12
+**Document Version**: 4.0 (Grilling Session Integration)
+**Last Updated**: 2026-06-10
 **Status**: **Awaiting approval for command removals (Section 4)**
 
-**Key Changes from v2.0**:
+**Key Changes from v3.0**:
 
-- Reverted profile system removal (keep as-is)
-- Changed auto-docs to PR merge trigger only
-- Added MATD workflow overview table (Section 2)
-- Clarified subagent preservation throughout
-- Created approval section (Section 4)
-- Added .speckit-templates analysis (Section 10)
-- Added AWS microservices test strategy research (Section 11)
-- Net change: 80 SP → 70 SP → 73 SP total scope
+- Added Section 11: Grilling Session Results (2026-06-09)
+- 6 new specs (006-011) planning added with 50 SP
+- STDD skills cleanup detailed (2 SP)
+- Enhanced workspace structure implementation plan (8 SP)
+- Plugin/extension splits architecture (34 SP)
+- Command inventory gap analysis (18 SP)
+- Revised sequencing: 6 phases → 7 phases (Phase 0 added for foundation)
+- Scope expansion: 73 SP → 177 SP total (140 SP active + 37 SP deferred)
+- Timeline extension: 12 weeks → 32 weeks (single-track) or 14-16 weeks (three-track)
+- 6 context documents referenced for architectural decisions

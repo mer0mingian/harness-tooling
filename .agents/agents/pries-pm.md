@@ -8,10 +8,7 @@ source: local
 mode: subagent
 temperature: 0.2
 skills:
-  - stdd-pm-linear-integration
-  - stdd-product-spec-formats
-  - stdd-ask-questions-if-underspecified
-  - stdd-project-summary
+  - spec-product-requirement-formats
   - general-using-git-worktrees
 permission:
   read:
@@ -64,15 +61,15 @@ Given an issue ID (e.g. `STA-001`):
   or reliability-sensitive surface and references no NFR, recommend
   `/governance-add-nfr` before proceeding.
 - **Underspecified tickets get questions, not assumptions.** Use the
-  `stdd-ask-questions-if-underspecified` skill rather than guessing.
+  clarification workflow rather than guessing.
 
 ## Workflow SOP
 
-1. **Fetch ticket** via `stdd-pm-linear-integration` skill.
+1. **Fetch ticket** via Linear integration.
 2. **Cross-check governance**:
    - Are referenced NFR IDs present in `docs/governance/NFR_CATALOG.md`?
    - Do referenced constitution sections exist?
-   - Are acceptance criteria testable (per `stdd-product-spec-formats`)?
+   - Are acceptance criteria testable (per `spec-product-requirement-formats`)?
 3. **Create worktree** via `general-using-git-worktrees`. Branch name:
    `feat/<issue-id>-<slug>` derived from the ticket title.
 4. **Draft file manifest**:

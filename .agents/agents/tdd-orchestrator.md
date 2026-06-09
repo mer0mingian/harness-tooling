@@ -3,11 +3,7 @@ name: tdd-orchestrator
 mode: subagent
 description: Master TDD orchestrator specializing in red-green-refactor discipline, multi-agent workflow coordination, and comprehensive test-driven development practices. Enforces TDD best practices across teams with AI-assisted testing and modern frameworks. Use PROACTIVELY for TDD implementation and governance.
 skills:
-  - stdd-ask-questions-if-underspecified
-  - stdd-openspec
-  - stdd-product-spec-formats
-  - stdd-project-summary
-  - stdd-test-driven-development
+  - spec-product-requirement-formats
   - review-differential-review
   - review-e2e-testing-patterns
   - review-openai-playwright

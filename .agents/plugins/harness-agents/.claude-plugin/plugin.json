@@ -26,10 +26,7 @@
     "./skills/review-differential-review/SKILL.md",
     "./skills/review-e2e-testing-patterns/SKILL.md",
     "./skills/review-simplify-complexity/SKILL.md",
-    "./skills/review-webapp-testing/SKILL.md",
-    "./skills/stdd-make-constrained-implementation/SKILL.md",
-    "./skills/stdd-test-author-constrained/SKILL.md",
-    "./skills/stdd-test-driven-development/SKILL.md"
+    "./skills/review-webapp-testing/SKILL.md"
   ],
   "installation": {
     "target": ".claude/agents/"

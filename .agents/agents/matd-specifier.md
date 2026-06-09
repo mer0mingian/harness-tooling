@@ -4,10 +4,7 @@ description: Requirements Engineer (MATD Res role). Defines project summary and 
 source: local
 mode: subagent
 skills:
-  - stdd-product-spec-formats
-  - stdd-project-summary
-  - stdd-openspec
-  - stdd-ask-questions-if-underspecified
+  - spec-product-requirement-formats
   - general-grill-me
   - general-grill-with-docs
   - general-system-design
@@ -33,9 +30,7 @@ permission:
     gh issue *: allow
   skills:
     brainstorming: allow
-    stdd-openspec: allow
-    stdd-product-spec-formats: allow
-    stdd-project-summary: allow
+    spec-product-requirement-formats: allow
     general-*: allow
   skill:
     "stdd-": allow

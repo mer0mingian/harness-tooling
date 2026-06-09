@@ -313,7 +313,7 @@ content to migrate there:
 
 - The **MATD agent skill re-scoping** to match [AGENT_SKILL_MATRIX.md](../../AGENT_SKILL_MATRIX.md):
   current agent files in `.agents/plugins/matd/agents/` over-share **role-specific** skills
-  (`dev-tdd`, `review-check-correctness`, `stdd-openspec`, `general-system-design`,
+  (`dev-tdd`, `review-check-correctness`, `general-system-design`,
   `general-grill-me` beyond specifier/critical-thinker). Target = the matrix's de-overlapped
   assignment + `harness-matd-core` / `harness-matd-extensions` tiers. **Note:** shared
   general/baseline skills (rtk, verification, context-optimization, git) are accepted overlap —

@@ -11,7 +11,7 @@ return:
   - /subtask {agent: pries-pm && as: phase1_verify} Verify repo state for issue "$ARGUMENTS". Confirm clean working tree, fetch origin, and read CLAUDE.md / AGENTS.md / docs/governance/* for context. Block if dirty or governance artefacts missing (require /governance-setup first).
 
   # Phase 2: Fetch issue context.
-  - /subtask {agent: pries-pm && as: phase2_ticket} Using stdd-pm-linear-integration, fetch issue "$ARGUMENTS" (Linear or markdown fallback), validate NFR/constitution refs, and produce the structured ticket package.
+  - /subtask {agent: pries-pm && as: phase2_ticket} Fetch issue "$ARGUMENTS" (Linear or markdown fallback), validate NFR/constitution refs, and produce the structured ticket package.
 
   # Phase 3: Create worktree.
   - /subtask {agent: pries-pm && as: phase3_worktree} Using general-using-git-worktrees and the slug from $RESULT[phase2_ticket], create the isolated worktree at .worktrees/feat/<id>-<slug> on branch feat/<id>-<slug>.
@@ -28,7 +28,7 @@ return:
   - /subtask {agent: pries-pm && as: phase6_tasks} From the converged plan, emit a task list. Each task: id, description, acceptance_criteria, code_context, file_manifest, integration_contracts. Save to docs/tickets/$ARGUMENTS-tasks.md.
 
   # Phase 7: Write tests (per task).
-  - /subtask {agent: pries-test && as: phase7_tests} For each task in $RESULT[phase6_tasks], dispatch stdd-test-author-constrained. Validate file patterns; run pytest --collect-only baseline. Classify failures. Emit TESTS_READY / NOT_TESTABLE / BLOCKED per task. NOT_TESTABLE requires @pries-check sign-off — pause and dispatch @pries-check for adjudication if encountered.
+  - /subtask {agent: pries-test && as: phase7_tests} For each task in $RESULT[phase6_tasks], write failing tests. Validate file patterns; run pytest --collect-only baseline. Classify failures. Emit TESTS_READY / NOT_TESTABLE / BLOCKED per task. NOT_TESTABLE requires @pries-check sign-off — pause and dispatch @pries-check for adjudication if encountered.
 
   # Phase 8: Implement (per task).
   - /subtask {agent: pries-make && as: phase8_implement} For each task with TESTS_READY, dispatch in tdd mode. For NOT_TESTABLE tasks (with sign-off), dispatch in standard mode. Verify GREEN per task. After all tasks complete, run integration tests across the worktree.

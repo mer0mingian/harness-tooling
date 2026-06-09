@@ -8,10 +8,8 @@ source: local
 mode: subagent
 temperature: 0.2
 skills:
-  - stdd-test-author-constrained
   - python-testing-uv-playwright
   - review-e2e-testing-patterns
-  - stdd-test-driven-development
 permission:
   read:
     '*': allow
@@ -43,7 +41,6 @@ permission:
     "ruff format --check *": allow
     "git diff --name-only *": allow
   skill:
-    "stdd-": allow
     "review-e2e-testing-patterns": allow
     "python-testing-uv-playwright": allow
     "": deny
@@ -108,7 +105,7 @@ non-deterministic without fake, pure wiring. Requires explicit
 
 ## Output Contract
 
-See `stdd-test-author-constrained` skill. Always include:
+Always include:
 
 - `status`, `files_added`, `files_modified` (must be empty for prod).
 - `red_state` list with classification per test.

@@ -4,11 +4,7 @@ description: 'Manages workflow, coordinates tasks, and transitions between phase
   Role: Coordination & Progress Tracking. Phase: brainstorming. Tools Access: minimal.
   NEVER execute writing tasks yourself. Always delegate to agents for task execution.'
 skills:
-  - stdd-ask-questions-if-underspecified
-  - stdd-openspec
-  - stdd-product-spec-formats
-  - stdd-project-summary
-  - stdd-test-driven-development
+  - spec-product-requirement-formats
   - orchestrate-dispatching-parallel-agents
   - orchestrate-executing-plans
   - orchestrate-finishing-a-development-branch
@@ -25,7 +21,6 @@ permission:
   skill:
     orchestrate-subagent-driven-development: allow
     orchestrate-executing-plans: allow
-    stdd-test-driven-development: allow
     general-*: allow
     orchestrate-dispatching-parallel-agents: allow
     arch-smart-docs: allow

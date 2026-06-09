@@ -20,9 +20,6 @@ skills:
   - python-fastapi-templates
   - python-packaging
   - python-testing-uv-playwright
-  - stdd-test-driven-development
-  - stdd-make-constrained-implementation
-  - stdd-ask-questions-if-underspecified
   - general-python-environment
   - general-solid
   - general-verification-before-completion
@@ -77,8 +74,6 @@ permission:
   skill:
     "dev-": allow
     "python-": allow
-    "stdd-test-driven-development": allow
-    "stdd-make-constrained-implementation": allow
     "general-python-environment": allow
     "general-solid": allow
     "general-verification-before-completion": allow
@@ -142,7 +137,7 @@ Given a task package + (optional) failing tests:
 
 ### TDD Discipline
 - Follow Red-Green-Refactor loop strictly
-- Use `dev-tdd` and `stdd-test-driven-development` skills
+- Use `dev-tdd` skill
 - Never weaken or disable a failing test to declare GREEN
 - No `try/except: pass` to silence errors
 

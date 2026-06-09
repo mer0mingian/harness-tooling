@@ -13,14 +13,14 @@ This plugin provides 5 specialist agent definitions that implement a structured 
 - **Capabilities**: test_generation, test_design, red_state_validation
 - **Critical Constraint**: MUST NOT write implementation code
 - **Permissions**: Write access to test files only (`tests/**`)
-- **Skills**: stdd-test-author-constrained, python-testing-uv-playwright, review-e2e-testing-patterns
+- **Skills**: python-testing-uv-playwright, review-e2e-testing-patterns
 
 ### @make - Dev Specialist
 **Role**: Implements code to achieve GREEN tests
 - **Capabilities**: implementation, refactoring, green_state_achievement
 - **Critical Constraint**: MUST NOT alter test code under any circumstances
 - **Permissions**: Write access to production code only (`src/**`, `app/**`, `lib/**`)
-- **Skills**: stdd-make-constrained-implementation, general-python-environment, python-fastapi-templates
+- **Skills**: general-python-environment, python-fastapi-templates
 
 ### @check - Architecture Specialist
 **Role**: Reviews for architectural flaws and safety violations

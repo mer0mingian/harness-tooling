@@ -62,13 +62,13 @@ specifics.
 | # | Phase             | Agent          | Skill(s)                                            | Artefact                                  |
 | - | ----------------- | -------------- | --------------------------------------------------- | ----------------------------------------- |
 | 1 | Verify repo       | @pries-pm      | general-using-git-worktrees                         | Clean tree, governance present            |
-| 2 | Fetch issue       | @pries-pm      | stdd-pm-linear-integration                          | Ticket package YAML                       |
+| 2 | Fetch issue       | @pries-pm      | (workflow-embedded)                                 | Ticket package YAML                       |
 | 3 | Create worktree   | @pries-pm      | general-using-git-worktrees                         | `feat/<id>-<slug>` worktree               |
-| 4 | Plan              | @pries-pm      | arch-writing-plans, stdd-product-spec-formats       | `docs/tickets/<id>-plan.md`               |
+| 4 | Plan              | @pries-pm      | arch-writing-plans, spec-product-requirement-formats       | `docs/tickets/<id>-plan.md`               |
 | 5 | Review plan       | @check + @simplify | review-orchestrate-dual-review                  | Converged review (max 3 cycles)           |
 | 6 | Split into tasks  | @pries-pm      | arch-writing-plans                                  | `docs/tickets/<id>-tasks.md`              |
-| 7 | Write tests       | @pries-test    | stdd-test-author-constrained                        | Test files (RED state)                    |
-| 8 | Implement         | @pries-make    | stdd-make-constrained-implementation                | GREEN state, passing tests                |
+| 7 | Write tests       | @pries-test    | python-testing-uv-playwright, review-e2e-testing-patterns | Test files (RED state)                    |
+| 8 | Implement         | @pries-make    | (workflow-embedded)                                 | GREEN state, passing tests                |
 | 9 | Final review      | @check + @simplify | review-orchestrate-dual-review                  | Final converged review                    |
 |10 | Commit & PR       | @pries-pm      | general-finishing-a-development-branch              | Draft PR with workflow report             |
 

@@ -3,11 +3,7 @@ name: python-dev
 description: Expert Python implementation Engineer. Implements Python code with modern
   patterns and TDD. Restricted from editing E2E tests.
 skills:
-  - stdd-ask-questions-if-underspecified
-  - stdd-openspec
-  - stdd-product-spec-formats
-  - stdd-project-summary
-  - stdd-test-driven-development
+  - spec-product-requirement-formats
   - review-differential-review
   - review-e2e-testing-patterns
   - review-openai-playwright

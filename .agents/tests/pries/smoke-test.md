@@ -48,22 +48,16 @@ done
 
 ### Skills
 
-- [ ] `.agents/skills/stdd-test-author-constrained/SKILL.md` exists with
-      valid frontmatter.
 - [ ] `.agents/skills/review-check-correctness/SKILL.md` exists.
-- [ ] `.agents/skills/stdd-make-constrained-implementation/SKILL.md`
-      exists.
 - [ ] `.agents/skills/review-orchestrate-dual-review/SKILL.md` exists.
-- [ ] `.agents/skills/stdd-pm-linear-integration/SKILL.md` exists.
 - [ ] `.agents/skills/review-simplify-complexity/SKILL.md` exists.
+- [ ] `.agents/skills/python-testing-uv-playwright/SKILL.md` exists.
 
 ```bash
-ls .agents/skills/stdd-test-author-constrained \
-   .agents/skills/review-check-correctness \
-   .agents/skills/stdd-make-constrained-implementation \
+ls .agents/skills/review-check-correctness \
    .agents/skills/review-orchestrate-dual-review \
-   .agents/skills/stdd-pm-linear-integration \
-   .agents/skills/review-simplify-complexity
+   .agents/skills/review-simplify-complexity \
+   .agents/skills/python-testing-uv-playwright
 # Each should contain SKILL.md.
 ```
 
@@ -76,12 +70,10 @@ ls .agents/skills/stdd-test-author-constrained \
 
 ```bash
 # Quick sanity check: skill names match dirs.
-for d in .agents/skills/stdd-test-author-constrained \
-         .agents/skills/review-check-correctness \
-         .agents/skills/stdd-make-constrained-implementation \
+for d in .agents/skills/review-check-correctness \
          .agents/skills/review-orchestrate-dual-review \
-         .agents/skills/stdd-pm-linear-integration \
-         .agents/skills/review-simplify-complexity; do
+         .agents/skills/review-simplify-complexity \
+         .agents/skills/python-testing-uv-playwright; do
   expected=$(basename "$d")
   actual=$(grep "^name:" "$d/SKILL.md" | head -1 | awk '{print $2}')
   [[ "$expected" == "$actual" ]] && echo "OK $expected" || echo "MISMATCH $expected -> $actual"
@@ -108,8 +100,7 @@ done
 
 ## STA-001 example dispatch (dry run)
 
-- [ ] `.agents/examples/pries/sta2e-vtt/example-ticket.md` parses
-      against the `stdd-pm-linear-integration` markdown-fallback schema.
+- [ ] `.agents/examples/pries/sta2e-vtt/example-ticket.md` is valid.
 - [ ] Acceptance criteria in the ticket reference at least one NFR ID.
 - [ ] Example ticket points to file paths consistent with the
       `pries-pm` draft-manifest output format.

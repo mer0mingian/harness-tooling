@@ -5,11 +5,7 @@ description: Architect agent for Solution Design. Generates C4 architecture and 
 source: local
 mode: subagent
 skills:
-  - stdd-ask-questions-if-underspecified
-  - stdd-openspec
-  - stdd-product-spec-formats
-  - stdd-project-summary
-  - stdd-test-driven-development
+  - spec-product-requirement-formats
   - general-finishing-a-development-branch
   - general-git-advanced-workflows
   - general-python-environment

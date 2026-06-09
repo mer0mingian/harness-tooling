@@ -7,7 +7,7 @@ return:
   - /subtask {agent: pries-pm && as: test_only_task} Treat "$ARGUMENTS" as a feature description or pointer to a markdown spec. Build a task package: title, acceptance_criteria, code_context (grep relevant symbols), target test file path matching **/test_*.py or **/*_test.py.
 
   # Step 2: Write tests, validate RED.
-  - /subtask {agent: pries-test && as: test_only_write} Using stdd-test-author-constrained, write failing tests for $RESULT[test_only_task]. Run pytest --collect-only baseline pre/post. Classify each failure. Emit TESTS_READY (with red_state) or NOT_TESTABLE (with @check sign-off requirement) or BLOCKED.
+  - /subtask {agent: pries-test && as: test_only_write} Write failing tests for $RESULT[test_only_task]. Run pytest --collect-only baseline pre/post. Classify each failure. Emit TESTS_READY (with red_state) or NOT_TESTABLE (with @check sign-off requirement) or BLOCKED.
 
   # Step 3: Final summary.
   - "Test authoring complete. See the failure classification above. To implement, run /pries-implement against the issue or call @pries-make directly with the task package."

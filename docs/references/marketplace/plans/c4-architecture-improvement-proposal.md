@@ -125,7 +125,6 @@ Call matd-architect with:
 
 All agents should have:
 - `general-verification-before-completion` ✓ (needs verification)
-- `stdd-ask-questions-if-underspecified` ✓ (needs verification)
 
 Only architect and orchestrator need:
 - `orchestrate-dispatching-parallel-agents`
@@ -163,7 +162,6 @@ Replace 4 separate agent calls with 4 matd-architect calls with level-specific i
 ### Task 5: Verify Universal Skills (Manual)
 Audit all matd-* agents to ensure:
 - `general-verification-before-completion` in skills list
-- `stdd-ask-questions-if-underspecified` in skills list
 - Only architect + orchestrator have orchestrate-* skills
 
 ## Review Questions

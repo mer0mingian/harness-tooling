@@ -15,13 +15,11 @@ skills:
   - general-system-design
   - general-improve-codebase-architecture
   - general-grill-me
-  - stdd-openspec
   - dev-backend-to-frontend-handoff
   - orchestrate-dispatching-parallel-agents
   - orchestrate-executing-plans
   - orchestrate-multi-agent-patterns
   - orchestrate-subagent-driven-development
-  - stdd-ask-questions-if-underspecified
   - general-verification-before-completion
   - general-rtk-usage
   - general-git-guardrails-claude-code
@@ -38,7 +36,6 @@ permission:
     arch-architecture-patterns: allow
     deployment-pipeline-design: allow
     python-testing-uv-playwright: allow
-    stdd-test-driven-development: allow
     review-webapp-testing: allow
     review-e2e-testing-patterns: allow
     arch-smart-docs: allow
