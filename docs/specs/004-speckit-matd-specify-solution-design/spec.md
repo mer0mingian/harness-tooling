@@ -95,6 +95,24 @@ Collaboration · Stakeholder Alignment. (Use as the content-test/checklist basis
 - Traceability IDs link PRD `REQ-NNN`/`PRD-NNN` → SD → Spec/Epic (the `index.yml` `specs[]` slots
   reserved by 001 are filled here).
 
+## Dependencies
+
+### Upstream Dependencies
+- **SPEC-013** (Enhanced Workspace Structure) - BLOCKS THIS SPEC
+  - Requires: Config location pattern (`.specify/extensions/matd/matd-config.yml`)
+  - Requires: `solution-designs/` path configuration in matd-config.yml
+  - Requires: Traceability frontmatter schema (sd_id, prd, requirements, adrs)
+  - Status: Design-complete, 8 SP
+- **SPEC-002** (Product Brief) - Required input (business invariants)
+- **SPEC-003** (System Constitution) - Required input (technical invariants)
+- **SPEC-001** (PRD Command) - Related (PRD is the third input to Solution Design)
+
+### Three-Input Model
+Solution Design = f(**Product Brief**, **System Constitution**, **PRD**)
+- Product Brief provides business invariants (vision, scope, value, stakeholders)
+- System Constitution provides technical invariants (EA principles, tech radar, NFRs, standards)
+- PRD provides the change request (what needs to be delivered)
+
 ## Open Questions
 - OQ-S1: Enhance the existing `speckit-matd-specify-solution-design` command vs. add a template variant?
 - OQ-S2: Reconcile the existing C4-centric template with this EA 9-section template — both selectable?

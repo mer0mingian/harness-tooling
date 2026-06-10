@@ -2,95 +2,73 @@
 
 Agent-to-skill mappings for the MATD (Multi-Agent Test-Driven Development) framework.
 
-## 7-Agent MATD Architecture
+## Agent Roles
 
-### 1. matd-product-manager
-- **Role:** Business Strategy
-- **Owns:** Product Brief, PRD (functional requirements from business view)
-- **Skills:**
-  - spec-product-requirement-formats
-  - general-grill-me
-  - general-verification-before-completion
-- **MCP:** Jira (scoped inline via agent config)
-- **Purpose:** Translates business needs into product requirements
+| Agent | Role | Owns | MCP Access |
+|---|---|---|---|
+| **matd-product-manager** | Business Strategy | Product Brief, PRD (functional requirements) | Jira (scoped) |
+| **matd-requirements-engineer** | Technical Requirements | System Constitution (NFRs/tech invariants), Build specs, Contracts | — |
+| **matd-architect** | Solution Design | Solution Design, C4 diagrams, ADRs | — |
+| **matd-qa** | Design Review (Simplicity & Correctness) | Test plans, E2E tests | — |
+| **matd-critical-thinker** | Red Team Validator / Adversarial Testing | Security analysis, edge case validation, failure mode analysis | — |
+| **matd-dev** | Implementation | Code, unit tests | — |
+| **matd-orchestrator** | Cross-framework Coordinator (compatibility only) | Workflow coordination | — |
 
-### 2. matd-requirements-engineer
-- **Role:** Technical Requirements
-- **Owns:** System Constitution (NFRs/tech invariants), Build specs, Contracts
-- **Skills:** TBD (NFR-focused skills to be defined)
-- **Purpose:** Defines non-functional requirements, technical constraints, and system invariants
+## Skill Permission Matrix
 
-### 3. matd-architect
-- **Role:** Solution Design
-- **Owns:** Solution Design, C4 diagrams, ADRs
-- **Skills:**
-  - arch-c4-architecture
-  - arch-architecture-patterns
-  - arch-design-system-patterns
-  - arch-mermaid-diagrams
-  - arch-smart-docs
-  - arch-writing-plans
-  - orchestrate-multi-agent-patterns
-  - orchestrate-subagent-driven-development
-  - general-system-design
-  - general-solid
-- **Purpose:** Designs technical solutions and architectural decisions
+| Skill | PM | Req Eng | Architect | QA | Crit Think | Dev | Orchestrator |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Architecture Skills** ||||||||
+| arch-api-design-principles ||||||||
+| arch-architecture-patterns |||| ✓ | ✓ ||||
+| arch-c4-architecture |||| ✓ ||||
+| arch-design-system-patterns |||| ✓ | ✓ ||||
+| arch-mermaid-diagrams |||| ✓ ||||
+| arch-smart-docs |||| ✓ ||||
+| arch-writing-plans |||| ✓ ||||
+| **Development Skills** ||||||||
+| dev-backend-to-frontend-handoff |||||| ✓ ||
+| dev-database-migration |||||| ✓ ||
+| dev-databases |||||| ✓ ||
+| dev-diagnose |||||| ✓ ||
+| dev-tdd |||||| ✓ ||
+| **Python Skills** ||||||||
+| python-async-patterns |||||| ✓ ||
+| python-code-style |||||| ✓ ||
+| python-configuration |||||| ✓ ||
+| python-design-patterns |||||| ✓ ||
+| python-fastapi-templates |||||| ✓ ||
+| python-packaging |||||| ✓ ||
+| python-testing-uv-playwright |||||| ✓ ||
+| **Review Skills** ||||||||
+| review-check-correctness |||| ✓ | ✓ |||
+| review-e2e-testing-patterns |||| ✓ ||||
+| review-simplify-complexity |||| ✓ ||||
+| review-systematic-debugging ||||| ✓ |||
+| review-webapp-testing |||| ✓ ||||
+| **Orchestration Skills** ||||||||
+| orchestrate-dispatching-parallel-agents ||||||||✓ |
+| orchestrate-executing-plans ||||||||✓ |
+| orchestrate-finishing-a-development-branch ||||||||✓ |
+| orchestrate-multi-agent-patterns |||| ✓ ||||✓ |
+| orchestrate-subagent-driven-development |||| ✓ ||||✓ |
+| **General Skills** ||||||||
+| general-grill-me | ✓ ||||||
+| general-python-environment |||||| ✓ ||
+| general-solid |||| ✓ | ✓ |||
+| general-system-design |||| ✓ ||||
+| general-verification-before-completion | ✓ ||||| ✓ ||
+| **Other Skills** ||||||||
+| docker-expert |||||| ✓ ||
+| security-review ||||| ✓ |||
+| spec-product-requirement-formats | ✓ ||||||
 
-### 4. matd-qa
-- **Role:** Design Review for Simplicity & Architectural Correctness
-- **Owns:** Test plans, E2E tests
-- **Challenges:** PM + Req Engineer + Architect from simplicity/anti-overengineering & architectural correctness perspectives
-- **Skills:**
-  - review-simplify-complexity
-  - review-check-correctness
-  - general-solid
-  - arch-architecture-patterns
-  - arch-design-system-patterns
-  - review-e2e-testing-patterns
-  - review-webapp-testing
-- **Purpose:** Ensures design quality, simplicity, and testability before implementation
+## Notes
 
-### 5. matd-critical-thinker
-- **Role:** Red Team Validator / Adversarial Testing
-- **Owns:** Security analysis, edge case validation, failure mode analysis
-- **Challenges:** ALL artifacts from security, edge cases, failure modes, testability, attack vectors
-- **Skills:**
-  - review-check-correctness
-  - review-systematic-debugging
-  - security-review
-- **Purpose:** Adversarially validates all work products for robustness and security
-
-### 6. matd-dev
-- **Role:** Implementation
-- **Owns:** Code, unit tests
-- **Skills:**
-  - dev-tdd
-  - dev-diagnose
-  - dev-databases
-  - dev-database-migration
-  - dev-backend-to-frontend-handoff
-  - python-async-patterns
-  - python-code-style
-  - python-configuration
-  - python-design-patterns
-  - python-fastapi-templates
-  - python-packaging
-  - python-testing-uv-playwright
-  - docker-expert
-  - general-python-environment
-  - general-verification-before-completion
-- **Purpose:** Implements features following TDD practices
-
-### 7. matd-orchestrator
-- **Role:** Cross-framework Coordinator
-- **Installed:** For compatibility (not used in Claude Code native workflows)
-- **Skills:**
-  - orchestrate-multi-agent-patterns
-  - orchestrate-subagent-driven-development
-  - orchestrate-dispatching-parallel-agents
-  - orchestrate-executing-plans
-  - orchestrate-finishing-a-development-branch
-- **Purpose:** Coordinates multi-agent workflows in non-Claude-Code environments
+- **matd-requirements-engineer**: TBD — NFR-focused skills to be defined
+- **matd-orchestrator**: Installed for compatibility; not used in Claude Code native workflows
+- **Skill Access Control**: Use `disallowedTools` in agent config to restrict skill access per-agent
+- **MCP Access**: Only matd-product-manager gets Jira MCP (scoped inline via agent config)
 
 ## Architecture Notes
 

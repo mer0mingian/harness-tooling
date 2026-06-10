@@ -119,72 +119,56 @@ story_points: X
 - Update `workspace-template/AGENT.md` to document spec folder conventions
 - Add examples of traceability chain
 
-## Phase 4: SpecKit Command Updates
+## Phase 4: SpecKit Extension Command Updates
 
-### 4.1 Update speckit-specify Skill
+**Note:** For Claude Code, commands in SpecKit extensions function as skills (same mechanism). Claude reads `commands/*.md` files and understands them as executable skills/commands.
+
+### 4.1 Update PRD Specification Command
 **Effort**: 1.5 SP
 
-Modify to create spec folders instead of flat files:
-- Detect if spec already exists (folder or flat file)
-- Create `specs/SPEC-XXXX/` folder
-- Write `spec.md` with frontmatter
-- Create placeholder `plan.md`, `tasks.md`, `dependency-map.md`
+Modify `speckit.matd.specify-prd` to create folder-based PRDs:
+- Create `prds/PRD-XXX/` folder structure
+- Write `index.md` with frontmatter
+- Auto-increment PRD numbers (scan prds/ directory)
+- Link to matd-config.yml for path configuration
 
 **Files**:
-- `skills/speckit-specify/skill.md`
-- Test with example spec creation
+- `spec-kit-multi-agent-tdd/commands/specify-prd.md`
 
-### 4.2 Update speckit-plan Skill
+### 4.2 Update Planning Commands
 **Effort**: 0.5 SP
 
-Write plan to `specs/SPEC-XXXX/plan.md` instead of separate file.
+Modify planning-related commands to write to spec folders:
+- Write plans to `specs/SPEC-XXXX/plan.md`
+- Write tasks to `specs/SPEC-XXXX/tasks.md`
 
 **Files**:
-- `skills/speckit-plan/skill.md`
+- Planning command files in `spec-kit-multi-agent-tdd/commands/`
 
-### 4.3 Update speckit-tasks Skill
+### 4.3 Update Solution Design Command
 **Effort**: 0.5 SP
 
-Write tasks to `specs/SPEC-XXXX/tasks.md` instead of separate file.
+Modify to create in `solution-designs/` directory:
+- Auto-increment SD numbers
+- Add traceability frontmatter linking to PRD
 
 **Files**:
-- `skills/speckit-tasks/skill.md`
+- `spec-kit-multi-agent-tdd/commands/specify-solution-design.md`
 
-## Phase 5: Migration Script
+## Phase 5: Breaking Change Documentation
 
-### 5.1 Create Migration Script
-**Effort**: 1.5 SP
-
-**Script**: `scripts/migrate-specs-to-folders.sh`
-
-**Logic**:
-1. Find all flat spec files: `specs/*.md`
-2. For each spec:
-   - Extract spec ID from filename
-   - Create `specs/SPEC-XXXX/` folder
-   - Move file to `specs/SPEC-XXXX/spec.md`
-   - Create placeholder `dependency-map.md`
-   - Generate `plan.md` if spec has plan section
-   - Generate `tasks.md` if spec has tasks section
-3. Report success/failures
-
-**Safety**:
-- Dry-run mode (`--dry-run`)
-- Backup option (`--backup`)
-- Validation checks
-
-### 5.2 Create Migration Documentation
+### 5.1 Document Breaking Change
 **Effort**: 0.5 SP
 
 **Files**:
-- Create `docs/guides/migrate-to-enhanced-structure.md`
+- Update workspace-template/README.md with structure changes
+- Create `docs/guides/enhanced-workspace-structure.md`
 
 **Content**:
-- Prerequisites
-- Step-by-step migration guide
-- Rollback procedure
-- Validation checklist
-- Manual steps (adding frontmatter)
+- Breaking change notice
+- New structure overview
+- Manual migration guidance (optional, for existing projects)
+- What changed from old structure
 
 ## Phase 6: Documentation and Examples
 
@@ -221,13 +205,13 @@ Create 2 example specs demonstrating:
 3. Verify all files created
 4. Verify frontmatter validity
 
-### 7.2 Test Migration Script
+### 7.2 Test New Project Creation
 **Effort**: 0.5 SP
 
-1. Create test specs in flat format
-2. Run migration script
-3. Validate conversion
-4. Check git history preservation
+1. Initialize new project with `harness init`
+2. Verify enhanced structure created
+3. Test SpecKit commands with new structure
+4. Validate folder creation workflow
 
 ### 7.3 Validate Configuration
 **Effort**: 0.5 SP
@@ -261,4 +245,10 @@ Create 2 example specs demonstrating:
 - [ ] Documentation complete with examples
 - [ ] At least 2 example specs demonstrate full traceability
 
-## Total Effort: 8 Story Points
+## Total Effort: 6 Story Points
+
+**Removed from original estimate:**
+- Phase 5.1: Migration script (-1.5 SP)
+- Phase 5.2: Migration documentation (-0.5 SP)
+
+**Breaking change approach eliminates migration complexity**

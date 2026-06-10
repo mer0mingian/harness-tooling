@@ -2,15 +2,16 @@
 type: spec
 feature_id: "009-matd-preset-specify-override"
 title: "Create MATD SpecKit Preset for /specify Override"
-status: stub
+status: deprecated
 created: "2026-06-09"
+deprecated: "2026-06-10"
 owner: "Daniel Mingers"
 branch: dev
 ---
 
-# Spec (STUB): Create MATD SpecKit Preset for /specify Override
+# Spec (DEPRECATED): Create MATD SpecKit Preset for /specify Override
 
-> **Status: STUB.** Created from FUTURE-WORK grilling session 2026-06-09.
+> **Status: DEPRECATED (2026-06-10).** Will not be implemented. Preset override mechanism deemed unnecessary complexity.
 
 ## What & Why
 

@@ -5,7 +5,8 @@ spec_id: SPEC-0013
 title: Enhanced Workspace Structure
 status: design-complete
 created: 2026-06-10
-story_points: 8
+updated: 2026-06-10
+story_points: 6
 ---
 
 ## Problem
@@ -37,10 +38,13 @@ Implement a specs-as-folders pattern with configuration-driven paths and complet
    - Optional `design/` subfolder for spec-specific diagrams/architecture
 
 2. **Configuration File (`matd-config.yml`)**
+   - **Location:** `.specify/extensions/matd/matd-config.yml` (SpecKit extension convention)
    - Defines all MATD paths (prds, solution-designs, specs, tests, adrs)
    - Configures numbering format (prefix, zero-padding width)
+   - **Numbering mechanism:** Auto-increment (scan active + archived directories, find max ID, increment)
    - Specifies spec folder structure conventions
    - Allows per-project customization
+   - Layered resolution: defaults (extension.yml) → project → local → env vars
 
 3. **Traceability Frontmatter**
    - PRD files: `prd_id`, `title`, `created`
@@ -57,7 +61,12 @@ Implement a specs-as-folders pattern with configuration-driven paths and complet
 
 ```
 project-root/
-├── matd-config.yml              # Path and numbering configuration
+├── .specify/
+│   └── extensions/
+│       └── matd/
+│           ├── matd-config.yml              # Path and numbering configuration
+│           ├── matd-config.local.yml        # Gitignored local overrides
+│           └── config-template.yml          # Reference template
 ├── prds/
 │   ├── PRD-001.md              # Product requirement documents
 │   └── PRD-002.md
@@ -83,53 +92,64 @@ project-root/
 
 ## Scope (v1)
 
+**Target:** workspace-template only (new projects going forward)
+**Approach:** Breaking cutover - no migration script, no backward compatibility
+
 ### In Scope
 
-1. **Implement specs-as-folders pattern**
-   - Define folder structure standard
+1. **Implement specs-as-folders pattern in workspace-template**
+   - Define folder structure standard for new projects
    - Update spec template to use folders
-   - Document migration from flat structure
+   - Document structure for new workspace initialization
 
 2. **Create matd-config.yml schema**
-   - Define configuration schema
+   - Define configuration schema at `.specify/extensions/matd/matd-config.yml`
    - Document all configuration options
-   - Provide default values
+   - Provide default values in template
 
-3. **Add traceability frontmatter**
-   - Update PRD template with metadata
-   - Update Solution Design template with metadata
-   - Update Spec template with metadata
+3. **Add traceability frontmatter to templates**
+   - Update PRD template with metadata (prd_id, title, created)
+   - Update Solution Design template with metadata (sd_id, prd, requirements, adrs)
+   - Update Spec template with metadata (spec_id, solution_design, prd, status, created)
    - Document cross-reference conventions
 
-4. **Update workspace-template**
-   - Add matd-config.yml to workspace-template
-   - Create prds/ and solution-designs/ directories
-   - Update documentation to reference new structure
-
-5. **Migration script**
-   - Script to convert existing flat specs to folders
-   - Preserve spec content
-   - Generate placeholder artifacts
-   - Document manual steps
+4. **Update workspace-template structure**
+   - Add `.specify/extensions/matd/matd-config.yml` template
+   - Create `prds/`, `solution-designs/` directories in workspace-template
+   - Update `AGENT.md` and `CONTEXT.md` to document new structure
+   - Add example spec folder showing structure
 
 ### Out of Scope (v1)
 
-1. **Automated dependency map generation** - Tier 3 command, future work
-2. **Test coverage reporting** - Tier 4 command, requires test discovery tooling
-3. **Traceability validation** - Tier 4 command, requires metadata validation engine
-4. **IDE integrations** - Future enhancement
-5. **Automated spec numbering** - Already handled by existing SpecKit commands
+1. **Migration of existing projects** - Breaking change, manual update required if needed
+2. **Harness-tooling repo migration** - Repo's own specs can diverge from target structure
+3. **Backward compatibility layer** - Old flat structure no longer supported in new projects
+4. **Automated dependency map generation** - Tier 3 command, future work
+5. **Test coverage reporting** - Tier 4 command, requires test discovery tooling
+6. **Traceability validation** - Tier 4 command, requires metadata validation engine
+7. **IDE integrations** - Future enhancement
 
 ## Dependencies
 
 ### Upstream Dependencies
-- Workspace-template structure (exists)
-- Context doc `matd-enhanced-structure.md` (exists)
+- **Workspace-template structure** (exists at `/workspace-template/`)
+- **Context doc** `matd-enhanced-structure.md` (exists)
+- **SpecKit extension system** (patterns documented in `/docs/references/speckit-extension-patterns.md`)
+  - Config must be at `.specify/extensions/matd/matd-config.yml` (not workspace root)
+  - Naming: `{ext-id}-config.yml` pattern
+  - Layering: defaults → project → local → env vars
+- **Extension manifest** (`spec-kit-multi-agent-tdd/extension.yml`)
+  - Must add `provides.config` section for matd-config.yml
+  - Config template registration required
 
-### Downstream Consumers
-- SpecKit specify commands (will need updates to create folders)
-- SpecKit plan command (will write to `plan.md`)
-- SpecKit tasks command (will write to `tasks.md`)
+### Downstream Consumers (Blocked Until Spec 013 Complete)
+- **SPEC-002**: Product Brief command (needs `product/` path config)
+- **SPEC-003**: Constitution command (needs `architecture/` path config)
+- **SPEC-004**: Solution Design command (needs `solution-designs/` path config)
+- **SpecKit extension commands** (will need updates):
+  - `speckit.matd.specify-prd` (create PRD folders)
+  - Extension planning commands (write to `plan.md`)
+  - Extension task commands (write to `tasks.md`)
 
 ## Acceptance Criteria
 
@@ -162,8 +182,16 @@ project-root/
 
 ## Implementation Notes
 
+### Critical Finding (2026-06-10 Grilling Session)
+**Config location must follow SpecKit extension conventions:**
+- ❌ NOT workspace root (`matd-config.yml`)
+- ✅ MUST be `.specify/extensions/matd/matd-config.yml`
+- Required: Add `provides.config` section to `extension.yml`
+- Pattern documented in `/docs/references/speckit-extension-patterns.md`
+
 ### Reference Documentation
 - Full design in `docs/context/matd-enhanced-structure.md`
+- SpecKit patterns in `docs/references/speckit-extension-patterns.md`
 - Align with existing workspace-template paths
 - Consider backward compatibility during migration
 
@@ -178,13 +206,14 @@ The `matd-config.yml` will default to:
 - PRD prefix: "PRD", width: 3 (PRD-001)
 - SD prefix: "SD", width: 3 (SD-001)
 - Spec prefix: "SPEC", width: 4 (SPEC-0001)
-- Standard folder names (prds, solution-designs, specs, tests, adrs)
+- Standard folder names (prds, solution-designs, specs, specs_archive, tests, adrs)
+- **Auto-increment scans both active + archive directories** to prevent ID collisions
 
-### Migration Considerations
-- Preserve git history during migration
-- Support incremental migration (not all-at-once)
-- Document rollback procedure
-- Provide validation script to check migration success
+### Breaking Change Notice
+- **No migration script provided** - Breaking cutover for workspace-template
+- Existing projects on old structure can continue using it (no forced upgrade)
+- New projects from `harness init` get enhanced structure only
+- Manual update required if existing project wants new structure
 
 ## Success Metrics
 

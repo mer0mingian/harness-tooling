@@ -129,6 +129,19 @@ yml-schema-driven structure + content-test gate; deterministic fetch/mirror via 
 - OQ-C5: yml schema + content-test rubric for the constitution.
 - OQ-C6: Skill placement — confirm `.claude/skills/stepstone-system-constitution/` (gitignored, corporate) with optional OSS-safe framework upstreamed to harness-tooling.
 
+## Dependencies
+
+### Upstream Dependencies
+- **SPEC-013** (Enhanced Workspace Structure) - BLOCKS THIS SPEC
+  - Requires: Config location pattern (`.specify/extensions/matd/matd-config.yml`)
+  - Requires: `architecture/` path configuration in matd-config.yml
+  - Status: Design-complete, 8 SP
+- **EA-Maps application content** - User to provide (Memory: `ea-maps-constitution-input`)
+
+### Related Specs
+- **SPEC-002** (Product Brief) - Business invariants (complements this spec's technical invariants)
+- **SPEC-004** (Solution Design) - Consumes both Product Brief + Constitution as inputs
+
 ## References
 - [confluence-constitution-sources.md](../../references/confluence-constitution-sources.md)
 - PDLC repo `docs/stepstone-conventions/` (digest+mirror+refresh pattern)
