@@ -45,3 +45,9 @@ logs/
 
 # Java
 .agents/skills/brainstorming/scripts/node_modules
+
+# Opencode logs
+.opencode/data
+
+# Non-committed repos to watch
+/home/mer0/repositories/harness-tooling/watching
