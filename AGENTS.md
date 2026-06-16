@@ -120,12 +120,11 @@ Plugins are **self-contained directories** under `.agents/plugins/` that bundle 
 
 | Plugin | Purpose |
 |--------|---------|
-| **matd** | MATD workflow for Claude Code |
+| **matd** | MATD workflow agents and skills for Claude Code |
 | **matd-workflow-standalone-commands** | MATD workflow commands (standalone) |
-| **legacy-stdd-skills** | Legacy STDD skills |
-| **generalist-skills** | General-purpose skills |
-| **harness-cgc-skill** | CodeGraphContext integration |
-| **harness-management-tools** | Plugin/extension creation and management |
+| **legacy-stdd-skills** | Legacy STDD skills + TDD workflow agents |
+| **generalist-skills** | General-purpose skills only |
+| **harness-deepwiki-skill** | Architecture documentation generation |
 
 ### Plugin vs Extension
 

@@ -52,7 +52,7 @@ commands:
 
 plugins:
   - matd
-  - harness-cgc-skill
+  - legacy-stdd-skills
 
 # Subtraction (applied after all unions)
 exclude:
@@ -299,7 +299,7 @@ harness-tooling/.agents/plugins/
 ├── generalist-skills/
 │   └── .claude-plugin/
 │       └── plugin.json
-└── harness-cgc-skill/
+└── harness-deepwiki-skill/
     └── .claude-plugin/
         └── plugin.json
 ```
@@ -366,12 +366,11 @@ harness-tooling/.agents/
 
 | Plugin | Purpose | Contents |
 |--------|---------|----------|
-| `matd` | Multi-Agent TDD workflow for Claude Code | Agents + skills directories |
-| `matd-workflow-standalone-commands` | MATD workflow commands (standalone) | Commands symlinked to SpecKit |
-| `legacy-stdd-skills` | Legacy STDD-specific skills | 8 STDD skills |
-| `generalist-skills` | General-purpose skills | 25 unique skills |
-| `harness-cgc-skill` | CodeGraphContext MCP integration | Single skill reference |
-| `harness-deepwiki-skill` | DeepWiki architecture documentation | Architecture doc generation |
+| `matd` | Multi-Agent TDD workflow for Claude Code | 6 agents + 50 skills |
+| `matd-workflow-standalone-commands` | MATD workflow commands (standalone) | 10 commands symlinked to SpecKit |
+| `legacy-stdd-skills` | Legacy STDD skills + TDD workflow agents | 5 agents + 6 skills |
+| `generalist-skills` | General-purpose skills only | 24 unique skills |
+| `harness-deepwiki-skill` | DeepWiki architecture documentation | 3 litho/AI skills |
 
 **Note on matd:** This is the **Claude Code plugin** for MATD workflow. There is also a separate **SpecKit extension** (`spec-kit-multi-agent-tdd/`) that implements the same MATD methodology for the SpecKit CLI. They share conceptual design but are distinct implementations. See [AGENTS.md](../../AGENTS.md) for details on the two artifacts.
 
@@ -381,7 +380,7 @@ harness-tooling/.agents/
 ```yaml
 plugins:
   - matd
-  - harness-cgc-skill
+  - legacy-stdd-skills
 ```
 
 **Resolution:**
@@ -484,16 +483,16 @@ clis:
 bundles:
   - pries-core
 skills:
-  - code-graph-context  # Add CGC on top of pries-core skills
+  - brainstorming  # Add brainstorming on top of pries-core skills
 plugins:
-  - harness-cgc-skill   # MCP integration for CGC
+  - generalist-skills   # General-purpose skills
 ```
 
 **Result:**
-- 10 skills (9 from pries-core + code-graph-context)
+- 10 skills (9 from pries-core + brainstorming)
 - 5 agents (pries-pm, pries-make, pries-test, pries-check, pries-simplify)
 - 4 commands (pries-implement, pries-validate, pries-review-only, pries-test-only)
-- 1 plugin (harness-cgc-skill direct)
+- 1 plugin (generalist-skills direct)
 - Overlay populated for Claude Code only
 
 ### Example 3: Custom Skill Mix with Exclusions

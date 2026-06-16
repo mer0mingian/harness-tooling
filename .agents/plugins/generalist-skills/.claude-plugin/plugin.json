@@ -1,7 +1,7 @@
 {
   "name": "generalist-skills",
-  "version": "0.2.0",
-  "description": "General-purpose skills for Claude Code (context, file ops, management, infrastructure)",
+  "version": "0.3.0",
+  "description": "General-purpose skills for Claude Code (context, file ops, management, infrastructure). Skills only - no agents or commands.",
   "author": {
     "name": "Daniel Minges",
     "email": "minged01@stepstone.com"

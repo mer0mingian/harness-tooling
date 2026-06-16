@@ -8,19 +8,7 @@
       "name": "generalist-skills",
       "source": "./.agents/plugins/generalist-skills",
       "description": "General-purpose skills for Claude Code (context, file ops, management, infrastructure)",
-      "version": "0.2.0"
-    },
-    {
-      "name": "harness-agents",
-      "source": "./.agents/plugins/harness-agents",
-      "description": "Multi-agent TDD workflow specialist agents",
-      "version": "1.0.0"
-    },
-    {
-      "name": "harness-cgc-skill",
-      "source": "./.agents/plugins/harness-cgc-skill",
-      "description": "CodeGraphContext (CGC) skill for querying code graphs via MCP in harness sandbox",
-      "version": "1.0.0"
+      "version": "0.3.0"
     },
     {
       "name": "harness-deepwiki-skill",
@@ -29,18 +17,10 @@
       "version": "1.1.0"
     },
     {
-      "name": "harness-management-tools",
-      "source": "./.agents/plugins/harness-management-tools",
-      "description": "Plugin and extension management skills for Claude Code and SpecKit",
-      "version": "1.0.0",
-      "keywords": ["plugin", "extension", "speckit", "claude-code", "marketplace"],
-      "category": "development"
-    },
-    {
       "name": "legacy-stdd-skills",
       "source": "./.agents/plugins/legacy-stdd-skills",
-      "description": "Legacy STDD-specific skills (specification, product formats, TDD methodology)",
-      "version": "1.0.0"
+      "description": "Legacy STDD-specific skills and TDD workflow agents. Includes 6 STDD skills and 5 TDD specialist agents.",
+      "version": "2.0.0"
     },
     {
       "name": "matd",

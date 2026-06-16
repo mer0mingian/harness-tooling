@@ -1,11 +1,18 @@
 {
   "name": "legacy-stdd-skills",
-  "version": "1.0.0",
-  "description": "Legacy STDD-specific skills (specification, product formats, TDD methodology). Symlinked from matd plugin.",
+  "version": "2.0.0",
+  "description": "Legacy STDD-specific skills and TDD workflow agents. Includes 6 STDD skills and 5 TDD specialist agents.",
   "author": {
     "name": "Daniel Minges",
     "email": "minged01@stepstone.com"
   },
+  "agents": [
+    "./agents/arch-specialist.md",
+    "./agents/dev-specialist.md",
+    "./agents/qa-specialist.md",
+    "./agents/review-specialist.md",
+    "./agents/test-specialist.md"
+  ],
   "skills": [
     "./skills/stdd-ask-questions-if-underspecified/SKILL.md",
     "./skills/stdd-make-constrained-implementation/SKILL.md",
