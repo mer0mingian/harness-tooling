@@ -209,8 +209,7 @@ pries-core:
     - pries-validate
     - pries-review-only
     - pries-test-only
-  plugins:
-    - harness-workflow-runtime
+  plugins: []
 ```
 
 **Use when:** Following PRIES methodology for feature development
@@ -291,10 +290,16 @@ harness-tooling/.agents/plugins/
 ├── matd/
 │   └── .claude-plugin/
 │       └── plugin.json         # Required manifest
-├── harness-cgc-skill/
+├── matd-workflow-standalone-commands/
 │   └── .claude-plugin/
 │       └── plugin.json
-└── harness-workflow-runtime/
+├── legacy-stdd-skills/
+│   └── .claude-plugin/
+│       └── plugin.json
+├── generalist-skills/
+│   └── .claude-plugin/
+│       └── plugin.json
+└── harness-cgc-skill/
     └── .claude-plugin/
         └── plugin.json
 ```
@@ -362,9 +367,11 @@ harness-tooling/.agents/
 | Plugin | Purpose | Contents |
 |--------|---------|----------|
 | `matd` | Multi-Agent TDD workflow for Claude Code | Agents + skills directories |
+| `matd-workflow-standalone-commands` | MATD workflow commands (standalone) | Commands symlinked to SpecKit |
+| `legacy-stdd-skills` | Legacy STDD-specific skills | 8 STDD skills |
+| `generalist-skills` | General-purpose skills | 25 unique skills |
 | `harness-cgc-skill` | CodeGraphContext MCP integration | Single skill reference |
-| `harness-workflow-runtime` | Workflow state machine and enforcement | Metadata-only runtime |
-| `harness-deepwiki-skill` | DeepWiki architecture documentation | (structure TBD) |
+| `harness-deepwiki-skill` | DeepWiki architecture documentation | Architecture doc generation |
 
 **Note on matd:** This is the **Claude Code plugin** for MATD workflow. There is also a separate **SpecKit extension** (`spec-kit-multi-agent-tdd/`) that implements the same MATD methodology for the SpecKit CLI. They share conceptual design but are distinct implementations. See [AGENTS.md](../../AGENTS.md) for details on the two artifacts.
 
@@ -486,7 +493,7 @@ plugins:
 - 10 skills (9 from pries-core + code-graph-context)
 - 5 agents (pries-pm, pries-make, pries-test, pries-check, pries-simplify)
 - 4 commands (pries-implement, pries-validate, pries-review-only, pries-test-only)
-- 2 plugins (harness-workflow-runtime from bundle + harness-cgc-skill direct)
+- 1 plugin (harness-cgc-skill direct)
 - Overlay populated for Claude Code only
 
 ### Example 3: Custom Skill Mix with Exclusions

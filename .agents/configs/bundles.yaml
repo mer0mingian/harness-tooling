@@ -40,8 +40,7 @@ bundles:
       - pries-validate
       - pries-review-only
       - pries-test-only
-    plugins:
-      - harness-workflow-runtime
+    plugins: []
 
   # General-purpose review/simplify/security skills used outside the strict
   # PRIES loop. Note: there is no `init` skill in this marketplace — Claude

@@ -53,7 +53,8 @@ This plugin is part of the harness-tooling marketplace. To use:
 ## Related Plugins
 
 - **harness-agents**: TDD workflow specialist agents
-- **harness-workflow-runtime**: Workflow resolution and execution
+- **matd**: Multi-Agent TDD workflow for SpecKit
+- **matd-workflow-standalone-commands**: MATD workflow commands (standalone)
 
 ## Resources
 

@@ -5,10 +5,10 @@
   },
   "plugins": [
     {
-      "name": "all-my-skills",
-      "source": "./.agents/plugins/all-my-skills",
-      "description": "Daniel's STDD + orchestration + review workflows for Claude Code",
-      "version": "0.1.0"
+      "name": "generalist-skills",
+      "source": "./.agents/plugins/generalist-skills",
+      "description": "General-purpose skills for Claude Code (context, file ops, management, infrastructure)",
+      "version": "0.2.0"
     },
     {
       "name": "harness-agents",
@@ -37,16 +37,22 @@
       "category": "development"
     },
     {
-      "name": "harness-workflow-runtime",
-      "source": "./.agents/plugins/harness-workflow-runtime",
-      "description": "Runtime plugin for multi-agent CLI workflows: schema validation, resolver, enforcement hooks, and the /workflow state machine",
-      "version": "0.1.0"
+      "name": "legacy-stdd-skills",
+      "source": "./.agents/plugins/legacy-stdd-skills",
+      "description": "Legacy STDD-specific skills (specification, product formats, TDD methodology)",
+      "version": "1.0.0"
     },
     {
       "name": "matd",
       "source": "./.agents/plugins/matd",
       "description": "Multi-Agent Test-Driven Development workflow for SpecKit. Provides orchestrated TDD workflow with specialized agents for requirements, architecture, QA, and implementation",
       "version": "1.8.0"
+    },
+    {
+      "name": "matd-workflow-standalone-commands",
+      "source": "./.agents/plugins/matd-workflow-standalone-commands",
+      "description": "MATD workflow commands for Claude Code (standalone, without SpecKit extension)",
+      "version": "1.0.0"
     }
   ]
 }
