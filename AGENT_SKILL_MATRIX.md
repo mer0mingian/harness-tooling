@@ -2,6 +2,23 @@
 
 Agent-to-skill mappings for the MATD (Multi-Agent Test-Driven Development) framework.
 
+## Plugin Marketplace Structure
+
+The marketplace consists of 5 active plugins:
+
+| Plugin                               | Version | Agents | Skills | Commands | Description                                |
+|--------------------------------------|---------|--------|--------|----------|--------------------------------------------|
+| **matd**                             | 1.9.0   | 6      | 50     | 0        | Core MATD agents and comprehensive skills  |
+| **legacy-stdd-skills**               | 2.0.0   | 5      | 6      | 0        | Legacy STDD agents and skills              |
+| **generalist-skills**                | 0.3.0   | 0      | 25     | 0        | General-purpose skills (no agents)         |
+| **matd-workflow-standalone-commands**| 1.0.0   | 0      | 0      | 10       | Standalone workflow commands               |
+| **harness-deepwiki-skill**           | 1.1.0   | 0      | 3      | 0        | DeepWiki context generation skills         |
+
+**Removed plugins** (no longer in marketplace):
+- harness-agents (agents migrated to legacy-stdd-skills)
+- harness-cgc-skill (functionality merged elsewhere)
+- harness-management-tools (deprecated)
+
 ## Agent Roles
 
 | Agent | Role | Owns | MCP Access |
