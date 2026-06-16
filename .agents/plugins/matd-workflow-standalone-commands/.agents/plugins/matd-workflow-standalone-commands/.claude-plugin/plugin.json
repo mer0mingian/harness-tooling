@@ -1,0 +1,20 @@
+{
+  "name": "matd-workflow-standalone-commands",
+  "version": "1.0.0",
+  "description": "MATD workflow commands for Claude Code (standalone, without SpecKit extension)",
+  "author": {
+    "name": "Daniel Minges",
+    "email": "minged01@stepstone.com"
+  },
+  "commands": [
+    "./commands/test.md",
+    "./commands/implement.md",
+    "./commands/review.md",
+    "./commands/commit.md",
+    "./commands/update-docs.md",
+    "./commands/specify-product-brief.md",
+    "./commands/specify-adr.md",
+    "./commands/specify-solution-design.md",
+    "./commands/specify-prd.md"
+  ]
+}

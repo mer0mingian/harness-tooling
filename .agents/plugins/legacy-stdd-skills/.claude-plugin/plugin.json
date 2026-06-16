@@ -1,0 +1,24 @@
+{
+  "name": "legacy-stdd-skills",
+  "version": "2.0.0",
+  "description": "Legacy STDD-specific skills and TDD workflow agents. Includes 6 STDD skills and 5 TDD specialist agents.",
+  "author": {
+    "name": "Daniel Minges",
+    "email": "minged01@stepstone.com"
+  },
+  "agents": [
+    "./agents/arch-specialist.md",
+    "./agents/dev-specialist.md",
+    "./agents/qa-specialist.md",
+    "./agents/review-specialist.md",
+    "./agents/test-specialist.md"
+  ],
+  "skills": [
+    "./skills/stdd-ask-questions-if-underspecified/SKILL.md",
+    "./skills/stdd-make-constrained-implementation/SKILL.md",
+    "./skills/stdd-product-spec-formats/SKILL.md",
+    "./skills/stdd-project-summary/SKILL.md",
+    "./skills/stdd-test-author-constrained/SKILL.md",
+    "./skills/stdd-test-driven-development/SKILL.md"
+  ]
+}

@@ -52,7 +52,7 @@ commands:
 
 plugins:
   - matd
-  - harness-cgc-skill
+  - legacy-stdd-skills
 
 # Subtraction (applied after all unions)
 exclude:
@@ -209,8 +209,7 @@ pries-core:
     - pries-validate
     - pries-review-only
     - pries-test-only
-  plugins:
-    - harness-workflow-runtime
+  plugins: []
 ```
 
 **Use when:** Following PRIES methodology for feature development
@@ -291,10 +290,16 @@ harness-tooling/.agents/plugins/
 ├── matd/
 │   └── .claude-plugin/
 │       └── plugin.json         # Required manifest
-├── harness-cgc-skill/
+├── matd-workflow-standalone-commands/
 │   └── .claude-plugin/
 │       └── plugin.json
-└── harness-workflow-runtime/
+├── legacy-stdd-skills/
+│   └── .claude-plugin/
+│       └── plugin.json
+├── generalist-skills/
+│   └── .claude-plugin/
+│       └── plugin.json
+└── harness-deepwiki-skill/
     └── .claude-plugin/
         └── plugin.json
 ```
@@ -361,10 +366,11 @@ harness-tooling/.agents/
 
 | Plugin | Purpose | Contents |
 |--------|---------|----------|
-| `matd` | Multi-Agent TDD workflow for Claude Code | Agents + skills directories |
-| `harness-cgc-skill` | CodeGraphContext MCP integration | Single skill reference |
-| `harness-workflow-runtime` | Workflow state machine and enforcement | Metadata-only runtime |
-| `harness-deepwiki-skill` | DeepWiki architecture documentation | (structure TBD) |
+| `matd` | Multi-Agent TDD workflow for Claude Code | 6 agents + 50 skills |
+| `matd-workflow-standalone-commands` | MATD workflow commands (standalone) | 10 commands symlinked to SpecKit |
+| `legacy-stdd-skills` | Legacy STDD skills + TDD workflow agents | 5 agents + 6 skills |
+| `generalist-skills` | General-purpose skills only | 24 unique skills |
+| `harness-deepwiki-skill` | DeepWiki architecture documentation | 3 litho/AI skills |
 
 **Note on matd:** This is the **Claude Code plugin** for MATD workflow. There is also a separate **SpecKit extension** (`spec-kit-multi-agent-tdd/`) that implements the same MATD methodology for the SpecKit CLI. They share conceptual design but are distinct implementations. See [AGENTS.md](../../AGENTS.md) for details on the two artifacts.
 
@@ -374,7 +380,7 @@ harness-tooling/.agents/
 ```yaml
 plugins:
   - matd
-  - harness-cgc-skill
+  - legacy-stdd-skills
 ```
 
 **Resolution:**
@@ -477,16 +483,16 @@ clis:
 bundles:
   - pries-core
 skills:
-  - code-graph-context  # Add CGC on top of pries-core skills
+  - brainstorming  # Add brainstorming on top of pries-core skills
 plugins:
-  - harness-cgc-skill   # MCP integration for CGC
+  - generalist-skills   # General-purpose skills
 ```
 
 **Result:**
-- 10 skills (9 from pries-core + code-graph-context)
+- 10 skills (9 from pries-core + brainstorming)
 - 5 agents (pries-pm, pries-make, pries-test, pries-check, pries-simplify)
 - 4 commands (pries-implement, pries-validate, pries-review-only, pries-test-only)
-- 2 plugins (harness-workflow-runtime from bundle + harness-cgc-skill direct)
+- 1 plugin (generalist-skills direct)
 - Overlay populated for Claude Code only
 
 ### Example 3: Custom Skill Mix with Exclusions
