@@ -1,7 +1,7 @@
 {
   "name": "legacy-stdd-skills",
   "version": "1.0.0",
-  "description": "Legacy STDD-specific skills (specification, product formats, TDD methodology)",
+  "description": "Legacy STDD-specific skills (specification, product formats, TDD methodology). Symlinked from matd plugin.",
   "author": {
     "name": "Daniel Minges",
     "email": "minged01@stepstone.com"
@@ -9,8 +9,6 @@
   "skills": [
     "./skills/stdd-ask-questions-if-underspecified/SKILL.md",
     "./skills/stdd-make-constrained-implementation/SKILL.md",
-    "./skills/stdd-openspec/SKILL.md",
-    "./skills/stdd-pm-linear-integration/SKILL.md",
     "./skills/stdd-product-spec-formats/SKILL.md",
     "./skills/stdd-project-summary/SKILL.md",
     "./skills/stdd-test-author-constrained/SKILL.md",
