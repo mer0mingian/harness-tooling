@@ -57,57 +57,72 @@ They differ in:
 
 ## Quick Install
 
-### Claude Code Marketplace
+### Streamlined Installation (Recommended)
 
-**Step 1: Add Marketplace**
+**One-time setup** (run from harness-tooling directory):
+
 ```bash
-# Clone repository (for marketplace manifest only)
-git clone https://stash.stepstone.com/scm/~minged01/harness-tooling.git ./harness-tooling
+# Clone harness-tooling repository
+git clone ssh://git@stash.stepstone.com:7999/~minged01/harness-tooling.git ~/.harness-tooling
+cd ~/.harness-tooling
 
-# Add marketplace to Claude Code
-claude plugin marketplace add ./harness-tooling/.claude-plugin/marketplace.json
+# Run installer (checks prerequisites, installs specify, adds to PATH)
+./install.sh
+
+# Restart shell to load environment
+source ~/.bashrc  # or ~/.zshrc
 ```
 
-**Step 2: Install MATD Plugin**
+**Per-project installation** (run from your project directory):
+
 ```bash
-# Project-scoped (this project only)
+# Navigate to your Claude Code project
+cd ~/my-project
+
+# Install plugins and extensions
+harness-setup
+
+# Optional: Initialize agent workspace structure
+harness-setup --init-agent-workspace
+```
+
+**Update harness-tooling:**
+
+```bash
+# From any directory
+harness-setup update
+```
+
+**What gets installed:**
+- **Claude Code plugins**: matd, harness-management-tools, harness-deepwiki-skill
+- **SpecKit extensions**: MATD, agent-assign
+- **Optional workspace template**: `.env`, `AGENT.md`, directory structure
+
+**Prerequisites** (checked by `install.sh`):
+- git (must be installed)
+- Claude Code CLI (must be installed)
+- uv (must be installed)
+- specify CLI (auto-installed if missing)
+
+---
+
+### Manual Installation (Alternative)
+
+If you prefer manual control or the streamlined installer doesn't work:
+
+**Claude Code Marketplace:**
+```bash
+git clone ssh://git@stash.stepstone.com:7999/~minged01/harness-tooling.git ~/.harness-tooling
+claude plugin marketplace add ~/.harness-tooling/.claude-plugin/marketplace.json
 claude plugin install matd --scope project
-
-# Or user-scoped (all projects)
-claude plugin install matd --scope user
+claude plugin install harness-management-tools --scope project
+claude plugin install harness-deepwiki-skill --scope project
 ```
 
-**Verify Installation:**
+**SpecKit Extension:**
 ```bash
-cat .claude/settings.json  # Should show: matd@harness-tooling-marketplace
-```
-
-### SpecKit Extension
-
-**Option A: Remote Installation (Recommended)**
-```bash
-# Install from hosted ZIP (no cloning needed)
-specify extension add matd \
-  --from https://artifacts.stepstone.com/speckit/matd-extension-v1.0.0.zip
-```
-
-**Option B: Development Mode (Local)**
-```bash
-# For development/testing with live updates
-git clone https://stash.stepstone.com/scm/~minged01/harness-tooling.git ./harness-tooling
-
-specify extension add --dev ./harness-tooling/spec-kit-multi-agent-tdd
-```
-
-**Additional Extensions:**
-```bash
-# Agent assignment extension
-specify extension add agent-assign \
-  --from https://github.com/xymelon/spec-kit-agent-assign/archive/refs/tags/v1.1.0.zip
-
-# V-Model extension pack
-specify extension add v-model \
-  --from https://github.com/leocamello/spec-kit-v-model/archive/refs/tags/v0.7.2.zip
+# Development mode (local)
+specify extension add --dev ~/.harness-tooling/spec-kit-multi-agent-tdd
 ```
 
 ### OpenCode

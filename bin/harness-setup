@@ -1,0 +1,185 @@
+#!/usr/bin/env bash
+# harness-setup: Install Claude Code plugins and SpecKit extensions
+#
+# Usage:
+#   harness-setup                    # Install in current directory (project scope)
+#   harness-setup --init-agent-workspace  # Also copy workspace template
+#   harness-setup update             # Update source and marketplace
+
+set -euo pipefail
+
+log()  { printf '\033[36m[harness]\033[0m %s\n' "$*"; }
+warn() { printf '\033[33m[warn]\033[0m %s\n' "$*" >&2; }
+die()  { printf '\033[31m[error]\033[0m %s\n' "$*" >&2; exit 1; }
+
+# Check HARNESS_TOOLING_DIR is set
+[[ -n "${HARNESS_TOOLING_DIR:-}" ]] || die "HARNESS_TOOLING_DIR not set. Run install.sh first."
+[[ -d "$HARNESS_TOOLING_DIR" ]] || die "HARNESS_TOOLING_DIR points to non-existent directory: $HARNESS_TOOLING_DIR"
+
+SRC_DIR="$HARNESS_TOOLING_DIR"
+INIT_WORKSPACE=false
+
+usage() {
+  cat <<EOF
+Usage: harness-setup [COMMAND] [OPTIONS]
+
+Install Claude Code plugins and SpecKit extensions into current directory.
+
+COMMANDS:
+  (none)         Install plugins and extensions (default)
+  update         Pull latest source and update marketplace
+
+OPTIONS:
+  --init-agent-workspace    Copy workspace template structure
+  -h, --help               Show this help
+
+EXAMPLES:
+  harness-setup                           # Install in current project
+  harness-setup --init-agent-workspace    # Install + workspace structure
+  harness-setup update                    # Update from git
+EOF
+  exit 0
+}
+
+# Parse arguments
+COMMAND=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    update)
+      COMMAND="update"
+      shift
+      ;;
+    --init-agent-workspace)
+      INIT_WORKSPACE=true
+      shift
+      ;;
+    -h|--help)
+      usage
+      ;;
+    *)
+      die "Unknown argument: $1 (try --help)"
+      ;;
+  esac
+done
+
+# Update command
+if [[ "$COMMAND" == "update" ]]; then
+  log "Updating harness-tooling..."
+
+  if [[ ! -d "$SRC_DIR/.git" ]]; then
+    die "Source directory is not a git repository: $SRC_DIR"
+  fi
+
+  log "  • Pulling latest changes..."
+  git -C "$SRC_DIR" pull --ff-only || die "Git pull failed"
+
+  log "  • Updating marketplace..."
+  claude plugin marketplace update harness-tooling-marketplace || warn "Marketplace update failed"
+
+  log "✓ Update complete"
+  exit 0
+fi
+
+# Install command (default)
+log ""
+log "=== Harness Setup ==="
+log "Source:  $SRC_DIR"
+log "Target:  $(pwd)"
+log "Scope:   project"
+log ""
+
+# Validate source structure
+[[ -f "$SRC_DIR/.claude-plugin/marketplace.json" ]] || die ".claude-plugin/marketplace.json not found in $SRC_DIR"
+[[ -d "$SRC_DIR/spec-kit-multi-agent-tdd" ]] || die "spec-kit-multi-agent-tdd/ not found in $SRC_DIR"
+
+# [1/4] Claude Code marketplace
+log "[1/4] Adding Claude Code marketplace..."
+if claude plugin marketplace add "$SRC_DIR/.claude-plugin/marketplace.json" 2>/dev/null; then
+  log "  ✓ Marketplace added"
+else
+  log "  • Marketplace already exists (continuing)"
+fi
+
+# [2/4] Claude Code plugins
+log ""
+log "[2/4] Installing Claude Code plugins..."
+
+PLUGINS=("matd" "harness-management-tools" "harness-deepwiki-skill")
+for plugin in "${PLUGINS[@]}"; do
+  log "  • Installing $plugin..."
+  if claude plugin install "$plugin" --scope project 2>/dev/null; then
+    log "    ✓ $plugin installed"
+  else
+    log "    • $plugin already installed (continuing)"
+  fi
+done
+
+# [3/4] SpecKit extensions
+log ""
+log "[3/4] Installing SpecKit extensions..."
+
+if ! command -v specify &>/dev/null; then
+  die "specify CLI not found (should have been installed by install.sh)"
+fi
+
+# Initialize SpecKit if needed
+if [[ ! -d ".specify" ]]; then
+  log "  • Initializing SpecKit..."
+  specify init --here --integration claude --script sh --force || log "    • Already initialized"
+fi
+
+# Install MATD extension
+log "  • Installing MATD extension..."
+if specify extension add --dev "$SRC_DIR/spec-kit-multi-agent-tdd" 2>/dev/null; then
+  log "    ✓ MATD extension installed"
+else
+  log "    • MATD extension already installed (continuing)"
+fi
+
+# Install agent-assign (if it exists)
+if [[ -d "$SRC_DIR/spec-kit-agent-assign" ]]; then
+  log "  • Installing agent-assign extension..."
+  if specify extension add --dev "$SRC_DIR/spec-kit-agent-assign" 2>/dev/null; then
+    log "    ✓ agent-assign installed"
+  else
+    log "    • agent-assign already installed (continuing)"
+  fi
+fi
+
+# [4/4] Workspace template (optional)
+if [[ "$INIT_WORKSPACE" == true ]]; then
+  log ""
+  log "[4/4] Copying workspace template..."
+
+  TEMPLATE_DIR="$SRC_DIR/../../workspace-template"
+  if [[ ! -d "$TEMPLATE_DIR" ]]; then
+    warn "Workspace template not found at $TEMPLATE_DIR"
+  else
+    # Copy structure (merge, don't overwrite)
+    cp -rn "$TEMPLATE_DIR"/* . 2>/dev/null || true
+    cp -rn "$TEMPLATE_DIR"/.* . 2>/dev/null || true
+
+    # Copy .env.example to .env if .env doesn't exist
+    if [[ -f ".env.example" ]] && [[ ! -f ".env" ]]; then
+      cp .env.example .env
+      log "  ✓ Created .env from .env.example"
+    fi
+
+    log "  ✓ Workspace structure copied"
+  fi
+else
+  log ""
+  log "[4/4] Skipping workspace template (use --init-agent-workspace to enable)"
+fi
+
+log ""
+log "✓ Installation complete!"
+log ""
+log "Installed in: $(pwd)"
+log "  • Plugins:    matd, harness-management-tools, harness-deepwiki-skill"
+log "  • Extensions: MATD"
+log ""
+log "Verify installation:"
+log "  cat .claude/settings.json    # Check plugins"
+log "  specify extension list        # Check extensions"
+log ""
