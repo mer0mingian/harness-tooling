@@ -104,7 +104,7 @@ fi
 log ""
 log "[2/4] Installing Claude Code plugins..."
 
-PLUGINS=("matd" "matd-workflow-standalone-commands" "legacy-stdd-skills" "generalist-skills" "harness-deepwiki-skill")
+PLUGINS=("matd" "generalist-skills" "harness-deepwiki-skill")
 for plugin in "${PLUGINS[@]}"; do
   log "  • Installing $plugin..."
   if claude plugin install "$plugin" --scope project 2>/dev/null; then
