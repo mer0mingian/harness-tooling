@@ -1,7 +1,7 @@
 {
   "name": "matd",
-  "version": "1.8.0",
-  "description": "Multi-Agent Test-Driven Development workflow for SpecKit. Provides orchestrated TDD workflow with specialized agents for requirements, architecture, QA, and implementation.",
+  "version": "1.9.0",
+  "description": "Multi-Agent Test-Driven Development workflow for SpecKit. Provides orchestrated TDD workflow with specialized agents for requirements, architecture, QA, and implementation. Commands come from the SpecKit extension.",
   "author": {
     "name": "Daniel Minges",
     "email": "minged01@stepstone.com"
@@ -13,15 +13,5 @@
     "./agents/matd-specifier.md",
     "./agents/matd-orchestrator.md",
     "./agents/matd-critical-thinker.md"
-  ],
-  "commands": [
-    "./commands/test.md",
-    "./commands/implement.md",
-    "./commands/review.md",
-    "./commands/commit.md",
-    "./commands/update-docs.md",
-    "./commands/specify-product-brief.md",
-    "./commands/specify-adr.md",
-    "./commands/specify-solution-design.md"
   ]
 }
