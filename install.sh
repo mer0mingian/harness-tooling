@@ -1,169 +1,144 @@
 #!/usr/bin/env bash
-# Install/update my-harness and wire it into Claude Code, OpenCode, and Gemini CLI.
+# install.sh: One-time setup for harness-tooling
 #
-# Source of truth: a single clone of the repo (default ~/.my-harness).
-# Each CLI gets symlinks pointing into <src>/.agents/{skills,agents,commands}.
+# Run this from the harness-tooling directory to:
+#   1. Check prerequisites (git, claude, uv)
+#   2. Install specify CLI if missing
+#   3. Add harness-setup to PATH
+#   4. Set HARNESS_TOOLING_DIR environment variable
 #
 # Usage:
-#   bash install.sh                                    # interactive
-#   bash install.sh --scope user --clis all            # user scope, all CLIs
-#   bash install.sh --scope project --clis claude,opencode
-#   bash install.sh --scope user --src-dir ~/code/my-harness
-#   bash install.sh --scope user --ssh                 # clone via SSH (needs keys)
-#
-# Remote one-liner:
-#   bash <(curl -fsSL https://raw.githubusercontent.com/mer0mingian/my-harness/main/install.sh) --scope user --clis all
+#   cd ~/.harness-tooling  # or wherever you cloned harness-tooling
+#   ./install.sh
 
 set -euo pipefail
 
-REPO_URL_HTTPS="https://github.com/mer0mingian/my-harness.git"
-REPO_URL_SSH="git@github.com:mer0mingian/my-harness.git"
-DEFAULT_SRC_DIR="${HOME}/.my-harness"
+log()  { printf '\033[36m[install]\033[0m %s\n' "$*"; }
+warn() { printf '\033[33m[warn]\033[0m %s\n' "$*" >&2; }
+die()  { printf '\033[31m[error]\033[0m %s\n' "$*" >&2; exit 1; }
 
-SCOPE=""
-CLIS=""
-SRC_DIR="${DEFAULT_SRC_DIR}"
-USE_SSH=0
-TS="$(date +%Y%m%d-%H%M%S)"
+log ""
+log "=== Harness Tooling Installation ==="
+log ""
 
-log()  { printf '\033[36m[my-harness]\033[0m %s\n' "$*"; }
-warn() { printf '\033[33m[my-harness] warn:\033[0m %s\n' "$*" >&2; }
-die()  { printf '\033[31m[my-harness] error:\033[0m %s\n' "$*" >&2; exit 1; }
+# Determine installation directory (where this script is located)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+log "Installation directory: $SCRIPT_DIR"
+log ""
 
-usage() {
-  sed -n '2,14p' "$0" | sed 's/^# \{0,1\}//'
-  exit "${1:-0}"
-}
+# [1/5] Check prerequisites
+log "[1/5] Checking prerequisites..."
 
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    --scope)    SCOPE="${2:-}"; shift 2 ;;
-    --scope=*)  SCOPE="${1#*=}"; shift ;;
-    --clis)     CLIS="${2:-}"; shift 2 ;;
-    --clis=*)   CLIS="${1#*=}"; shift ;;
-    --src-dir)  SRC_DIR="${2:-}"; shift 2 ;;
-    --src-dir=*) SRC_DIR="${1#*=}"; shift ;;
-    --ssh)      USE_SSH=1; shift ;;
-    --https)    USE_SSH=0; shift ;;
-    -h|--help)  usage 0 ;;
-    *)          die "unknown flag: $1 (try --help)" ;;
-  esac
-done
-
-# ---- Interactive fallback --------------------------------------------------
-if [[ -z "$SCOPE" ]]; then
-  printf 'Install scope? [u]ser (~/.claude, ~/.config/opencode, ~/.gemini) or [p]roject (./.claude, ./.opencode, ./.gemini): '
-  read -r ans
-  case "$ans" in
-    u|U|user)    SCOPE="user" ;;
-    p|P|project) SCOPE="project" ;;
-    *)           die "invalid scope" ;;
-  esac
+# Check git
+if ! command -v git &>/dev/null; then
+  die "git not found. Install git first."
 fi
-[[ "$SCOPE" == "user" || "$SCOPE" == "project" ]] || die "--scope must be 'user' or 'project'"
+log "  ✓ git: $(git --version | head -1)"
 
-if [[ -z "$CLIS" ]]; then
-  printf 'Which CLIs? comma list of [claude,opencode,gemini] or "all" [all]: '
-  read -r ans
-  CLIS="${ans:-all}"
+# Check claude CLI
+if ! command -v claude &>/dev/null; then
+  die "Claude Code CLI not found. Install from claude.ai/code"
 fi
-[[ "$CLIS" == "all" ]] && CLIS="claude,opencode,gemini"
+log "  ✓ claude: $(claude --version 2>/dev/null || echo 'installed')"
 
-# ---- Clone or update source of truth --------------------------------------
-SRC_DIR="${SRC_DIR/#\~/$HOME}"
-if [[ "$USE_SSH" -eq 1 ]]; then
-  REPO_URL="$REPO_URL_SSH"
+# Check uv
+if ! command -v uv &>/dev/null; then
+  die "uv not found. Install from https://docs.astral.sh/uv/"
+fi
+log "  ✓ uv: $(uv --version)"
+
+# [2/5] Install specify if missing
+log ""
+log "[2/5] Checking SpecKit CLI..."
+
+if command -v specify &>/dev/null; then
+  SPECIFY_VERSION=$(specify --version 2>/dev/null || echo "unknown")
+  log "  ✓ specify: $SPECIFY_VERSION"
+
+  # Auto-upgrade to v0.10.2
+  log "  • Running specify self upgrade..."
+  specify self upgrade 2>/dev/null || log "    • Upgrade skipped (may already be latest)"
 else
-  REPO_URL="$REPO_URL_HTTPS"
+  log "  • specify not found, installing..."
+  uv tool install specify-cli --from git+https://github.com/github/spec-kit.git@v0.10.2 || die "Failed to install specify"
+  log "  ✓ specify installed"
+
+  # Verify installation
+  specify self check || warn "specify self check reported issues"
 fi
 
-if [[ -d "$SRC_DIR/.git" ]]; then
-  log "updating source at $SRC_DIR"
-  git -C "$SRC_DIR" pull --ff-only
-elif [[ -e "$SRC_DIR" ]]; then
-  die "$SRC_DIR exists but is not a git repo; move it aside or pass --src-dir"
+# [3/5] Detect shell
+log ""
+log "[3/5] Detecting shell..."
+
+SHELL_TYPE=""
+SHELL_RC=""
+
+# Detect current shell
+if [[ -n "${ZSH_VERSION:-}" ]] || [[ "$SHELL" == *"zsh"* ]]; then
+  SHELL_TYPE="zsh"
+  SHELL_RC="$HOME/.zshrc"
+elif [[ -n "${BASH_VERSION:-}" ]] || [[ "$SHELL" == *"bash"* ]]; then
+  SHELL_TYPE="bash"
+  SHELL_RC="$HOME/.bashrc"
 else
-  log "cloning $REPO_URL into $SRC_DIR"
-  git clone --depth 1 "$REPO_URL" "$SRC_DIR"
+  die "Unsupported shell. Expected bash or zsh (WSL2/Ubuntu or macOS)."
 fi
 
-AGENTS_SRC="$SRC_DIR/.agents"
-[[ -d "$AGENTS_SRC/skills" && -d "$AGENTS_SRC/agents" && -d "$AGENTS_SRC/commands" ]] \
-  || die "$AGENTS_SRC is missing skills/agents/commands — bad source?"
+log "  ✓ Detected: $SHELL_TYPE"
+log "  ✓ Config:   $SHELL_RC"
 
-# ---- Scope → target roots -------------------------------------------------
-if [[ "$SCOPE" == "user" ]]; then
-  CLAUDE_ROOT="${HOME}/.claude"
-  OPENCODE_ROOT="${HOME}/.config/opencode"
-  GEMINI_ROOT="${HOME}/.gemini"
-else
-  CLAUDE_ROOT="$(pwd)/.claude"
-  OPENCODE_ROOT="$(pwd)/.opencode"
-  GEMINI_ROOT="$(pwd)/.gemini"
+# [4/5] Update shell config
+log ""
+log "[4/5] Updating $SHELL_RC..."
+
+# Create shell config if it doesn't exist
+touch "$SHELL_RC"
+
+# Check if harness-tooling block already exists
+if grep -q "# harness-tooling setup" "$SHELL_RC"; then
+  log "  • Configuration already exists, updating..."
+
+  # Remove old block
+  sed -i.bak '/# harness-tooling setup/,/# end harness-tooling/d' "$SHELL_RC"
 fi
 
-# ---- Symlink helper --------------------------------------------------------
-# link_into <target_link> <source_dir>
-#   - ensures parent dir exists
-#   - if target is already a symlink to source, no-op
-#   - if target is a broken symlink, remove it
-#   - if target is a real dir/file, back up as .bak.<ts>
-link_into() {
-  local target="$1" source="$2"
-  mkdir -p "$(dirname "$target")"
-  if [[ -L "$target" ]]; then
-    local current
-    current="$(readlink "$target")"
-    if [[ "$current" == "$source" ]]; then
-      log "ok: $target -> $source"
-      return
-    fi
-    if [[ ! -e "$target" ]]; then
-      rm "$target"
-    else
-      warn "replacing symlink $target (was -> $current)"
-      rm "$target"
-    fi
-  elif [[ -e "$target" ]]; then
-    warn "backing up existing $target -> ${target}.bak.${TS}"
-    mv "$target" "${target}.bak.${TS}"
-  fi
-  ln -s "$source" "$target"
-  log "linked: $target -> $source"
-}
+# Add new configuration block
+cat >> "$SHELL_RC" << EOF
 
-install_claude() {
-  log "Claude Code → $CLAUDE_ROOT"
-  link_into "$CLAUDE_ROOT/skills"   "$AGENTS_SRC/skills"
-  link_into "$CLAUDE_ROOT/agents"   "$AGENTS_SRC/agents"
-  link_into "$CLAUDE_ROOT/commands" "$AGENTS_SRC/commands"
-}
+# harness-tooling setup
+export HARNESS_TOOLING_DIR="$SCRIPT_DIR"
+export PATH="\$HARNESS_TOOLING_DIR/bin:\$PATH"
+# end harness-tooling
+EOF
 
-install_opencode() {
-  # OpenCode convention: singular `agent/` and `command/`.
-  log "OpenCode → $OPENCODE_ROOT"
-  link_into "$OPENCODE_ROOT/skills"  "$AGENTS_SRC/skills"
-  link_into "$OPENCODE_ROOT/agent"   "$AGENTS_SRC/agents"
-  link_into "$OPENCODE_ROOT/command" "$AGENTS_SRC/commands"
-}
+log "  ✓ Added HARNESS_TOOLING_DIR=$SCRIPT_DIR"
+log "  ✓ Added $SCRIPT_DIR/bin to PATH"
 
-install_gemini() {
-  # Gemini CLI reads TOML commands from <root>/commands; only .gemini.toml
-  # files in the shared commands dir are relevant to it.
-  log "Gemini CLI → $GEMINI_ROOT"
-  link_into "$GEMINI_ROOT/commands" "$AGENTS_SRC/commands"
-}
+# [5/5] Make CLI executable
+log ""
+log "[5/5] Setting up CLI..."
 
-IFS=',' read -ra SELECTED <<<"$CLIS"
-for cli in "${SELECTED[@]}"; do
-  case "$(echo "$cli" | tr '[:upper:]' '[:lower:]' | xargs)" in
-    claude)   install_claude   ;;
-    opencode) install_opencode ;;
-    gemini)   install_gemini   ;;
-    "")       ;;
-    *)        warn "unknown CLI: $cli (skipped)" ;;
-  esac
-done
+chmod +x "$SCRIPT_DIR/bin/harness-setup"
+log "  ✓ harness-setup is executable"
 
-log "done. scope=$SCOPE  source=$SRC_DIR"
-log "update later with:  git -C $SRC_DIR pull"
+# Export for current session
+export HARNESS_TOOLING_DIR="$SCRIPT_DIR"
+export PATH="$SCRIPT_DIR/bin:$PATH"
+
+log ""
+log "✓ Installation complete!"
+log ""
+log "Configuration:"
+log "  HARNESS_TOOLING_DIR=$SCRIPT_DIR"
+log "  PATH includes: $SCRIPT_DIR/bin"
+log ""
+log "Next steps:"
+log "  1. Restart your shell (or run: source $SHELL_RC)"
+log "  2. cd to your project directory"
+log "  3. Run: harness-setup"
+log "  4. Optional: harness-setup --init-agent-workspace"
+log ""
+log "Update later with:"
+log "  harness-setup update"
+log ""
