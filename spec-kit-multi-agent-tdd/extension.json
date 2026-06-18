@@ -98,6 +98,18 @@
         }
       ]
     },
+    "specify-prd": {
+      "file": "commands/specify-prd.md",
+      "description": "PM-facing PRD command: schema-driven interview → change-request PRD + SDP Initiative",
+      "usage": "/speckit.matd.specify-prd [feature-id]",
+      "arguments": [
+        {
+          "name": "feature_id",
+          "required": false,
+          "description": "Optional feature identifier (determined during interview if not provided)"
+        }
+      ]
+    },
     "specify-solution-design": {
       "file": "commands/specify-solution-design.md",
       "description": "Solution Design: generate ADR comparing approaches and C2/C3 architecture via c4-* agents",

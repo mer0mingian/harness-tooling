@@ -1,0 +1,407 @@
+# service-reference-schema.yml
+# Single source of truth for Service Reference documentation structure.
+# Drives both the grill interview (grill_prompts) and the deterministic
+# content-test validator (validation_rules).
+# Integrates Stonehenge catalog categories and EA Maps.
+# Version: 1.0
+
+version: "1.0"
+
+sections:
+  - id: header
+    name: Header
+    required: true
+    id_prefix: null
+    grill_prompts:
+      - "What is the service name (as registered in Stonehenge)?"
+      - "What is the owning team name and contact email?"
+      - "What is the service's purpose in one sentence?"
+      - "What is the repository URL (Bitbucket/GitHub)?"
+      - "What is the Stonehenge catalog URL for this component?"
+    validation_rules:
+      - id: HEADER-V001
+        severity: CRITICAL
+        description: "service_name field must be present and non-empty"
+        rule: "frontmatter key 'service_name' exists and is not empty string"
+      - id: HEADER-V002
+        severity: CRITICAL
+        description: "team field must be present and non-empty"
+        rule: "frontmatter key 'team' exists and is not empty string"
+      - id: HEADER-V003
+        severity: CRITICAL
+        description: "repository_url field must be present and valid URL"
+        rule: "frontmatter key 'repository_url' exists and matches regex '^https?://'"
+      - id: HEADER-V004
+        severity: WARNING
+        description: "stonehenge_url should be present for catalog integration"
+        rule: "frontmatter key 'stonehenge_url' exists and is not empty string"
+      - id: HEADER-V005
+        severity: WARNING
+        description: "last_updated date field should be present"
+        rule: "frontmatter key 'last_updated' exists and matches regex '\\d{4}-\\d{2}-\\d{2}'"
+
+  - id: overview
+    name: Overview
+    required: true
+    id_prefix: null
+    grill_prompts:
+      - "Describe the service's primary purpose and business value in 2-3 sentences."
+      - "What problem does this service solve?"
+      - "Which projects or initiatives use this service?"
+    validation_rules:
+      - id: OVERVIEW-V001
+        severity: CRITICAL
+        description: "Overview section must be present and non-empty"
+        rule: "section 'overview' heading exists with non-empty body"
+      - id: OVERVIEW-V002
+        severity: WARNING
+        description: "Overview should contain at least 2 sentences"
+        rule: "section body contains at least 2 sentence-ending punctuation marks"
+
+  - id: service_links
+    name: Service Links
+    required: true
+    id_prefix: "LINK-"
+    grill_prompts:
+      - "What is the repository URL?"
+      - "What is the Stonehenge catalog entry URL?"
+      - "What is the API documentation URL (Swagger/OpenAPI)?"
+      - "What is the architecture documentation URL (Confluence/Eureka)?"
+      - "Are there monitoring dashboards (Grafana, DataDog, CloudWatch)?"
+    validation_rules:
+      - id: LINKS-V001
+        severity: CRITICAL
+        description: "Service Links section must be present"
+        rule: "section 'service_links' heading exists"
+      - id: LINKS-V002
+        severity: CRITICAL
+        description: "Repository link must be present"
+        rule: "section body contains regex 'Repository.*https?://'"
+      - id: LINKS-V003
+        severity: WARNING
+        description: "Stonehenge catalog link should be present"
+        rule: "section body contains regex 'Stonehenge.*https?://'"
+      - id: LINKS-V004
+        severity: WARNING
+        description: "API documentation link should be present for services with APIs"
+        rule: "section body contains regex 'API.*Documentation.*https?://|N/A|No API'"
+
+  - id: contact_information
+    name: Contact Information
+    required: true
+    id_prefix: null
+    grill_prompts:
+      - "What is the owning team name?"
+      - "What is the team email address?"
+      - "What is the team Slack channel?"
+      - "Who are the key technical contacts (names and roles)?"
+    validation_rules:
+      - id: CONTACT-V001
+        severity: CRITICAL
+        description: "Contact Information section must be present and non-empty"
+        rule: "section 'contact_information' heading exists with non-empty body"
+      - id: CONTACT-V002
+        severity: CRITICAL
+        description: "Team name must be specified"
+        rule: "section body contains regex 'Team.*:'"
+      - id: CONTACT-V003
+        severity: WARNING
+        description: "Team email should be present"
+        rule: "section body contains regex 'Email.*:.*@'"
+      - id: CONTACT-V004
+        severity: WARNING
+        description: "Slack channel should be present"
+        rule: "section body contains regex 'Slack.*:.*#'"
+
+  - id: component_metadata
+    name: Component Metadata (Stonehenge)
+    required: true
+    id_prefix: "META-"
+    grill_prompts:
+      - "What is the component type (service, library, application, data-pipeline)?"
+      - "What is the lifecycle stage (development, production, deprecated)?"
+      - "What is the system or domain this component belongs to (from Stonehenge)?"
+      - "What technology stack is used (language, framework, runtime version)?"
+      - "What is the deployment model (containerized, serverless, VM-based)?"
+    validation_rules:
+      - id: META-V001
+        severity: CRITICAL
+        description: "Component Metadata section must be present and non-empty"
+        rule: "section 'component_metadata' heading exists with non-empty body"
+      - id: META-V002
+        severity: CRITICAL
+        description: "Component type must be specified"
+        rule: "section body contains regex 'Type.*:.*\\b(service|library|application|data-pipeline|website)\\b'"
+      - id: META-V003
+        severity: CRITICAL
+        description: "Lifecycle stage must be specified"
+        rule: "section body contains regex 'Lifecycle.*:.*\\b(development|production|deprecated|sunset)\\b'"
+      - id: META-V004
+        severity: WARNING
+        description: "Technology stack should be documented"
+        rule: "section body contains regex 'Stack|Technology|Language|Framework'"
+
+  - id: api_endpoints
+    name: API Endpoints
+    required: false
+    id_prefix: "API-"
+    grill_prompts:
+      - "What are the main API endpoints exposed by this service?"
+      - "For each endpoint: method (GET/POST/etc.), path, purpose, authentication?"
+      - "What is the request/response schema (link to OpenAPI spec if available)?"
+      - "What are typical response codes and error scenarios?"
+    validation_rules:
+      - id: API-V001
+        severity: WARNING
+        description: "If API Endpoints section exists, at least one endpoint should be documented"
+        rule: "if section 'api_endpoints' exists, section body contains regex '(GET|POST|PUT|DELETE|PATCH).*/'||'No API endpoints exposed'"
+      - id: API-V002
+        severity: WARNING
+        description: "Authentication mechanism should be documented if APIs exist"
+        rule: "if section contains 'GET|POST|PUT|DELETE|PATCH', section body contains regex 'Auth|authentication|x-api-key|Bearer|OAuth'"
+
+  - id: schemas
+    name: Data Schemas
+    required: false
+    id_prefix: "SCHEMA-"
+    grill_prompts:
+      - "What are the main data schemas used (API request/response, database models, Kafka events)?"
+      - "For each schema: what is its purpose and key fields?"
+      - "Are schemas versioned? How?"
+      - "Where are schemas registered (Schema Registry, OpenAPI spec, code)?"
+    validation_rules:
+      - id: SCHEMA-V001
+        severity: WARNING
+        description: "If schemas are documented, format should be clear (JSON, Avro, Protobuf, etc.)"
+        rule: "if section 'schemas' exists, section body contains regex 'JSON|Avro|Protobuf|OpenAPI|GraphQL|format|Format'"
+      - id: SCHEMA-V002
+        severity: WARNING
+        description: "Required vs optional fields should be indicated"
+        rule: "if section 'schemas' exists, section body contains regex 'required|Required|optional|Optional|nullable|Nullable'"
+
+  - id: architecture_overview
+    name: Architecture Overview
+    required: true
+    id_prefix: "ARCH-"
+    grill_prompts:
+      - "What is the high-level architecture pattern (microservice, monolith, event-driven, batch pipeline)?"
+      - "What are the main components and their responsibilities?"
+      - "Are there architectural diagrams (C4, sequence diagrams)? Where?"
+      - "What are the key design decisions and trade-offs?"
+    validation_rules:
+      - id: ARCH-V001
+        severity: CRITICAL
+        description: "Architecture Overview section must be present and non-empty"
+        rule: "section 'architecture_overview' heading exists with non-empty body"
+      - id: ARCH-V002
+        severity: WARNING
+        description: "Architecture pattern should be identified"
+        rule: "section body contains regex 'microservice|monolith|event-driven|batch|pipeline|serverless|API|REST|GraphQL'"
+      - id: ARCH-V003
+        severity: WARNING
+        description: "Link to architecture diagrams should be present"
+        rule: "section body contains regex 'diagram|Diagram|C4|Mermaid|https?://.*confluence|https?://.*eureka|No diagrams'"
+
+  - id: dependencies_and_integrations
+    name: Dependencies & Integrations (Stonehenge)
+    required: true
+    id_prefix: "DEP-"
+    grill_prompts:
+      - "What upstream services does this component depend on (APIs it calls)?"
+      - "What downstream consumers use this component (who calls our APIs)?"
+      - "What databases or data stores does this use (DynamoDB, PostgreSQL, Redis)?"
+      - "What message queues or event streams are involved (Kafka topics, SQS queues, SNS topics)?"
+      - "Are there third-party integrations (external APIs, SaaS services)?"
+    validation_rules:
+      - id: DEP-V001
+        severity: CRITICAL
+        description: "Dependencies & Integrations section must be present"
+        rule: "section 'dependencies_and_integrations' heading exists"
+      - id: DEP-V002
+        severity: WARNING
+        description: "Upstream dependencies should be listed or explicitly state 'none'"
+        rule: "section body contains regex 'Upstream|upstream|depends on|calls|None|N/A|No upstream'"
+      - id: DEP-V003
+        severity: WARNING
+        description: "Downstream consumers should be listed or explicitly state 'none'"
+        rule: "section body contains regex 'Downstream|downstream|consumers|used by|None|N/A|No downstream'"
+      - id: DEP-V004
+        severity: WARNING
+        description: "Data stores should be documented if used"
+        rule: "section body contains regex 'Database|DynamoDB|PostgreSQL|MySQL|Redis|MongoDB|S3|data store|No database'"
+
+  - id: infrastructure_and_deployment
+    name: Infrastructure & Deployment (Stonehenge)
+    required: true
+    id_prefix: "INFRA-"
+    grill_prompts:
+      - "What cloud platform and account is this deployed to (AWS, GCP, Azure)?"
+      - "What are the deployment targets (ECS, Lambda, Kubernetes, EC2)?"
+      - "What is the CI/CD pipeline (Bamboo, GitHub Actions, GitLab CI)?"
+      - "What monitoring and observability tools are configured (Grafana, DataDog, CloudWatch)?"
+      - "What are the alerting rules and on-call procedures?"
+    validation_rules:
+      - id: INFRA-V001
+        severity: CRITICAL
+        description: "Infrastructure & Deployment section must be present and non-empty"
+        rule: "section 'infrastructure_and_deployment' heading exists with non-empty body"
+      - id: INFRA-V002
+        severity: CRITICAL
+        description: "Cloud platform must be specified"
+        rule: "section body contains regex 'AWS|GCP|Azure|cloud platform|Cloud Platform'"
+      - id: INFRA-V003
+        severity: WARNING
+        description: "Deployment target should be specified"
+        rule: "section body contains regex 'ECS|Lambda|Kubernetes|K8s|EC2|Container|deployment target'"
+      - id: INFRA-V004
+        severity: WARNING
+        description: "CI/CD pipeline should be documented"
+        rule: "section body contains regex 'CI/CD|Bamboo|GitHub Actions|GitLab|Jenkins|pipeline'"
+      - id: INFRA-V005
+        severity: WARNING
+        description: "Monitoring/observability should be documented"
+        rule: "section body contains regex 'Grafana|DataDog|CloudWatch|monitoring|Monitoring|observability|Observability'"
+
+  - id: key_features
+    name: Key Features
+    required: false
+    id_prefix: "FEAT-"
+    grill_prompts:
+      - "What are the main features or capabilities this service provides?"
+      - "What makes this service valuable to its consumers?"
+      - "Are there any unique or differentiating features?"
+    validation_rules:
+      - id: FEAT-V001
+        severity: WARNING
+        description: "If Key Features section exists, at least one feature should be listed"
+        rule: "if section 'key_features' exists, section body contains regex 'FEAT-\\d+|^-\\s|^\\*\\s|^\\d+\\.\\s'"
+
+  - id: authentication_and_authorization
+    name: Authentication & Authorization
+    required: false
+    id_prefix: "AUTH-"
+    grill_prompts:
+      - "What authentication mechanism is used (API keys, OAuth, JWT, IAM roles)?"
+      - "How are credentials managed (Secrets Manager, Parameter Store, environment variables)?"
+      - "What authorization model is used (RBAC, ABAC, resource-based policies)?"
+      - "Are there rate limits or quota restrictions?"
+    validation_rules:
+      - id: AUTH-V001
+        severity: WARNING
+        description: "If APIs or external access exists, authentication should be documented"
+        rule: "if section 'authentication_and_authorization' exists, section body contains regex 'API key|OAuth|JWT|IAM|Bearer|x-api-key|authentication|Authentication'"
+
+  - id: ea_maps_categorization
+    name: EA Maps Categorization
+    required: false
+    id_prefix: "EA-"
+    grill_prompts:
+      - "What EA Domain does this belong to (Platform, Product, Data, Operations)?"
+      - "What EA Portfolio is this part of (from Stonehenge auto-mapping)?"
+      - "What business capabilities does this support?"
+      - "What integration patterns are used (API Gateway, Event Mesh, Direct Service-to-Service)?"
+    validation_rules:
+      - id: EA-V001
+        severity: WARNING
+        description: "EA Domain should be specified if EA Maps is used"
+        rule: "if section 'ea_maps_categorization' exists, section body contains regex 'Domain.*:.*\\b(Platform|Product|Data|Operations|Infrastructure)\\b'"
+      - id: EA-V002
+        severity: WARNING
+        description: "EA Portfolio should be documented"
+        rule: "if section 'ea_maps_categorization' exists, section body contains regex 'Portfolio.*:|N/A|Not assigned'"
+
+  - id: related_documentation
+    name: Related Documentation
+    required: true
+    id_prefix: "DOC-"
+    grill_prompts:
+      - "Where is the architecture documentation stored (Confluence/Eureka URL)?"
+      - "Where are runbooks and operational procedures documented?"
+      - "Are there ADRs (Architecture Decision Records) for key decisions?"
+      - "Where is the API documentation (Swagger, Postman collection)?"
+      - "Are there design documents or RFCs related to this service?"
+    validation_rules:
+      - id: DOC-V001
+        severity: CRITICAL
+        description: "Related Documentation section must be present"
+        rule: "section 'related_documentation' heading exists"
+      - id: DOC-V002
+        severity: WARNING
+        description: "At least one documentation link should be present"
+        rule: "section body contains regex 'https?://|confluence|eureka|github|stash|bitbucket|No documentation|N/A'"
+
+  - id: troubleshooting_and_support
+    name: Troubleshooting & Support
+    required: false
+    id_prefix: "TS-"
+    grill_prompts:
+      - "What are common issues and how to resolve them?"
+      - "How to access logs (CloudWatch, DataDog, Kibana)?"
+      - "What are the key metrics to monitor?"
+      - "Who to contact for support (team, on-call rotation)?"
+      - "Are there known limitations or technical debt?"
+    validation_rules:
+      - id: TS-V001
+        severity: WARNING
+        description: "If Troubleshooting section exists, common issues should be documented"
+        rule: "if section 'troubleshooting_and_support' exists, section body contains regex 'TS-\\d+|Common issues|Known issues|Error|Logs|Metrics'"
+
+  - id: data_flow
+    name: Data Flow
+    required: false
+    id_prefix: "FLOW-"
+    grill_prompts:
+      - "What are the main data inputs (Kafka events, API requests, file uploads)?"
+      - "How is data processed (transformations, validations, enrichments)?"
+      - "What are the data outputs (database writes, Kafka events, API responses)?"
+      - "Are there data retention policies or compliance requirements?"
+    validation_rules:
+      - id: FLOW-V001
+        severity: WARNING
+        description: "If Data Flow section exists, inputs and outputs should be documented"
+        rule: "if section 'data_flow' exists, section body contains regex 'input|Input|output|Output|Kafka|API|database|Database'"
+
+  - id: security_and_compliance
+    name: Security & Compliance
+    required: false
+    id_prefix: "SEC-"
+    grill_prompts:
+      - "What sensitive data does this handle (PII, credentials, financial data)?"
+      - "What compliance requirements apply (GDPR, SOC2, PCI-DSS)?"
+      - "How is data encrypted (at rest, in transit)?"
+      - "Are there security scanning tools in the CI/CD pipeline?"
+      - "When was the last security review?"
+    validation_rules:
+      - id: SEC-V001
+        severity: WARNING
+        description: "If handling sensitive data, security measures should be documented"
+        rule: "if section 'security_and_compliance' exists, section body contains regex 'encryption|Encryption|GDPR|PII|compliance|Compliance|security|Security'"
+
+  - id: performance_and_scalability
+    name: Performance & Scalability
+    required: false
+    id_prefix: "PERF-"
+    grill_prompts:
+      - "What are the expected throughput and latency characteristics?"
+      - "What are the current scale limits (requests/sec, events/hour)?"
+      - "How does the service scale (horizontal, vertical, auto-scaling)?"
+      - "Are there load tests or performance benchmarks?"
+    validation_rules:
+      - id: PERF-V001
+        severity: WARNING
+        description: "If Performance section exists, scale characteristics should be documented"
+        rule: "if section 'performance_and_scalability' exists, section body contains regex 'throughput|latency|scale|Scale|requests|RPS|performance|Performance'"
+
+  - id: changelog
+    name: Changelog
+    required: false
+    id_prefix: "CHANGE-"
+    grill_prompts:
+      - "What major changes or versions have been released?"
+      - "What is the current version and when was it deployed?"
+      - "Are there planned upcoming changes or deprecations?"
+    validation_rules:
+      - id: CHANGE-V001
+        severity: WARNING
+        description: "If Changelog exists, at least one version entry should be present"
+        rule: "if section 'changelog' exists, section body contains regex '\\d+\\.\\d+|v\\d+|Version|version|\\d{4}-\\d{2}-\\d{2}'"

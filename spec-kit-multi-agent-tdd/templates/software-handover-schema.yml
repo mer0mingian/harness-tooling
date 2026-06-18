@@ -1,0 +1,401 @@
+# software-handover-schema.yml
+# Single source of truth for Software Project Handover documentation structure.
+# Based on StepStone ME team's handover methodology.
+# Drives both the grill interview (grill_prompts) and the deterministic
+# content-test validator (validation_rules).
+# Version: 1.0
+
+version: "1.0"
+
+sections:
+  - id: header
+    name: Header
+    required: true
+    id_prefix: null
+    grill_prompts:
+      - "What is the project/service name being handed over?"
+      - "Who is the outgoing team/owner?"
+      - "Who is the incoming team/owner?"
+      - "What is the target handover completion date?"
+      - "What is the handover status: Planned | In Progress | Completed?"
+    validation_rules:
+      - id: HEADER-V001
+        severity: CRITICAL
+        description: "project_name field must be present and non-empty"
+        rule: "frontmatter key 'project_name' exists and is not empty string"
+      - id: HEADER-V002
+        severity: CRITICAL
+        description: "outgoing_team field must be present and non-empty"
+        rule: "frontmatter key 'outgoing_team' exists and is not empty string"
+      - id: HEADER-V003
+        severity: CRITICAL
+        description: "incoming_team field must be present and non-empty"
+        rule: "frontmatter key 'incoming_team' exists and is not empty string"
+      - id: HEADER-V004
+        severity: CRITICAL
+        description: "status field must be one of: Planned, In Progress, Completed"
+        rule: "frontmatter key 'status' matches regex '^(Planned|In Progress|Completed)$'"
+      - id: HEADER-V005
+        severity: WARNING
+        description: "target_completion_date should be present"
+        rule: "frontmatter key 'target_completion_date' exists and matches regex '\\d{4}-\\d{2}-\\d{2}'"
+
+  - id: objective
+    name: Objective
+    required: true
+    id_prefix: null
+    grill_prompts:
+      - "What is the primary objective of this handover?"
+      - "Why is this handover necessary (team restructure, ownership change, service sunset)?"
+      - "What does success look like for this handover?"
+    validation_rules:
+      - id: OBJ-V001
+        severity: CRITICAL
+        description: "Objective section must be present and non-empty"
+        rule: "section 'objective' heading exists with non-empty body"
+      - id: OBJ-V002
+        severity: WARNING
+        description: "Objective should clearly state the reason for handover"
+        rule: "section body contains regex 'ownership|restructure|sunset|transfer|transition|Why'"
+
+  - id: phase_0_context_and_risks
+    name: "Phase 0: Why? What if?"
+    required: true
+    id_prefix: "CTX-"
+    grill_prompts:
+      - "Why is the handover necessary? What triggered it?"
+      - "Do both teams have enough capacity now and during handover?"
+      - "Why was the system built this way? What context from the past is important?"
+      - "What is the known technical debt?"
+      - "What was planned but never implemented?"
+      - "What is currently work-in-progress?"
+      - "What are the SLAs and blast radius if the system breaks?"
+      - "What happens if issues occur during the handover phase?"
+    validation_rules:
+      - id: CTX-V001
+        severity: CRITICAL
+        description: "Phase 0 section must be present and non-empty"
+        rule: "section 'phase_0' or 'Phase 0' heading exists with non-empty body"
+      - id: CTX-V002
+        severity: CRITICAL
+        description: "No [PLACEHOLDER] or TODO residue in Phase 0"
+        rule: "section body does not match regex '\\[PLACEHOLDER\\]|TODO'"
+      - id: CTX-V003
+        severity: WARNING
+        description: "Capacity assessment should be addressed"
+        rule: "section body contains regex 'capacity|Capacity|bandwidth|Bandwidth|resources|Resources'"
+      - id: CTX-V004
+        severity: WARNING
+        description: "Technical debt should be documented"
+        rule: "section body contains regex 'technical debt|Technical Debt|debt|known issues|Known Issues'"
+      - id: CTX-V005
+        severity: WARNING
+        description: "SLAs and blast radius should be addressed"
+        rule: "section body contains regex 'SLA|blast radius|impact|Impact|downtime|Downtime'"
+
+  - id: phase_1_architecture
+    name: "Phase 1: Architectural Blueprint & Mental Model"
+    required: true
+    id_prefix: "ARCH-"
+    grill_prompts:
+      - "Is there a System Context Diagram (C4 Model preferred)? Where is it stored?"
+      - "Have all components been identified and documented?"
+      - "Is the tech stack clearly documented?"
+      - "Is there a Data Flow Analysis documenting triggers, queues, transformers, sinks?"
+      - "What are the inputs and outputs? What data formats are expected?"
+      - "What data is stored vs. passed through?"
+      - "Is there an Infrastructure Overview mapping Cloud resources, CI/CD, Secret Management?"
+      - "Are all components confirmed to exist in all environments (dev, staging, prod)?"
+    validation_rules:
+      - id: ARCH-V001
+        severity: CRITICAL
+        description: "Phase 1 section must be present and non-empty"
+        rule: "section 'phase_1' or 'Phase 1' heading exists with non-empty body"
+      - id: ARCH-V002
+        severity: CRITICAL
+        description: "System Context Diagram must be referenced"
+        rule: "section body contains regex 'System Context|C4|diagram|Diagram|architecture diagram|Architecture Diagram|https?://.*confluence|https?://.*mermaid'"
+      - id: ARCH-V003
+        severity: CRITICAL
+        description: "Data Flow must be documented"
+        rule: "section body contains regex 'Data Flow|data flow|inputs|outputs|triggers|queues|transformers|sinks'"
+      - id: ARCH-V004
+        severity: CRITICAL
+        description: "Infrastructure Overview must be documented"
+        rule: "section body contains regex 'Infrastructure|infrastructure|Cloud resources|CI/CD|Secret|Secrets'"
+      - id: ARCH-V005
+        severity: WARNING
+        description: "Tech stack should be clearly identified"
+        rule: "section body contains regex 'tech stack|Tech Stack|technology|Technology|stack|Stack|language|Language|framework|Framework'"
+      - id: ARCH-V006
+        severity: WARNING
+        description: "Environment verification should be addressed"
+        rule: "section body contains regex 'environment|Environment|dev|staging|prod|production|DEV|STAGING|PROD'"
+
+  - id: phase_2_local_environment
+    name: "Phase 2: Local Environment & Debug Test"
+    required: true
+    id_prefix: "ENV-"
+    grill_prompts:
+      - "What SDKs, CLI tools, and local/Docker environments need to be installed?"
+      - "Is there a 'one-command' setup (mvn install, docker-compose up, make setup, poetry run)?"
+      - "How do you verify local setup works?"
+      - "What mock data or staging environments are available?"
+      - "What local vs. cloud resources are used (e.g., DEV AWS accounts)?"
+      - "Can the incoming team set a breakpoint in a core component?"
+      - "Can the incoming team trigger manual execution or run services locally?"
+      - "Can the incoming team trace a log entry from entry point to database/output?"
+    validation_rules:
+      - id: ENV-V001
+        severity: CRITICAL
+        description: "Phase 2 section must be present and non-empty"
+        rule: "section 'phase_2' or 'Phase 2' heading exists with non-empty body"
+      - id: ENV-V002
+        severity: CRITICAL
+        description: "Dependency check must list required tools/SDKs"
+        rule: "section body contains regex 'SDK|CLI|Docker|dependency|Dependency|dependencies|Dependencies|install|Install'"
+      - id: ENV-V003
+        severity: CRITICAL
+        description: "One-command start must be documented"
+        rule: "section body contains regex 'mvn|docker-compose|make|poetry|npm|yarn|setup|start|run|one-command|One-Command'"
+      - id: ENV-V004
+        severity: CRITICAL
+        description: "Debugging challenge must be addressed"
+        rule: "section body contains regex 'breakpoint|Breakpoint|debug|Debug|trace|Trace|logging|Logging'"
+      - id: ENV-V005
+        severity: WARNING
+        description: "Mock data or staging access should be documented"
+        rule: "section body contains regex 'mock|Mock|staging|Staging|test data|Test Data|DEV account|dev account'"
+
+  - id: phase_3_reverse_shadowing
+    name: "Phase 3: Reverse Shadowing (Active Hands-on)"
+    required: true
+    id_prefix: "SHADOW-"
+    grill_prompts:
+      - "Has the incoming team written code for a small feature or fix?"
+      - "Has the incoming team run tests successfully?"
+      - "Has the incoming team triggered CI/CD and monitored logs?"
+      - "Have rollback procedures been explained and practiced?"
+      - "Has the incoming team investigated a production bug or incident simulation?"
+      - "Has the monitoring/alerting stack been explained?"
+    validation_rules:
+      - id: SHADOW-V001
+        severity: CRITICAL
+        description: "Phase 3 section must be present and non-empty"
+        rule: "section 'phase_3' or 'Phase 3' heading exists with non-empty body"
+      - id: SHADOW-V002
+        severity: CRITICAL
+        description: "Small feature/fix activity must be addressed"
+        rule: "section body contains regex 'feature|Feature|fix|Fix|code|Code|implementation|Implementation'"
+      - id: SHADOW-V003
+        severity: CRITICAL
+        description: "Deployment activity must be addressed"
+        rule: "section body contains regex 'deploy|Deploy|CI/CD|pipeline|Pipeline|rollback|Rollback'"
+      - id: SHADOW-V004
+        severity: WARNING
+        description: "Incident simulation should be addressed"
+        rule: "section body contains regex 'incident|Incident|simulation|Simulation|bug|Bug|investigation|Investigation'"
+      - id: SHADOW-V005
+        severity: WARNING
+        description: "Monitoring/alerting should be explained"
+        rule: "section body contains regex 'monitoring|Monitoring|alerting|Alerting|dashboard|Dashboard|metrics|Metrics'"
+
+  - id: phase_4_artifacts_and_maintenance
+    name: "Phase 4: Artifacts & Maintenance"
+    required: true
+    id_prefix: "MAINT-"
+    grill_prompts:
+      - "Is there a Troubleshooting Guide with common errors and fixes?"
+      - "Where are credentials stored (API keys, SSH keys, Service Accounts)?"
+      - "Where is all documentation stored (architecture, runbooks, ADRs)?"
+      - "Who are the key upstream/downstream stakeholders?"
+      - "Is Stonehenge catalog up to date with correct team ownership?"
+      - "Are on-call procedures and escalation paths documented?"
+    validation_rules:
+      - id: MAINT-V001
+        severity: CRITICAL
+        description: "Phase 4 section must be present and non-empty"
+        rule: "section 'phase_4' or 'Phase 4' heading exists with non-empty body"
+      - id: MAINT-V002
+        severity: CRITICAL
+        description: "Troubleshooting Guide must be referenced"
+        rule: "section body contains regex 'Troubleshooting|troubleshooting|common errors|Common Errors|FAQ|runbook|Runbook'"
+      - id: MAINT-V003
+        severity: CRITICAL
+        description: "Credential Map must be documented"
+        rule: "section body contains regex 'credential|Credential|API key|SSH key|Service Account|secret|Secret|Secrets Manager|Parameter Store'"
+      - id: MAINT-V004
+        severity: CRITICAL
+        description: "Key contacts must be listed"
+        rule: "section body contains regex 'contact|Contact|stakeholder|Stakeholder|upstream|downstream|Upstream|Downstream'"
+      - id: MAINT-V005
+        severity: WARNING
+        description: "Stonehenge alignment should be verified"
+        rule: "section body contains regex 'Stonehenge|stonehenge|catalog|Catalog|ownership|Ownership'"
+
+  - id: handover_readiness_checklist
+    name: Handover Readiness Checklist
+    required: true
+    id_prefix: "CHECK-"
+    grill_prompts:
+      - "Are architecture diagrams updated and stored in Git/Confluence?"
+      - "Does local setup work on a clean machine (Windows/Mac/WSL)?"
+      - "Has the incoming team successfully pushed at least one change to Production or Staging?"
+      - "Have monitoring dashboards been explained?"
+      - "Have alerting rules been reviewed?"
+      - "Have on-call procedures been documented and transferred?"
+      - "Has team ownership been updated in Stonehenge?"
+      - "Have all credentials and access been transferred?"
+    validation_rules:
+      - id: CHECK-V001
+        severity: CRITICAL
+        description: "Handover Readiness Checklist section must be present"
+        rule: "section 'handover_readiness_checklist' or 'Checklist' heading exists"
+      - id: CHECK-V002
+        severity: CRITICAL
+        description: "Architecture diagrams checklist item must be present"
+        rule: "section body contains regex '\\[.\\].*architecture.*diagram|\\[.\\].*Architecture.*Diagram|diagram.*\\[.\\]|Diagram.*\\[.\\]'"
+      - id: CHECK-V003
+        severity: CRITICAL
+        description: "Local setup checklist item must be present"
+        rule: "section body contains regex '\\[.\\].*local.*setup|\\[.\\].*Local.*setup|setup.*\\[.\\]|Setup.*\\[.\\]'"
+      - id: CHECK-V004
+        severity: CRITICAL
+        description: "Production push checklist item must be present"
+        rule: "section body contains regex '\\[.\\].*production|\\[.\\].*Production|\\[.\\].*staging|\\[.\\].*Staging|pushed.*change|deployed.*change'"
+      - id: CHECK-V005
+        severity: CRITICAL
+        description: "Monitoring dashboards checklist item must be present"
+        rule: "section body contains regex '\\[.\\].*monitoring|\\[.\\].*Monitoring|\\[.\\].*dashboard|\\[.\\].*Dashboard'"
+      - id: CHECK-V006
+        severity: WARNING
+        description: "All checklist items should use checkbox format [ ]"
+        rule: "section body contains regex '\\[.\\]'"
+
+  - id: knowledge_transfer_sessions
+    name: Knowledge Transfer Sessions
+    required: false
+    id_prefix: "KT-"
+    grill_prompts:
+      - "What knowledge transfer sessions have been scheduled or completed?"
+      - "What topics were covered in each session?"
+      - "Who attended from each team?"
+      - "Are there recordings or notes from the sessions?"
+      - "What follow-up questions or action items emerged?"
+    validation_rules:
+      - id: KT-V001
+        severity: WARNING
+        description: "If KT sessions exist, dates should be documented"
+        rule: "if section 'knowledge_transfer_sessions' exists, section body contains regex '\\d{4}-\\d{2}-\\d{2}|Date|date|Session|session'"
+      - id: KT-V002
+        severity: WARNING
+        description: "Session topics should be listed"
+        rule: "if section 'knowledge_transfer_sessions' exists, section body contains regex 'Topic|topic|Covered|covered|Agenda|agenda'"
+
+  - id: risks_and_mitigation
+    name: Risks & Mitigation
+    required: true
+    id_prefix: "RISK-"
+    grill_prompts:
+      - "What are the main risks during the handover period (RISK-NNN)?"
+      - "What is the likelihood and impact of each risk?"
+      - "What mitigation strategies are in place?"
+      - "What is the rollback plan if critical issues occur during transition?"
+      - "Are there any dependencies on external teams that could delay handover?"
+    validation_rules:
+      - id: RISK-V001
+        severity: CRITICAL
+        description: "Risks & Mitigation section must be present and non-empty"
+        rule: "section 'risks_and_mitigation' or 'Risks' heading exists with non-empty body"
+      - id: RISK-V002
+        severity: WARNING
+        description: "At least one RISK- item should be present or explicitly state 'none'"
+        rule: "section body contains regex 'RISK-\\d+|No risks|N/A|None identified'"
+      - id: RISK-V003
+        severity: WARNING
+        description: "Mitigation strategies should be documented for identified risks"
+        rule: "section body contains regex 'mitigation|Mitigation|strategy|Strategy|plan|Plan|contingency|Contingency'"
+
+  - id: timeline_and_milestones
+    name: Timeline & Milestones
+    required: true
+    id_prefix: "MILE-"
+    grill_prompts:
+      - "What is the overall handover timeline?"
+      - "What are the key milestones and their target dates?"
+      - "What is the expected completion date for each phase?"
+      - "Are there any dependencies or blockers affecting the timeline?"
+      - "What is the go-live or ownership transfer date?"
+    validation_rules:
+      - id: MILE-V001
+        severity: CRITICAL
+        description: "Timeline & Milestones section must be present and non-empty"
+        rule: "section 'timeline_and_milestones' or 'Timeline' heading exists with non-empty body"
+      - id: MILE-V002
+        severity: CRITICAL
+        description: "At least one date or milestone should be specified"
+        rule: "section body contains regex '\\d{4}-\\d{2}-\\d{2}|Phase.*date|Milestone|milestone|timeline|Timeline'"
+      - id: MILE-V003
+        severity: WARNING
+        description: "Ownership transfer date should be specified"
+        rule: "section body contains regex 'transfer|Transfer|go-live|Go-live|completion|Completion|handover complete|Handover complete'"
+
+  - id: success_criteria
+    name: Success Criteria
+    required: true
+    id_prefix: "SC-"
+    grill_prompts:
+      - "How will you measure handover success (SC-NNN)?"
+      - "What must the incoming team be able to do independently?"
+      - "What knowledge gaps are acceptable vs. must-have?"
+      - "What is the acceptance criteria for completing each phase?"
+      - "Who signs off on handover completion?"
+    validation_rules:
+      - id: SC-V001
+        severity: CRITICAL
+        description: "Success Criteria section must be present and non-empty"
+        rule: "section 'success_criteria' heading exists with non-empty body"
+      - id: SC-V002
+        severity: WARNING
+        description: "Measurable success criteria should be defined"
+        rule: "section body contains regex 'SC-\\d+|criteria|Criteria|able to|independently|sign-off|Sign-off'"
+      - id: SC-V003
+        severity: WARNING
+        description: "Acceptance criteria should be specified"
+        rule: "section body contains regex 'acceptance|Acceptance|must be able|required to|complete|Complete'"
+
+  - id: post_handover_support
+    name: Post-Handover Support
+    required: false
+    id_prefix: "SUPPORT-"
+    grill_prompts:
+      - "What support will the outgoing team provide after handover?"
+      - "For how long will support be available?"
+      - "What is the response time commitment for post-handover questions?"
+      - "Are there specific support channels (Slack, email, on-call)?"
+      - "What triggers escalation back to the outgoing team?"
+    validation_rules:
+      - id: SUPPORT-V001
+        severity: WARNING
+        description: "If post-handover support exists, duration should be specified"
+        rule: "if section 'post_handover_support' exists, section body contains regex 'week|month|day|duration|Duration|until|Until'"
+      - id: SUPPORT-V002
+        severity: WARNING
+        description: "Support channels should be documented"
+        rule: "if section 'post_handover_support' exists, section body contains regex 'Slack|slack|email|Email|channel|Channel|contact|Contact'"
+
+  - id: lessons_learned
+    name: Lessons Learned
+    required: false
+    id_prefix: "LESSON-"
+    grill_prompts:
+      - "What went well during the handover?"
+      - "What could be improved for future handovers?"
+      - "What unexpected challenges arose?"
+      - "What would you recommend to teams doing similar handovers?"
+      - "What documentation or processes were most/least helpful?"
+    validation_rules:
+      - id: LESSON-V001
+        severity: WARNING
+        description: "If Lessons Learned exists, both positives and improvements should be noted"
+        rule: "if section 'lessons_learned' exists, section body contains regex 'went well|Went well|positive|Positive|improve|Improve|challenge|Challenge'"

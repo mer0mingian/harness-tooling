@@ -41,6 +41,10 @@ provides:
       file: "commands/specify-product-brief.md"
       description: "Create or update product brief using grill-me interview for new products"
       aliases: []
+    - name: "speckit.matd.specify-prd"
+      file: "commands/specify-prd.md"
+      description: "PM-facing PRD command: schema-driven interview → change-request PRD + SDP Initiative"
+      aliases: []
     - name: "speckit.matd.specify-adr"
       file: "commands/specify-adr.md"
       description: "Create Architecture Decision Record using grill-me interview"
